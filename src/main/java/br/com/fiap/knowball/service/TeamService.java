@@ -3,13 +3,17 @@ package br.com.fiap.knowball.service;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Team;
 import br.com.fiap.knowball.repository.TeamRepository;
 import jakarta.persistence.EntityNotFoundException;
 
+@Service
 public class TeamService {
     
+    @Autowired
     private final TeamRepository teamRepository;
 
     public TeamService(TeamRepository teamRepository) {
