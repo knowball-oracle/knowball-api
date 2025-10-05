@@ -1,7 +1,6 @@
 package br.com.fiap.knowball.model;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,11 +9,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,9 +19,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Match {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,15 +36,15 @@ public class Match {
     @Column(nullable = false)
     private LocalDateTime date;
     
-    @NotNull(message = "{match.teams.notnull}")
-    @Size(min = 2, message = "{match.teams.size}")
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "match_team",
-        joinColumns = @JoinColumn(name = "match_id"),
-        inverseJoinColumns = @JoinColumn(name = "team_id")
-    ) // define explicitamente a tabela de junção que será criada no banco para armazenar o relacionamento
-    private Set<Team> teams; // significa que cada objeto da classe Match pode estar associdado a vários objetos da classe Team
-    //formando uma coleção de times participantes daquela partida.
+    @NotBlank(message = "{match.place.notblank}")
+    @Column(nullable = false, length = 100)
+    private String place;
 
+    @NotNull(message = "{match.homeScore.notnull}")
+    @Column(nullable = false)
+    private Integer homeScore;
+
+    @NotNull(message = "{match.awayScore.notnull}")
+    @Column(nullable = false)
+    private Integer awayScore;
 }

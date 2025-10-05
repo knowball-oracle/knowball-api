@@ -1,5 +1,7 @@
 package br.com.fiap.knowball.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,20 +21,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Championship {
-
+public class Referee {
+    
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "{championship.name.notblank}")
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "{referee.name.notblank}")
+    @Column(nullable = false, length = 100, unique = true)
     private String name;
+
+    @NotNull(message = "{referee.birthDate.notnull}")
+    @Column(nullable = false, length = 100)
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private ChampionshipCategory category;
-
-    @NotNull(message = "{championship.year.notnull}")
-    @Column(nullable = false)
-    private Integer year;
-}  
+    private RefereeStatus status;
+}
