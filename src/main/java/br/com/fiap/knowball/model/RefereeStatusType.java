@@ -1,6 +1,6 @@
 package br.com.fiap.knowball.model;
 
-public enum RefereeStatus {
+public enum RefereeStatusType {
     ACTIVE,
     INACTIVE,
     SUSPENDED

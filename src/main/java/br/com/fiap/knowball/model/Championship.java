@@ -30,7 +30,7 @@ public class Championship {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private ChampionshipCategory category;
+    private ChampionshipCategoryType category;
 
     @NotNull(message = "{championship.year.notnull}")
     @Column(nullable = false)

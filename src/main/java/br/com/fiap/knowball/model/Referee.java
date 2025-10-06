@@ -36,5 +36,5 @@ public class Referee {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private RefereeStatus status;
+    private RefereeStatusType status;
 }

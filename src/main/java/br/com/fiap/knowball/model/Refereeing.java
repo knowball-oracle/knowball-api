@@ -26,7 +26,7 @@ public class Refereeing {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private RefereeingRole role;
+    private RefereeingRoleType role;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("matchId")

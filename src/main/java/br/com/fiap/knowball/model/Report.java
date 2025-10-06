@@ -53,9 +53,9 @@ public class Report {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private ReportStatus status;
+    private ReportStatusType status;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private AnalysisResult analysisResult;
+    private AnalysisResultType analysisResult;
 }
