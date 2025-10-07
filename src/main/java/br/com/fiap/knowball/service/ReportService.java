@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Report;
+import br.com.fiap.knowball.model.ReportStatusType;
 import br.com.fiap.knowball.repository.MatchRepository;
 import br.com.fiap.knowball.repository.RefereeRepository;
 import br.com.fiap.knowball.repository.RefereeingRepository;
@@ -43,6 +44,10 @@ public class ReportService {
         return reportRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Denúncia não encontrado com id " + id));
+    }
+
+    public List<Report> findByStatus(ReportStatusType status) {
+        return reportRepository.findByStatus(status);
     }
 
     public Report save(Report report) {

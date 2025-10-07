@@ -35,6 +35,9 @@ public class ParticipationService {
     }
 
     public List<Participation> findByMatchId(Long matchId) {
+        if(!matchRepository.existsById(matchId)) {
+            throw new EntityNotFoundException("Partida não encontrada com id " + matchId);
+        }
         return participationRepository.findByMatchId(matchId);
     }
 

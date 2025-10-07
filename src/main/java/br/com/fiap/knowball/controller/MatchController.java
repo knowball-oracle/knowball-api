@@ -37,6 +37,12 @@ public class MatchController {
         return matchService.findById(id);
     }
 
+    @GetMapping("/championship/{championshipId}")
+    public List<Match> getByChampionship(@PathVariable Long championshipId) {
+        log.info("buscando partidas pelo campeonato id: {}", championshipId);
+        return matchService.findByChampionshipId(championshipId);
+    }
+
     public ResponseEntity<Match> create(@Valid @RequestBody Match match) {
         log.info("criando nova partida na data {}", match.getDate());
         Match created = matchService.save(match);

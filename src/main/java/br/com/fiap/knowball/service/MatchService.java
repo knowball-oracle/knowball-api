@@ -33,6 +33,14 @@ public class MatchService {
             .orElseThrow(() -> new EntityNotFoundException("Partida não encontrada com id " + id));
     }
 
+    public List<Match> findByChampionshipId(Long championshipId) {
+        if(!championshipRepository.existsById(championshipId)) {
+            throw new EntityNotFoundException("Campeonato não encontrado");
+        } 
+
+        return matchRepository.findByChampionshipId(championshipId);
+    }
+
     public Match save(Match match) {
         championshipRepository.findById(match.getChampionship().getId())
             .orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado"));

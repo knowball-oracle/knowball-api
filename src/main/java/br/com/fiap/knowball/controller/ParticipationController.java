@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.knowball.model.Participation;
 import br.com.fiap.knowball.service.ParticipationService;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,25 +42,14 @@ public class ParticipationController {
     @PostMapping
     public ResponseEntity<Participation> create(@Valid @RequestBody Participation participation) {
         log.info("criando nova participação para partida id {} e time id {}", participation.getMatch().getId(), participation.getTeam().getId());
-        try {
-            Participation created = participationService.save(participation);
-            return ResponseEntity.status(HttpStatus.CREATED).body(created);
-        } catch (IllegalArgumentException e) {
-            log.error("erro ao criar participação: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        Participation created = participationService.save(participation);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping
-    public ResponseEntity<Participation> update(@Valid @RequestBody Participation participation) {
+    public Participation update(@Valid @RequestBody Participation participation) {
         log.info("atualizando participação para partida id {} e time id {}", participation.getMatch().getId(), participation.getTeam().getId());
-        try {
-            Participation updated = participationService.update(participation);
-            return ResponseEntity.ok(updated);
-        } catch (IllegalArgumentException | EntityNotFoundException e) {
-            log.error("erro ao atualizar participação: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        return participationService.update(participation);
     }
 
     @DeleteMapping("/match/{matchId}/team/{teamId}")
