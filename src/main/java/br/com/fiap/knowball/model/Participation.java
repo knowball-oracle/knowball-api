@@ -29,9 +29,9 @@ public class Participation {
     private ParticipationType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("matchId")
-    @JoinColumn(name = "match_id")
-    private Match match;
+    @MapsId("gameId")
+    @JoinColumn(name = "game_id")
+    private Game game;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("teamId")

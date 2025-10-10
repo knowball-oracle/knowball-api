@@ -31,7 +31,7 @@ public class Referee {
     private String name;
 
     @NotNull(message = "{referee.birthDate.notnull}")
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)

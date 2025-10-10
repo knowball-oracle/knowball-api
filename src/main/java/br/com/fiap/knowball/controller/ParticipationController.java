@@ -41,14 +41,14 @@ public class ParticipationController {
 
     @PostMapping
     public ResponseEntity<Participation> create(@Valid @RequestBody Participation participation) {
-        log.info("criando nova participação para partida id {} e time id {}", participation.getMatch().getId(), participation.getTeam().getId());
+        log.info("criando nova participação para partida id {} e time id {}", participation.getGame().getId(), participation.getTeam().getId());
         Participation created = participationService.save(participation);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping
     public Participation update(@Valid @RequestBody Participation participation) {
-        log.info("atualizando participação para partida id {} e time id {}", participation.getMatch().getId(), participation.getTeam().getId());
+        log.info("atualizando participação para partida id {} e time id {}", participation.getGame().getId(), participation.getTeam().getId());
         return participationService.update(participation);
     }
 

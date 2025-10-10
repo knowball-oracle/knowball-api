@@ -6,34 +6,34 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.fiap.knowball.model.Match;
+import br.com.fiap.knowball.model.Game;
 import br.com.fiap.knowball.repository.ChampionshipRepository;
-import br.com.fiap.knowball.repository.MatchRepository;
+import br.com.fiap.knowball.repository.GameRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class MatchService {
+public class GameService {
     
     @Autowired
-    private final MatchRepository matchRepository;
+    private final GameRepository matchRepository;
     private final ChampionshipRepository championshipRepository;
 
-    public MatchService(MatchRepository matchRepository, ChampionshipRepository championshipRepository) {
+    public GameService(GameRepository matchRepository, ChampionshipRepository championshipRepository) {
         this.matchRepository = matchRepository;
         this.championshipRepository = championshipRepository;
     }
 
-    public List<Match> findAll() {
+    public List<Game> findAll() {
         return matchRepository.findAll();
     }
 
-    public Match findById(Long id) {
+    public Game findById(Long id) {
         return matchRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Partida não encontrada com id " + id));
     }
 
-    public List<Match> findByChampionshipId(Long championshipId) {
+    public List<Game> findByChampionshipId(Long championshipId) {
         if(!championshipRepository.existsById(championshipId)) {
             throw new EntityNotFoundException("Campeonato não encontrado");
         } 
@@ -41,17 +41,17 @@ public class MatchService {
         return matchRepository.findByChampionshipId(championshipId);
     }
 
-    public Match save(Match match) {
-        championshipRepository.findById(match.getChampionship().getId())
+    public Game save(Game game) {
+        championshipRepository.findById(game.getChampionship().getId())
             .orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado"));
 
-        return matchRepository.save(match);
+        return matchRepository.save(game);
     }
 
-    public Match update(Long id, Match updatedMatch) {
-        Match match = findById(id);
-        BeanUtils.copyProperties(updatedMatch, match, "id");
-        return matchRepository.save(match);
+    public Game update(Long id, Game updatedMatch) {
+        Game game = findById(id);
+        BeanUtils.copyProperties(updatedMatch, game, "id");
+        return matchRepository.save(game);
     }
 
     public void destroy(Long id) {

@@ -39,7 +39,7 @@ public class RefereeingController {
 
     @PostMapping
     public ResponseEntity<Refereeing> create(@Valid @RequestBody Refereeing refereeing) {
-        log.info("criando novo papel de arbitragem para partida id {} e árbitro id {}", refereeing.getMatch().getId(), refereeing.getReferee().getId());
+        log.info("criando novo papel de arbitragem para partida id {} e árbitro id {}", refereeing.getGame().getId(), refereeing.getReferee().getId());
         Refereeing created = refereeingService.save(refereeing);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }

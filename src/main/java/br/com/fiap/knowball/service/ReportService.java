@@ -2,13 +2,14 @@ package br.com.fiap.knowball.service;
 
 import java.util.List;
 
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Report;
 import br.com.fiap.knowball.model.ReportStatusType;
-import br.com.fiap.knowball.repository.MatchRepository;
+import br.com.fiap.knowball.repository.GameRepository;
 import br.com.fiap.knowball.repository.RefereeRepository;
 import br.com.fiap.knowball.repository.RefereeingRepository;
 import br.com.fiap.knowball.repository.ReportRepository;
@@ -19,13 +20,16 @@ public class ReportService {
 
     @Autowired
     private final ReportRepository reportRepository;
-    private final MatchRepository matchRepository;
+    private final GameRepository matchRepository;
     private final RefereeRepository refereeRepository;
     private final RefereeingRepository refereeingRepository;
+
+    @Autowired
+    @Lazy
     private final RefereeService refereeService;
 
     public ReportService(ReportRepository reportRepository,
-            MatchRepository matchRepository,
+            GameRepository matchRepository,
             RefereeRepository refereeRepository,
             RefereeingRepository refereeingRepository,
             RefereeService refereeService) {
@@ -51,7 +55,7 @@ public class ReportService {
     }
 
     public Report save(Report report) {
-        Long matchId = report.getMatch().getId();
+        Long matchId = report.getGame().getId();
         Long refereeId = report.getReferee().getId();
 
         matchRepository.findById(matchId)
@@ -60,7 +64,7 @@ public class ReportService {
         refereeRepository.findById(refereeId)
                 .orElseThrow(() -> new EntityNotFoundException("Arbitro não encontrado"));
 
-        boolean isRefereeActing = refereeingRepository.findByMatchId(matchId).stream()
+        boolean isRefereeActing = refereeingRepository.findByGameId(matchId).stream()
                 .anyMatch(r -> r.getReferee().getId().equals(refereeId));
 
         if (!isRefereeActing) {

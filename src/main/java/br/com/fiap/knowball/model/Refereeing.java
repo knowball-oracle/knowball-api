@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Refereeing {
     
     @EmbeddedId
-    private RefeeringId id;
+    private RefereeingId id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
@@ -31,7 +31,7 @@ public class Refereeing {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("matchId")
     @JoinColumn(name = "match_id")
-    private Match match;
+    private Game game;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("refereeId")

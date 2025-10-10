@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,11 +19,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "game")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Match {
+public class Game {
     
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,8 +35,8 @@ public class Match {
     private Championship championship;
 
     @NotNull(message = "{match.date.notnull}")
-    @Column(nullable = false)
-    private LocalDateTime date;
+    @Column(name = "match_date", nullable = false)
+    private LocalDateTime matchDate;
     
     @NotBlank(message = "{match.place.notblank}")
     @Column(nullable = false, length = 100)

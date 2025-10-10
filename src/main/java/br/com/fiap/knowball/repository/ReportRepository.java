@@ -16,5 +16,5 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
     @Query("SELECT r FROM Report r WHERE r.status = :status")
     List<Report> findByStatus(@Param("status") ReportStatusType status);
 
-    Optional<Report> findbyProtocol(String protocol);
+    Optional<Report> findByProtocol(String protocol);
 }

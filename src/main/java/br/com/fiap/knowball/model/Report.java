@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,7 +33,7 @@ public class Report {
     @NotNull(message = "{report.match.notnull}")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "match_id", nullable = false)
-    private Match match;
+    private Game game;
 
     @NotNull(message = "{report.referee.notnull}")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,11 +45,12 @@ public class Report {
     private String protocol;
 
     @NotBlank(message = "{report.content.notblank}")
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Lob
+    @Column(nullable = false)
     private String content;
     
     @NotNull(message = "{report.date.notnull}")
-    @Column(nullable = false)
+    @Column(name = "report_date", nullable = false)
     private LocalDate date;
 
     @Enumerated(EnumType.STRING)

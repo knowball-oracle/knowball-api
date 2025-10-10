@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.knowball.model.Match;
-import br.com.fiap.knowball.service.MatchService;
+import br.com.fiap.knowball.model.Game;
+import br.com.fiap.knowball.service.GameService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,35 +21,35 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("matches")
 @RequiredArgsConstructor
 @Slf4j
-public class MatchController {
+public class GameController {
     
-    private final MatchService matchService;
+    private final GameService matchService;
 
     @GetMapping
-    public List<Match> getAll() {
+    public List<Game> getAll() {
         log.info("buscando todas as partidas");
         return matchService.findAll();
     }
 
     @GetMapping("{id}")
-    public Match getById(@PathVariable Long id) {
+    public Game getById(@PathVariable Long id) {
         log.info("buscando partida pelo id: {}", id);
         return matchService.findById(id);
     }
 
     @GetMapping("/championship/{championshipId}")
-    public List<Match> getByChampionship(@PathVariable Long championshipId) {
+    public List<Game> getByChampionship(@PathVariable Long championshipId) {
         log.info("buscando partidas pelo campeonato id: {}", championshipId);
         return matchService.findByChampionshipId(championshipId);
     }
 
-    public ResponseEntity<Match> create(@Valid @RequestBody Match match) {
-        log.info("criando nova partida na data {}", match.getDate());
-        Match created = matchService.save(match);
+    public ResponseEntity<Game> create(@Valid @RequestBody Game match) {
+        log.info("criando nova partida na data {}", match.getMatchDate());
+        Game created = matchService.save(match);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    public Match update(@PathVariable Long id, @Valid @RequestBody Match match) {
+    public Game update(@PathVariable Long id, @Valid @RequestBody Game match) {
         log.info("atualizando partida com id: {}", id);
         return matchService.update(id, match);
     }

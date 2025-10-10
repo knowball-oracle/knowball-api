@@ -6,20 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Refereeing;
-import br.com.fiap.knowball.repository.MatchRepository;
+import br.com.fiap.knowball.repository.GameRepository;
 import br.com.fiap.knowball.repository.RefereeRepository;
+import br.com.fiap.knowball.repository.RefereeingRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class RefereeingService {
     
     @Autowired
-    private final RefereeingService refereeingRepository;
-    private final MatchRepository matchRepository;
+    private final RefereeingRepository refereeingRepository;
+    private final GameRepository matchRepository;
     private final RefereeRepository refereeRepository;
 
-    public RefereeingService(RefereeingService refereeingRepository,
-                             MatchRepository matchRepository,
+    public RefereeingService(RefereeingRepository refereeingRepository,
+                             GameRepository matchRepository,
                              RefereeRepository refereeRepository) {
         this.refereeingRepository = refereeingRepository;
         this.matchRepository = matchRepository;
@@ -31,12 +32,12 @@ public class RefereeingService {
     }
 
     public List<Refereeing> findByMatchId(Long matchId) {
-        return refereeingRepository.findByMatchId(matchId);
+        return refereeingRepository.findByGameId(matchId);
     }
 
     public Refereeing save(Refereeing refereeing) {
         
-        matchRepository.findById(refereeing.getMatch().getId())
+        matchRepository.findById(refereeing.getGame().getId())
             .orElseThrow(() -> new EntityNotFoundException("Partida não encontrada"));
 
         // Valida se árbitro existe

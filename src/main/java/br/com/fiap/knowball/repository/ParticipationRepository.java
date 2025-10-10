@@ -10,8 +10,8 @@ import br.com.fiap.knowball.model.ParticipationId;
 
 public interface ParticipationRepository extends JpaRepository<Participation, ParticipationId>{
 
-    @Query("SELECT p FROM Participation p WHERE p.match.id = :matchId")
-    List<Participation> findByMatchId(Long matchId);
+    @Query("SELECT p FROM Participation p WHERE p.game.id = :gameId")
+    List<Participation> findByGameId(Long gameId);
     
     List<Participation> findByTeamId(Long teamId);
 }

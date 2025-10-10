@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.fiap.knowball.model.Participation;
 import br.com.fiap.knowball.model.ParticipationId;
 import br.com.fiap.knowball.model.ParticipationType;
-import br.com.fiap.knowball.repository.MatchRepository;
+import br.com.fiap.knowball.repository.GameRepository;
 import br.com.fiap.knowball.repository.ParticipationRepository;
 import br.com.fiap.knowball.repository.TeamRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -19,11 +19,11 @@ public class ParticipationService {
     
     @Autowired
     private final ParticipationRepository participationRepository;
-    private final MatchRepository matchRepository;
+    private final GameRepository matchRepository;
     private final TeamRepository teamRepository;
 
     public ParticipationService(ParticipationRepository participationRepository,
-                                MatchRepository matchRepository,
+                                GameRepository matchRepository,
                                 TeamRepository teamRepository) {
         this.participationRepository = participationRepository;
         this.matchRepository = matchRepository;
@@ -38,11 +38,11 @@ public class ParticipationService {
         if(!matchRepository.existsById(matchId)) {
             throw new EntityNotFoundException("Partida não encontrada com id " + matchId);
         }
-        return participationRepository.findByMatchId(matchId);
+        return participationRepository.findByGameId(matchId);
     }
 
     public Participation save(Participation participation) {
-        Long matchId = participation.getMatch().getId();
+        Long matchId = participation.getGame().getId();
         Long teamId = participation.getTeam().getId();
         ParticipationType type = participation.getType();
 
@@ -52,7 +52,7 @@ public class ParticipationService {
         teamRepository.findById(teamId)
             .orElseThrow(() -> new EntityNotFoundException("Time não encontrado"));
 
-        boolean exists = participationRepository.findByMatchId(matchId).stream()
+        boolean exists = participationRepository.findByGameId(matchId).stream()
             .anyMatch(p -> p.getType().equals(type));
 
         if (exists) {
@@ -63,7 +63,7 @@ public class ParticipationService {
     }
 
     public Participation update(Participation participation) {
-        Long matchId = participation.getMatch().getId();
+        Long matchId = participation.getGame().getId();
         Long teamId = participation.getTeam().getId();
         ParticipationType type = participation.getType();
 
@@ -73,7 +73,7 @@ public class ParticipationService {
             .orElseThrow(() -> new EntityNotFoundException("Participação não encontrada"));
 
         if (!existing.getType().equals(type)) {
-            boolean typeExists = participationRepository.findByMatchId(matchId).stream()
+            boolean typeExists = participationRepository.findByGameId(matchId).stream()
                 .anyMatch(p -> p.getType().equals(type));
 
             if (typeExists) {

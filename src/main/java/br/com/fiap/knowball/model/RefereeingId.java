@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RefeeringId implements Serializable{
+public class RefereeingId implements Serializable{
 
     private Long matchId;
     private Long refereeId;
