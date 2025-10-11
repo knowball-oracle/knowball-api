@@ -132,7 +132,7 @@ mvn spring-boot:run
 
 # Integrantes
 
-| Nome Completo           | Avatar | Responsabilidade |
+| Nome Completo           | Foto | Responsabilidade |
 | ------------------------| ------ | ----- |
 | Gabriel Oliveira Rossi  | <a href="https://github.com/GabrielRossi01"><img src="https://avatars.githubusercontent.com/u/179617228?v=4" height="50" style="border-radius:30px;"></a> | Responsável pela concepção, implementação, testes e documentação da API Knowball. |
 | Rodrigo Naoki Yamasaki  | <a href="https://github.com/RodrygoYamasaki"><img src="https://avatars.githubusercontent.com/u/182231531?v=4" height="50" style="border-radius:30px;"></a> | Responsável pela participação nas etapas de design e revisão de código. |
