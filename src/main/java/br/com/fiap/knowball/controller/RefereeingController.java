@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fiap.knowball.model.Refereeing;
 import br.com.fiap.knowball.service.RefereeingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Tag(name = "Refereeing", description = "Endpoints de gerenciamento de papéis de arbitragem")
 @RestController
 @RequestMapping("/refereeing")
 @RequiredArgsConstructor
@@ -25,18 +29,24 @@ public class RefereeingController {
     
     private final RefereeingService refereeingService;
 
+    @Operation(summary = "Listar todos os papéis de arbitragem", description = "Retorna todos os papéis de arbitragem cadastrados.")
+    @ApiResponse(responseCode = "200", description = "Lista de papéis de arbitragem retornada com sucesso")
     @GetMapping
     public List<Refereeing> getAll() {
         log.info("buscando todos os papéis de arbitragem");
         return refereeingService.findAll();
     }
 
+    @Operation(summary = "Listar papéis de arbitragem por partida", description = "Retorna todos os papéis de arbitragem para uma partida específica.")
+    @ApiResponse(responseCode = "200", description = "Lista de papéis de arbitragem da partida retornada com sucesso")
     @GetMapping("/match/{matchId}")
     public List<Refereeing> getByMatchId(@PathVariable Long matchId) {
         log.info("buscando papéis de arbitragem pela partida id: {}", matchId);
         return refereeingService.findByMatchId(matchId);
     }
 
+    @Operation(summary = "Criar papel de arbitragem", description = "Cria um novo papel de arbitragem para uma partida e árbitro.")
+    @ApiResponse(responseCode = "201", description = "Papel de arbitragem criado com sucesso")
     @PostMapping
     public ResponseEntity<Refereeing> create(@Valid @RequestBody Refereeing refereeing) {
         log.info("criando novo papel de arbitragem para partida id {} e árbitro id {}", refereeing.getGame().getId(), refereeing.getReferee().getId());
