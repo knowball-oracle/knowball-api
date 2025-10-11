@@ -51,6 +51,25 @@ O Knowball é voltado principalmente para:
 
 ---
 
+## Cronograma de desenvolvimento
+
+| Etapa                                       | Descrição das atividades                                     | Data prevista/concluída      |
+|----------------------------------------------|-------------------------------------------------------------|------------------------------|
+| Levantamento de requisitos e modelagem       | Definição das entidades do domínio, regras, relacionamento  | 02 de outubro de 2025        |
+| Modelagem UML inicial                        | Elaboração do diagrama de classes no Draw.io                | 03-05 de outubro de 2025     |
+| Criação do projeto Spring Boot               | Geração do esqueleto e configuração inicial                 | 05 de outubro de 2025        |
+| Implementação das entidades (models)         | Criar classes Championship, Game, Team, Referee, Report, etc| 06-07 de outubro de 2025     |
+| Implementação dos repositórios               | JPARepository para cada entidade                            | 07-08 de outubro de 2025     |
+| Criação dos services                         | Lógica de negócio e validações                              | 08-09 de outubro de 2025     |
+| Implementação dos controllers (API REST)     | Endpoints REST de cada recurso                              | 10 de outubro de 2025        |
+| Ajustes de nomenclatura (Match -> Game)      | Correção devido a palavras reservadas Oracle                | 10 de outubro de 2025        |
+| Solução de erros de mapping/compostos        | Ajuste de participações, IDs compostos e anotações          | 10 de outubro de 2025        |
+| Testes de endpoint no Insomnia               | Criação e validação de requisições GET/POST/PUT/DELETE      | 10 de outubro de 2025        |
+| Refinamento do diagrama de classes           | Adiciona cardinalidades e enums, revisando clareza          | 10 de outubro de 2025        |
+| Documentação da API com Swagger/OpenAPI      | Documentação automática e exemplos de uso                   | 11 de outubro de 2025        |
+| Documentação final                           | Consolidação do cronograma, guias de teste e material de apoio | 11 de outubro de 2025     |
+
+
 ## Instruções de como rodar a aplicação
 
 ### Pré-requisitos
