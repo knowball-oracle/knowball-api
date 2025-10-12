@@ -172,13 +172,9 @@ mvn spring-boot:run
 | GET | `/reports/{id}` | Buscar denúncia por ID |
 | GET | `/reports/status/{status}` | Buscar denúncias por status |
 
----
-
-**Base URL:** `http://localhost:8080`
-
 **Total de endpoints:** 31
 
-
+---
 
 ### Testando API
 
@@ -187,6 +183,22 @@ mvn spring-boot:run
 `https://localhost:8080/swagger-ui.html`
 
 - Use ferramentas como **Insomnia ou Postman** para testar os endpoints REST da API.
+
+
+### Importar collection no Insomnia
+
+1. **Baixe a collection:**
+
+[📥 Baixar knowball-api-tests.json](https://drive.google.com/uc?export=download&id=1x1jmJmGsbHSktv2ufjS996ZYl59iDCq1)
+  
+2. Abra o Insomnia
+  
+3. Clique em **Application** > **Import/Export** > **Import Data** > **From File**
+  
+4. Selecione o arquivo baixado
+  
+5. Pronto! Todas as requisições estarão disponíveis
+
 
 # Integrantes
 
