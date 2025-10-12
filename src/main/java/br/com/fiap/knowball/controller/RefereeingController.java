@@ -39,10 +39,10 @@ public class RefereeingController {
 
     @Operation(summary = "Listar papéis de arbitragem por partida", description = "Retorna todos os papéis de arbitragem para uma partida específica.")
     @ApiResponse(responseCode = "200", description = "Lista de papéis de arbitragem da partida retornada com sucesso")
-    @GetMapping("/match/{matchId}")
-    public List<Refereeing> getByMatchId(@PathVariable Long matchId) {
-        log.info("buscando papéis de arbitragem pela partida id: {}", matchId);
-        return refereeingService.findByMatchId(matchId);
+    @GetMapping("/game/{gameId}")
+    public List<Refereeing> getByGameId(@PathVariable Long gameId) {
+        log.info("buscando papéis de arbitragem pela partida id: {}", gameId);
+        return refereeingService.findByGameId(gameId);
     }
 
     @Operation(summary = "Criar papel de arbitragem", description = "Cria um novo papel de arbitragem para uma partida e árbitro.")

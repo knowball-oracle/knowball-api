@@ -19,14 +19,14 @@ public class ParticipationService {
     
     @Autowired
     private final ParticipationRepository participationRepository;
-    private final GameRepository matchRepository;
+    private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
 
     public ParticipationService(ParticipationRepository participationRepository,
-                                GameRepository matchRepository,
+                                GameRepository gameRepository,
                                 TeamRepository teamRepository) {
         this.participationRepository = participationRepository;
-        this.matchRepository = matchRepository;
+        this.gameRepository = gameRepository;
         this.teamRepository = teamRepository;
     }
 
@@ -34,11 +34,11 @@ public class ParticipationService {
         return participationRepository.findAll();
     }
 
-    public List<Participation> findByMatchId(Long matchId) {
-        if(!matchRepository.existsById(matchId)) {
-            throw new EntityNotFoundException("Partida não encontrada com id " + matchId);
+    public List<Participation> findByGameId(Long gameId) {
+        if(!gameRepository.existsById(gameId)) {
+            throw new EntityNotFoundException("Partida não encontrada com id " + gameId);
         }
-        return participationRepository.findByGameId(matchId);
+        return participationRepository.findByGameId(gameId);
     }
 
     public Participation save(Participation participation) {
@@ -46,7 +46,7 @@ public class ParticipationService {
         Long teamId = participation.getTeam().getId();
         ParticipationType type = participation.getType();
 
-        matchRepository.findById(matchId)
+        gameRepository.findById(matchId)
             .orElseThrow(() -> new EntityNotFoundException("Partida não encontrada"));
 
         teamRepository.findById(teamId)
@@ -89,5 +89,4 @@ public class ParticipationService {
         ParticipationId id = new ParticipationId(matchId, teamId);
         participationRepository.deleteById(id);
     }
-    
 }

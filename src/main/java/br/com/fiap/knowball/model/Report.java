@@ -2,6 +2,8 @@ package br.com.fiap.knowball.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -32,12 +34,14 @@ public class Report {
 
     @NotNull(message = "{report.match.notnull}")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "match_id", nullable = false)
+    @JoinColumn(name = "game_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Game game;
 
     @NotNull(message = "{report.referee.notnull}")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "referee_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Referee referee;
 
     @NotBlank(message = "{report.protocol.notblank}")

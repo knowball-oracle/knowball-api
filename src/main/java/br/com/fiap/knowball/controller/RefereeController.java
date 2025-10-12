@@ -65,7 +65,7 @@ public class RefereeController {
         @ApiResponse(responseCode = "200", description = "Árbitro atualizado com sucesso"),
         @ApiResponse(responseCode = "404", description = "Árbitro não encontrado")
     })
-    @PutMapping
+    @PutMapping("{id}")
     public Referee update(@PathVariable Long id, @Valid @RequestBody Referee referee) {
         log.info("atualizando árbitro com id: {}", id);
         return refereeService.update(id, referee);

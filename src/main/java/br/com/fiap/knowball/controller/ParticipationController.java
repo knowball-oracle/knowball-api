@@ -42,9 +42,9 @@ public class ParticipationController {
     @Operation(summary = "Listar participações por partida", description = "Retorna todas as participações de uma partida específica.")
     @ApiResponse(responseCode = "200", description = "Lista de participações da partida retornada com sucesso")
     @GetMapping("/match/{matchId}")
-    public List<Participation> getByMatch(@PathVariable Long matchId) {
-        log.info("buscando participações pela partida id: {}", matchId);
-        return participationService.findByMatchId(matchId);
+    public List<Participation> getByGame(@PathVariable Long gameId) {
+        log.info("buscando participações pela partida id: {}", gameId);
+        return participationService.findByGameId(gameId);
     }
 
     @Operation(summary = "Criar participação", description = "Cria uma nova participação para uma partida e time.")

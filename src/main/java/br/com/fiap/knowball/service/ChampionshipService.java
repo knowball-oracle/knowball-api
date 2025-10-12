@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Championship;
+import br.com.fiap.knowball.model.Game;
 import br.com.fiap.knowball.repository.ChampionshipRepository;
+import br.com.fiap.knowball.repository.GameRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -15,9 +17,11 @@ public class ChampionshipService {
     
     @Autowired
     private final ChampionshipRepository championshipRepository;
+    private final GameRepository gameRepository;
 
-    public ChampionshipService(ChampionshipRepository championshipRepository) {
+    public ChampionshipService(ChampionshipRepository championshipRepository, GameRepository gameRepository) {
         this.championshipRepository = championshipRepository;
+        this.gameRepository = gameRepository;
     }
 
     public List<Championship> findAll(){
@@ -41,6 +45,8 @@ public class ChampionshipService {
     }
 
     public void destroy(Long id) {
+        List<Game> games = gameRepository.findByChampionshipId(id);
+        gameRepository.deleteAll(games);
         championshipRepository.deleteById(id);
     }
 }

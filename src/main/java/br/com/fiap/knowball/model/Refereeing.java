@@ -1,5 +1,7 @@
 package br.com.fiap.knowball.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -11,11 +13,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -29,12 +33,14 @@ public class Refereeing {
     private RefereeingRoleType role;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("matchId")
-    @JoinColumn(name = "match_id")
+    @MapsId("gameId")
+    @JoinColumn(name = "game_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Game game;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("refereeId")
     @JoinColumn(name = "referee_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Referee referee;
 }

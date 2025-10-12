@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RefereeingId implements Serializable{
 
-    private Long matchId;
+    private Long gameId;
     private Long refereeId;
 }

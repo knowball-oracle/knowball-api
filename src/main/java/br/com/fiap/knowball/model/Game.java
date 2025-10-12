@@ -2,6 +2,8 @@ package br.com.fiap.knowball.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,6 +34,7 @@ public class Game {
     @NotNull(message = "{match.championship.notnull}")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "championship_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Championship championship;
 
     @NotNull(message = "{match.date.notnull}")

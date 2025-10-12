@@ -31,8 +31,8 @@ public class RefereeingService {
         return refereeingRepository.findAll();
     }
 
-    public List<Refereeing> findByMatchId(Long matchId) {
-        return refereeingRepository.findByGameId(matchId);
+    public List<Refereeing> findByGameId(Long gameId) {
+        return refereeingRepository.findByGameId(gameId);
     }
 
     public Refereeing save(Refereeing refereeing) {

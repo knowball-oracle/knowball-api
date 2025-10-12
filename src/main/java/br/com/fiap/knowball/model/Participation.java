@@ -1,5 +1,7 @@
 package br.com.fiap.knowball.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -31,10 +33,12 @@ public class Participation {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("gameId")
     @JoinColumn(name = "game_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Game game;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("teamId")
     @JoinColumn(name = "team_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Team team;
 }
