@@ -104,41 +104,80 @@ mvn spring-boot:run
 
 ## Listagem de todos os endpoints
 
-| Recurso      | Endpoint                   | Método HTTP | Descrição                                        |
-|--------------|----------------------------|-------------|-------------------------------------------------|
-| Championship | /championships             | GET         | Retorna todos os campeonatos cadastrados        |
-| Championship | /championships/{id}        | GET         | Retorna campeonato pelo ID específico           |
-| Championship | /championships             | POST        | Cria um novo campeonato                          |
-| Championship | /championships/{id}        | PUT         | Atualiza dados de um campeonato existente       |
-| Championship | /championships/{id}        | DELETE      | Remove um campeonato pelo ID                      |
-| Game         | /games                     | GET         | Retorna todas as partidas cadastradas            |
-| Game         | /games/{id}                | GET         | Retorna uma partida pelo ID                       |
-| Game         | /games/championship/{id}   | GET         | Retorna partidas associadas a campeonato         |
-| Game         | /games                     | POST        | Cria uma nova partida                            |
-| Game         | /games/{id}                | PUT         | Atualiza dados de uma partida existente          |
-| Game         | /games/{id}                | DELETE      | Remove uma partida pelo ID                        |
-| Participation| /participations            | GET         | Retorna todas as participações                   |
-| Participation| /participations/match/{id} | GET         | Retorna participações por partida                 |
-| Participation| /participations            | POST        | Cria nova participação                           |
-| Participation| /participations            | PUT         | Atualiza uma participação                        |
-| Participation| /participations/match/{matchId}/team/{teamId} | DELETE  | Remove uma participação específica                |
-| Referee      | /referees                  | GET         | Retorna todos os árbitros                         |
-| Referee      | /referees/{id}             | GET         | Retorna árbitro por ID                            |
-| Referee      | /referees                  | POST        | Cria novo árbitro                                |
-| Referee      | /referees/{id}             | PUT         | Atualiza árbitro existente                        |
-| Referee      | /referees/{id}             | DELETE      | Remove árbitro por ID                             |
-| Refereeing   | /refereeing                | GET         | Retorna todos os papéis de arbitragem            |
-| Refereeing   | /refereeing/match/{id}     | GET         | Retorna papéis de arbitragem por partida          |
-| Refereeing   | /refereeing                | POST        | Cria novo papel de arbitragem                     |
-| Report       | /reports                   | GET         | Retorna todas as denúncias                        |
-| Report       | /reports/{id}              | GET         | Retorna denúncia por ID                           |
-| Report       | /reports/status/{status}   | GET         | Retorna denúncias filtradas por status             |
-| Report       | /reports                   | POST        | Cria nova denúncia                               |
-| Team         | /teams                     | GET         | Retorna todos os times                            |
-| Team         | /teams/{id}                | GET         | Retorna time por ID                              |
-| Team         | /teams                     | POST        | Cria novo time                                  |
-| Team         | /teams/{id}                | POST        | Atualiza time existente                          |
-| Team         | /teams/{id}                | DELETE      | Remove time por ID                               |
+### Championship (Campeonatos)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/championships` | Listar todos os campeonatos |
+| POST | `/championships` | Criar novo campeonato |
+| GET | `/championships/{id}` | Buscar campeonato por ID |
+| PUT | `/championships/{id}` | Atualizar campeonato |
+| DELETE | `/championships/{id}` | Deletar campeonato |
+
+### Game (Partidas)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/games` | Buscar todas as partidas |
+| POST | `/games` | Criar nova partida |
+| GET | `/games/{id}` | Buscar partida por ID |
+| PUT | `/games/{id}` | Atualizar partida por ID |
+| DELETE | `/games/{id}` | Deletar partida por ID |
+| GET | `/games/championship/{championshipId}` | Buscar partidas por campeonato |
+
+### Team (Times)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/teams` | Listar todos os times |
+| POST | `/teams` | Criar novo time |
+| GET | `/teams/{id}` | Buscar time por ID |
+| PUT | `/teams/{id}` | Atualizar time |
+| DELETE | `/teams/{id}` | Deletar time |
+
+### Participation (Participações)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/participations` | Listar todas as participações |
+| POST | `/participations` | Criar participação |
+| PUT | `/participations` | Atualizar participação |
+| GET | `/participations/game/{gameId}` | Listar participações por partida |
+| DELETE | `/participations/game/{gameId}/team/{teamId}` | Deletar participação |
+
+### Referee (Árbitros)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/referees` | Listar todos os árbitros |
+| POST | `/referees` | Criar novo árbitro |
+| GET | `/referees/{id}` | Buscar árbitro por ID |
+| PUT | `/referees/{id}` | Atualizar árbitro |
+| DELETE | `/referees/{id}` | Deletar árbitro |
+
+### Refereeing (Arbitragem)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/refereeing` | Listar todos os papéis de arbitragem |
+| POST | `/refereeing` | Criar papel de arbitragem |
+| GET | `/refereeing/game/{gameId}` | Listar papéis de arbitragem por partida |
+
+### Report (Denúncias)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/reports` | Listar todas as denúncias |
+| POST | `/reports` | Criar nova denúncia |
+| GET | `/reports/{id}` | Buscar denúncia por ID |
+| GET | `/reports/status/{status}` | Buscar denúncias por status |
+
+---
+
+**Base URL:** `http://localhost:8080`
+
+**Total de endpoints:** 31
+
 
 
 ### Testando API
