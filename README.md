@@ -193,11 +193,11 @@ mvn spring-boot:run
   
 2. Abra o Insomnia
   
-3. Clique em **Application** > **Import/Export** > **Import Data** > **From File**
+3. Clique em **Create** > **Import**
   
-4. Selecione o arquivo baixado
+4. Selecione o arquivo JSON que você baixou
   
-5. Pronto! Todas as requisições estarão disponíveis
+5. Pronto! Todas as requisições serão importadas automaticamente
 
 
 ## Link do vídeo apresentando a proposta
