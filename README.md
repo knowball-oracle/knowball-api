@@ -176,7 +176,7 @@ mvn spring-boot:run
 
 ---
 
-### Testando API
+## Testando API
 
 - Para acessar a documentação **Swagger (UI e OpenAPI)**:
 
@@ -185,7 +185,7 @@ mvn spring-boot:run
 - Use ferramentas como **Insomnia ou Postman** para testar os endpoints REST da API.
 
 
-### Importar collection no Insomnia
+## Importar collection no Insomnia
 
 1. **Baixe a collection:**
 
@@ -200,7 +200,7 @@ mvn spring-boot:run
 5. Pronto! Todas as requisições estarão disponíveis
 
 
-## Link para vídeo apresentando a proposta
+## Link do vídeo apresentando a proposta
 
 > 🎬 Clique na imagem abaixo para assistir no YouTube
 
