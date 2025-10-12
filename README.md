@@ -200,7 +200,14 @@ mvn spring-boot:run
 5. Pronto! Todas as requisições estarão disponíveis
 
 
-# Integrantes
+## Link para vídeo apresentando a proposta
+
+> 🎬 Clique na imagem abaixo para assistir no YouTube
+
+[![Assista ao vídeo](https://img.youtube.com/vi/UewdXhF_TZ8/maxresdefault.jpg)](https://www.youtube.com/watch?v=UewdXhF_TZ8)
+
+
+## Integrantes
 
 | Nome Completo           | Foto | Responsabilidade |
 | ------------------------| ------ | ----- |
