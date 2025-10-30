@@ -1,8 +1,14 @@
 package br.com.fiap.knowball.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.knowball.assembler.ChampionshipModelAssembler;
 import br.com.fiap.knowball.model.Championship;
 import br.com.fiap.knowball.service.ChampionshipService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,13 +39,20 @@ import lombok.extern.slf4j.Slf4j;
 public class ChampionshipController {
 
     private final ChampionshipService championshipService;
+    private final ChampionshipModelAssembler assembler;
 
     @Operation(summary = "Listar todos os campeonatos", description = "Retorna todos os campeonatos cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de campeonatos retornada com sucesso")
     @GetMapping
-    public List<Championship> getAll() {
+    public CollectionModel<EntityModel<Championship>> getAll() {
         log.info("buscando todos os campeonatos");
-        return championshipService.findAll();
+        List<EntityModel<Championship>> championships = championshipService.findAll().stream()
+            .map(assembler::toModel)
+            .collect(Collectors.toList());
+
+        return CollectionModel.of(championships,
+            linkTo(methodOn(ChampionshipController.class).getAll()).withSelfRel()
+        );
     }
 
     @Operation(summary = "Buscar campeonato por ID", description = "Retorna um campeonato pelo seu identificador único.")
@@ -47,18 +61,23 @@ public class ChampionshipController {
         @ApiResponse(responseCode = "404", description = "Campeonato não encontrado")
     })
     @GetMapping("{id}")
-    public Championship getById(@PathVariable Long id) {
+    public EntityModel<Championship> getById(@PathVariable Long id) {
         log.info("buscando campeonato por id: {}", id);
-        return championshipService.findById(id);
+        Championship championship = championshipService.findById(id);
+        return assembler.toModel(championship);
     }
 
     @Operation(summary = "Criar novo campeonato", description = "Cria um novo campeonato com os dados enviados.")
     @ApiResponse(responseCode = "201", description = "Campeonato criado com sucesso")
     @PostMapping
-    public ResponseEntity<Championship> create(@Valid @RequestBody Championship championship) {
+    public ResponseEntity<EntityModel<Championship>> create(@Valid @RequestBody Championship championship) {
         log.info("criando um novo campeonato: {}", championship.getName());
         Championship created = championshipService.save(championship);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        EntityModel<Championship> entityModel = assembler.toModel(created);
+
+        return ResponseEntity
+            .created(linkTo(methodOn(ChampionshipController.class).getById(created.getId())).toUri())
+            .body(entityModel);
     }
 
     @Operation(summary = "Atualizar campeonato", description = "Atualiza os dados de um campeonato existente.")
@@ -67,9 +86,10 @@ public class ChampionshipController {
         @ApiResponse(responseCode = "404", description = "Campeonato não encontrado")
     })
     @PutMapping("{id}")
-    public Championship update(@PathVariable Long id, @Valid @RequestBody Championship championship) {
+    public EntityModel<Championship> update(@PathVariable Long id, @Valid @RequestBody Championship championship) {
         log.info("atualizando campeonanto com id:{}", id);
-        return championshipService.update(id, championship);
+        Championship updated = championshipService.update(id, championship);
+        return assembler.toModel(updated);
     }
 
     @Operation(summary = "Deletar campeonato", description = "Remove um campeonato pelo seu ID.")
@@ -83,6 +103,8 @@ public class ChampionshipController {
         championshipService.destroy(id);
         return ResponseEntity.noContent().build();
     }
+
+    // Endpoints para testar STORES PROCEDURES para o entregável da matéria de Banco de Dados
 
     @Operation(summary = "Inserir campeonato via Procedure",
                 description = "Insere um campeonato usando a stored procedure pcd_insert_campeonato")
