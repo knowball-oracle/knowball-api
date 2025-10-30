@@ -31,7 +31,7 @@ O Knowball é voltado principalmente para:
 
 ## Diagrama de Classe das Entidades
 
-![Imagem](https://drive.google.com/uc?export=view&id=1BYFaZ096cIoCFIdaYMZVoByM-ARmmr5T)
+![Imagem](https://drive.google.com/uc?export=view&id=1-gX6otPR6oUZ41xjQl5smzxORJ4Eh2P7)
 
 
 ## Diagrama de Entidade e Relacionamento (DER) 
@@ -49,11 +49,17 @@ O Knowball é voltado principalmente para:
 | **ÁRBITRO → DENÚNCIA** | 1:N | Um árbitro pode ser alvo de várias denúncias | `id_arbitro` em `denuncia` | - |
 | **PARTIDA ↔ EQUIPE** | N:M | Relacionamento muitos-para-muitos via tabela `participacao` | `(id_partida, id_equipe)` | `fk_participacao_partida`, `fk_participacao_equipe` |
 
+## Diagrama da arquitetura
+
+![Imagem](https://drive.google.com/uc?export=view&id=17Re8NdRuNXts7V7-fM9g2NiruMe6pk6m)
+
 ---
 
 ## Cronograma de desenvolvimento
 
-| Etapa                                       | Descrição das atividades                                     | Data prevista/concluída      |
+### Atividades concluídas
+
+| Etapa                                        | Descrição das atividades                                    | Data prevista/concluída      |
 |----------------------------------------------|-------------------------------------------------------------|------------------------------|
 | Levantamento de requisitos e modelagem       | Definição das entidades do domínio, regras, relacionamento  | 02 de outubro de 2025        |
 | Modelagem UML inicial                        | Elaboração do diagrama de classes no Draw.io                | 03-05 de outubro de 2025     |
@@ -69,6 +75,66 @@ O Knowball é voltado principalmente para:
 | Documentação da API com Swagger/OpenAPI      | Documentação automática e exemplos de uso                   | 11 de outubro de 2025        |
 | Documentação final                           | Consolidação do cronograma, guias de teste e material de apoio | 11 de outubro de 2025     |
 
+### Próximas Atividades
+ 
+| Etapa                            | Descrição das atividades                                      | Data prevista              |
+|----------------------------------|---------------------------------------------------------------|----------------------------|
+| **Implementação HATEOAS**        | Adicionar links hipermídia nos recursos REST (Spring HATEOAS) | 30-31 de outubro de 2025   |
+| Configuração de Spring Security  | Setup inicial de segurança, autenticação básica               | 20 de fevereiro de 2026    |
+| Sistema de roles e permissões    | Controle de acesso baseado em perfis (admin, user, etc)       | 21-22 de fevereiro de 2026 |
+| Paginação e ordenação            | Implementar Pageable em endpoints de listagem                 | 23-24 de fevereiro de 2026 |
+| Filtros e busca avançada         | Query methods e specifications para buscas complexas          | 25 de fevereiro de 2026    |
+| Configuração de profiles         | Ambientes dev, test, prod com diferentes configs              | 27 de março de 2026        |
+| Preparação para deploy           | Dockerização da aplicação                                     | 27-28 de março de 2026     |
+| Deploy em ambiente de produção   | Configuração CI/CD e deploy inicial                           | 29-30 de março de 2026     |
+
+
+## Evolução do projeto - Sprint 1 -> Sprint 2
+
+### Todos os tópicos já abordados na Sprint 1
+
+1. Estrutura base do projeto
+    - Configuração do projeto Spring Boot com Java
+    - Integração com Oracle Database
+
+2. Modelagem de dados
+    - Criação do modelo relacional completo
+    - Implementação de 7 entidades principais: `Championship`, `Game`, `Team`, `Participation`, `Referee`, `Refereeing`, `Report`
+    - Relacionamentos ManyToOne e chaves compostas com `@EmbeddedId`
+
+3. Implementação CRUD completa
+    - 31 endpoints REST funcionais
+    - Services com lógica de negócio
+    - Repositories com JPA
+    - Validações com Bean Validation
+    - Tratamento de exceções customizado
+
+4. Documentação
+    - Swagger/OpenAPI integrado
+    - Collection do Insomnia exportada
+    - README com instruções de uso
+    - Diagramas do banco de dados/classes das entidades
+
+5. Testes
+   - Testes manuais via **Insomnia**
+   - Validação de todos os endpoints
+   - Documentação de casos de teste
+  
+### Sprint 2 - HATEOAS
+
+Elevar o nível de maturidade da API REST através da implementação de **HATEOAS (Hypermedia as the Engine of Application State)**, alcançando o nível 3 do [*Richardson Maturiy Model.*](https://martinfowler.com/articles/richardsonMaturityModel.html)
+
+## Comparativo Sprint 1 vs Sprint 2
+
+| Aspecto                          | Sprint 1                                                      | Sprint 2                      |
+|----------------------------------|---------------------------------------------------------------|-------------------------------|
+| Nível de maturidade              | Nível 2                                                       | Nível 3                       |
+| Retorno dos controllers          | Entity                                                        | EntityModel/CollectionModel   |
+| Hipermídia                       | ❌ Não                                                        | ✅ Sim                       |
+| Assemblers                       | ❌ Não                                                        | ✅ 7 Assemblers              |
+| Links nas respostas              | ❌ Não                                                        | ✅ Self, Collection, Related |
+| Navegabilidade da API            | Manual                                                        | Autodescritiva                |
+| Diagrama de arquitetura          | ❌ Não                                                        | ✅ Sim                       |
 
 ## Instruções de como rodar a aplicação
 
