@@ -1,8 +1,13 @@
 package br.com.fiap.knowball.controller;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.springframework.http.HttpStatus;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.knowball.assembler.GameModelAssembler;
 import br.com.fiap.knowball.model.Game;
 import br.com.fiap.knowball.service.GameService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,14 +36,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GameController {
     
-    private final GameService matchService;
+    private final GameService gameService;
+    private final GameModelAssembler assembler;
 
     @Operation(summary = "Buscar todas as partidas", description = "Retorna uma lista de todas as partidas cadastradas.")
     @ApiResponse(responseCode = "200", description = "Lista de partidas retornada com sucesso")
     @GetMapping
-    public List<Game> getAll() {
+    public CollectionModel<EntityModel<Game>> getAll() {
         log.info("buscando todas as partidas");
-        return matchService.findAll();
+        List<EntityModel<Game>> games = gameService.findAll().stream()
+            .map(assembler::toModel)
+            .collect(Collectors.toList());
+        
+        return CollectionModel.of(games,
+            linkTo(methodOn(GameController.class).getAll()).withSelfRel()
+        );
     }
 
     @Operation(summary = "Buscar partida por ID", description = "Busca uma partida específica pelo seu identificador único.")
@@ -46,24 +59,43 @@ public class GameController {
         @ApiResponse(responseCode = "404", description = "Partida não encontrada")
     })
     @GetMapping("{id}")
-    public Game getById(@PathVariable Long id) {
+    public EntityModel<Game> getById(@PathVariable Long id) {
         log.info("buscando partida pelo id: {}", id);
-        return matchService.findById(id);
+        Game game = gameService.findById(id);
+        return assembler.toModel(game);
     }
 
     @GetMapping("/championship/{championshipId}")
-    public List<Game> getByChampionship(@PathVariable Long championshipId) {
+    public CollectionModel<EntityModel<Game>> getByChampionship(@PathVariable Long championshipId) {
         log.info("buscando partidas pelo campeonato id: {}", championshipId);
-        return matchService.findByChampionshipId(championshipId);
+        List<EntityModel<Game>> games = gameService.findByChampionshipId(championshipId).stream()
+            .map(assembler::toModel)
+            .collect(Collectors.toList());
+
+        return CollectionModel.of(games,
+            linkTo(methodOn(GameController.class).getByChampionship(championshipId))
+                .withSelfRel()
+                .withTitle("List games by championship"),
+            linkTo(methodOn(ChampionshipController.class).getById(championshipId))
+                .withRel("championship")
+                .withTitle("View championship details"),
+            linkTo(methodOn(GameController.class).getAll())
+                .withRel("all-games")
+                .withTitle("List all games")
+        );
     }
 
     @Operation(summary = "Criar nova partida", description = "Cria uma nova partida com os dados informados.")
     @ApiResponse(responseCode = "201", description = "Partida criada com sucesso")
     @PostMapping
-    public ResponseEntity<Game> create(@Valid @RequestBody Game match) {
-        log.info("criando nova partida na data {}", match.getMatchDate());
-        Game created = matchService.save(match);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public ResponseEntity<EntityModel<Game>> create(@Valid @RequestBody Game game) {
+        log.info("criando nova partida na data {}", game.getMatchDate());
+        Game created = gameService.save(game);
+        EntityModel<Game> entityModel = assembler.toModel(created);
+
+        return ResponseEntity
+            .created(linkTo(methodOn(GameController.class).getById(created.getId())).toUri())
+            .body(entityModel);
     }
 
     @Operation(summary = "Atualizar partida por ID", description = "Atualiza os dados de uma partida existente.")
@@ -72,9 +104,10 @@ public class GameController {
         @ApiResponse(responseCode = "404", description = "Partida não encontrada")
     })
     @PutMapping("{id}")
-    public Game update(@PathVariable Long id, @Valid @RequestBody Game match) {
+    public EntityModel<Game> update(@PathVariable Long id, @Valid @RequestBody Game game) {
         log.info("atualizando partida com id: {}", id);
-        return matchService.update(id, match);
+        Game updated = gameService.update(id, game);
+        return assembler.toModel(updated);
     }
 
     @Operation(summary = "Deletar partida por ID", description = "Exclui uma partida do sistema pelo seu ID.")
@@ -85,7 +118,7 @@ public class GameController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> destroy(@PathVariable Long id) {
         log.info("deletando partida com id: {}", id);
-        matchService.destroy(id);
+        gameService.destroy(id);
         return ResponseEntity.noContent().build();
     }
 }

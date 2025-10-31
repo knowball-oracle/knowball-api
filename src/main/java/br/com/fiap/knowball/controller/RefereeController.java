@@ -1,8 +1,13 @@
 package br.com.fiap.knowball.controller;
 
-import java.util.List;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.springframework.http.HttpStatus;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.knowball.assembler.RefereeModelAssembler;
 import br.com.fiap.knowball.model.Referee;
 import br.com.fiap.knowball.service.RefereeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,13 +37,20 @@ import lombok.extern.slf4j.Slf4j;
 public class RefereeController {
     
     private final RefereeService refereeService;
+    private final RefereeModelAssembler assembler;
 
     @Operation(summary = "Listar todos os árbitros", description = "Retorna a lista de todos os árbitros cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de árbitros retornada com sucesso")
     @GetMapping
-    public List<Referee> getAll() {
+    public CollectionModel<EntityModel<Referee>> getAll() {
         log.info("buscando todos os árbitros");
-        return refereeService.findAll();
+        List<EntityModel<Referee>> referees = refereeService.findAll().stream()
+            .map(assembler::toModel)
+            .collect(Collectors.toList());
+        
+        return CollectionModel.of(referees,
+            linkTo(methodOn(RefereeController.class).getAll()).withSelfRel()
+        );
     }
 
     @Operation(summary = "Buscar árbitro por ID", description = "Retorna um árbitro pelo seu identificador único.")
@@ -46,18 +59,23 @@ public class RefereeController {
         @ApiResponse(responseCode = "404", description = "Árbitro não encontrado")
     })
     @GetMapping("{id}")
-    public Referee getById(@PathVariable Long id) {
+    public EntityModel<Referee> getById(@PathVariable Long id) {
         log.info("buscando árbitro pelo id: {}", id);
-        return refereeService.findById(id);
+        Referee referee = refereeService.findById(id);
+        return assembler.toModel(referee);
     }
 
     @Operation(summary = "Criar novo árbitro", description = "Cria um novo árbitro com os dados informados.")
     @ApiResponse(responseCode = "201", description = "Árbitro criado com sucesso")
     @PostMapping
-    public ResponseEntity<Referee> create(@Valid @RequestBody Referee referee) {
+    public ResponseEntity<EntityModel<Referee>> create(@Valid @RequestBody Referee referee) {
         log.info("criando novo árbitro: {}", referee.getName());
         Referee created = refereeService.save(referee);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        EntityModel<Referee> entityModel = assembler.toModel(created);
+
+        return ResponseEntity
+            .created(linkTo(methodOn(RefereeController.class).getById(created.getId())).toUri())
+            .body(entityModel);
     }
 
     @Operation(summary = "Atualizar árbitro", description = "Atualiza os dados de um árbitro existente.")
@@ -66,9 +84,10 @@ public class RefereeController {
         @ApiResponse(responseCode = "404", description = "Árbitro não encontrado")
     })
     @PutMapping("{id}")
-    public Referee update(@PathVariable Long id, @Valid @RequestBody Referee referee) {
+    public EntityModel<Referee> update(@PathVariable Long id, @Valid @RequestBody Referee referee) {
         log.info("atualizando árbitro com id: {}", id);
-        return refereeService.update(id, referee);
+        Referee updated = refereeService.update(id, referee);
+        return assembler.toModel(updated);
     }
 
     @Operation(summary = "Deletar árbitro", description = "Remove um árbitro pelo seu ID.")

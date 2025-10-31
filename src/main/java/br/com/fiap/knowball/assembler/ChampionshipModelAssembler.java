@@ -18,11 +18,25 @@ public class ChampionshipModelAssembler implements RepresentationModelAssembler<
     @NonNull
     public EntityModel<Championship> toModel(@NonNull Championship championship) {
         return EntityModel.of(championship,
-            linkTo(methodOn(ChampionshipController.class).getById(championship.getId())).withSelfRel().withTitle("Get championship details"),
-            linkTo(methodOn(ChampionshipController.class).getAll()).withRel("all-championships").withTitle("List all championships"),
-            linkTo(methodOn(ChampionshipController.class).update(championship.getId(), null)).withRel("update-championship").withTitle("Update this championship"),
-            linkTo(methodOn(ChampionshipController.class).destroy(championship.getId())).withRel("delete-championship").withTitle("Delete this championship"),
-            linkTo(methodOn(ChampionshipController.class).create(null)).withRel("create-championship").withTitle("Create a new championship")
+            linkTo(methodOn(ChampionshipController.class).getById(championship.getId()))
+                .withSelfRel()
+                .withTitle("Get championship details"),
+
+            linkTo(methodOn(ChampionshipController.class).getAll())
+                .withRel("all-championships")
+                .withTitle("List all championships"),
+
+            linkTo(methodOn(ChampionshipController.class).update(championship.getId(), null))
+                .withRel("update-championship")
+                .withTitle("Update this championship"),
+
+            linkTo(methodOn(ChampionshipController.class).destroy(championship.getId()))
+                .withRel("delete-championship")
+                .withTitle("Delete this championship"),
+
+            linkTo(methodOn(ChampionshipController.class).create(null))
+                .withRel("create-championship")
+                .withTitle("Create a new championship")
         );
     }
 }
