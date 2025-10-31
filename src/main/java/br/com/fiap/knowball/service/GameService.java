@@ -15,20 +15,20 @@ import jakarta.persistence.EntityNotFoundException;
 public class GameService {
     
     @Autowired
-    private final GameRepository matchRepository;
+    private final GameRepository gameRepository;
     private final ChampionshipRepository championshipRepository;
 
-    public GameService(GameRepository matchRepository, ChampionshipRepository championshipRepository) {
-        this.matchRepository = matchRepository;
+    public GameService(GameRepository gameRepository, ChampionshipRepository championshipRepository) {
+        this.gameRepository = gameRepository;
         this.championshipRepository = championshipRepository;
     }
 
     public List<Game> findAll() {
-        return matchRepository.findAll();
+        return gameRepository.findAll();
     }
 
     public Game findById(Long id) {
-        return matchRepository
+        return gameRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Partida não encontrada com id " + id));
     }
@@ -38,23 +38,23 @@ public class GameService {
             throw new EntityNotFoundException("Campeonato não encontrado");
         } 
 
-        return matchRepository.findByChampionshipId(championshipId);
+        return gameRepository.findByChampionshipId(championshipId);
     }
 
     public Game save(Game game) {
         championshipRepository.findById(game.getChampionship().getId())
             .orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado"));
 
-        return matchRepository.save(game);
+        return gameRepository.save(game);
     }
 
     public Game update(Long id, Game updatedMatch) {
         Game game = findById(id);
         BeanUtils.copyProperties(updatedMatch, game, "id");
-        return matchRepository.save(game);
+        return gameRepository.save(game);
     }
 
     public void destroy(Long id) {
-        matchRepository.deleteById(id);
+        gameRepository.deleteById(id);
     }
 }

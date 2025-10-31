@@ -1,8 +1,14 @@
 package br.com.fiap.knowball.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.knowball.assembler.TeamModelAssembler;
 import br.com.fiap.knowball.model.Team;
 import br.com.fiap.knowball.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,13 +39,20 @@ import lombok.extern.slf4j.Slf4j;
 public class TeamController {
     
     private final TeamService teamService;
+    private final TeamModelAssembler assembler;
 
     @Operation(summary = "Listar todos os times", description = "Retorna a lista de todos os times cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de times retornada com sucesso")
     @GetMapping
-    public List<Team> getAll() {
+    public CollectionModel<EntityModel<Team>> getAll() {
         log.info("buscando todos os times");
-        return teamService.findAll();
+        List<EntityModel<Team>> teams = teamService.findAll().stream()
+            .map(assembler::toModel)
+            .collect(Collectors.toList());
+
+        return CollectionModel.of(teams,
+            linkTo(methodOn(TeamController.class).getAll()).withSelfRel()
+        );
     }
 
     @Operation(summary = "Buscar time por ID", description = "Retorna um time pelo seu identificador único.")
@@ -47,26 +61,32 @@ public class TeamController {
         @ApiResponse(responseCode = "404", description = "Time não encontrado")
     })
     @GetMapping("{id}")
-    public Team getById(@PathVariable Long id) {
+    public EntityModel<Team> getById(@PathVariable Long id) {
         log.info("buscando time por id: {}", id);
-        return teamService.findById(id);
+        Team team = teamService.findById(id);
+        return assembler.toModel(team);
     }
 
     @Operation(summary = "Criar novo time", description = "Cria um novo time com os dados fornecidos.")
     @ApiResponse(responseCode = "201", description = "Time criado com sucesso")
     @PostMapping
-    public ResponseEntity<Team> create(@Valid @RequestBody Team team) {
+    public ResponseEntity<EntityModel<Team>> create(@Valid @RequestBody Team team) {
         log.info("criando um novo time: {}", team);
         Team created = teamService.save(team);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        EntityModel<Team> entityModel = assembler.toModel(created);
+
+        return ResponseEntity
+            .created(linkTo(methodOn(TeamController.class).getById(created.getId())).toUri())
+            .body(entityModel);
     }
 
     @Operation(summary = "Atualizar time", description = "Atualiza os dados de um time existente.")
     @ApiResponse(responseCode = "200", description = "Time atualizado com sucesso")
     @PutMapping("{id}")
-    public Team update(@PathVariable Long id, @Valid @RequestBody Team team) {
+    public EntityModel<Team> update(@PathVariable Long id, @Valid @RequestBody Team team) {
         log.info("atualizando time com id: {}", id);
-        return teamService.update(id, team);
+        Team updated = teamService.update(id, team);
+        return assembler.toModel(updated);
     }
 
     @Operation(summary = "Deletar time", description = "Remove um time pelo seu ID.")
