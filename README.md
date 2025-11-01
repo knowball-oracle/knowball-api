@@ -174,9 +174,9 @@ mvn spring-boot:run
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| GET | `/championships` | Listar todos os campeonatos |
-| POST | `/championships` | Criar novo campeonato |
-| GET | `/championships/{id}` | Buscar campeonato por ID |
+| GET | `/championships`        | Listar todos os campeonatos |
+| GET | `/championships/{id}` | Criar novo campeonato |
+| POST| `/championships`                    | Buscar campeonato por ID |
 | PUT | `/championships/{id}` | Atualizar campeonato |
 | DELETE | `/championships/{id}` | Deletar campeonato |
 
@@ -185,30 +185,21 @@ mvn spring-boot:run
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/games` | Buscar todas as partidas |
-| POST | `/games` | Criar nova partida |
 | GET | `/games/{id}` | Buscar partida por ID |
+| GET | `/games/championship/{championshipId}` | Buscar partidas por campeonato |
+| POST | `/games` | Criar nova partida |
 | PUT | `/games/{id}` | Atualizar partida por ID |
 | DELETE | `/games/{id}` | Deletar partida por ID |
-| GET | `/games/championship/{championshipId}` | Buscar partidas por campeonato |
-
-### Team (Times)
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/teams` | Listar todos os times |
-| POST | `/teams` | Criar novo time |
-| GET | `/teams/{id}` | Buscar time por ID |
-| PUT | `/teams/{id}` | Atualizar time |
-| DELETE | `/teams/{id}` | Deletar time |
 
 ### Participation (Participações)
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/participations` | Listar todas as participações |
+| GET | `/participations/game/{gameId}` | Listar participações por partida |
+| GET | `/participations/game/{gameId}/team/{teamId}` | Listar participações por partida e por time |
 | POST | `/participations` | Criar participação |
 | PUT | `/participations` | Atualizar participação |
-| GET | `/participations/game/{gameId}` | Listar participações por partida |
 | DELETE | `/participations/game/{gameId}/team/{teamId}` | Deletar participação |
 
 ### Referee (Árbitros)
@@ -216,8 +207,8 @@ mvn spring-boot:run
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/referees` | Listar todos os árbitros |
-| POST | `/referees` | Criar novo árbitro |
 | GET | `/referees/{id}` | Buscar árbitro por ID |
+| POST | `/referees` | Criar novo árbitro |
 | PUT | `/referees/{id}` | Atualizar árbitro |
 | DELETE | `/referees/{id}` | Deletar árbitro |
 
@@ -226,19 +217,31 @@ mvn spring-boot:run
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/refereeing` | Listar todos os papéis de arbitragem |
-| POST | `/refereeing` | Criar papel de arbitragem |
 | GET | `/refereeing/game/{gameId}` | Listar papéis de arbitragem por partida |
+| GET | `/refereeing/game/{gameId}/referee/{refereeId}` | Listar papéis de arbitragem por partida e por árbitro|
+| POST | `/refereeing` | Criar papel de arbitragem |
 
 ### Report (Denúncias)
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/reports` | Listar todas as denúncias |
-| POST | `/reports` | Criar nova denúncia |
 | GET | `/reports/{id}` | Buscar denúncia por ID |
 | GET | `/reports/status/{status}` | Buscar denúncias por status |
+| POST | `/reports` | Criar nova denúncia |
 
-**Total de endpoints:** 31
+### Team (Times)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/teams` | Listar todos os times |
+| GET | `/teams/{id}` | Buscar time por ID |
+| POST | `/teams` | Criar novo time |
+| PUT | `/teams/{id}` | Atualizar time |
+| DELETE | `/teams/{id}` | Deletar time |
+
+
+**Total de endpoints:** 35
 
 ---
 
