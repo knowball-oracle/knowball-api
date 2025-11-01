@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.fiap.knowball.controller.GameController;
 import br.com.fiap.knowball.controller.ParticipationController;
+import br.com.fiap.knowball.controller.TeamController;
 import br.com.fiap.knowball.model.Participation;
 
 @Component
@@ -22,7 +23,7 @@ public class ParticipationModelAssembler implements RepresentationModelAssembler
         Long teamId = participation.getTeam().getId();
 
         return EntityModel.of(participation,
-            linkTo(methodOn(ParticipationController.class).getByGame(gameId))
+            linkTo(methodOn(ParticipationController.class).getById(gameId, teamId))
                 .withSelfRel()
                 .withTitle("Get participation details"),
 
@@ -34,7 +35,7 @@ public class ParticipationModelAssembler implements RepresentationModelAssembler
                 .withRel("game")
                 .withTitle("View game details"),
 
-            linkTo(methodOn(GameController.class).getById(teamId))
+            linkTo(methodOn(TeamController.class).getById(teamId))
                 .withRel("team")
                 .withTitle("View team details"),
 

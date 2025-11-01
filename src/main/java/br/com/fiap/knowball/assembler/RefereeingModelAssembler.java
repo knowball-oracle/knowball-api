@@ -24,7 +24,7 @@ public class RefereeingModelAssembler implements RepresentationModelAssembler<Re
         Long refereeId = refereeing.getReferee().getId();
 
         return EntityModel.of(refereeing,
-            linkTo(methodOn(RefereeingController.class).getByGameId(gameId))
+            linkTo(methodOn(RefereeingController.class).getById(gameId, refereeId))
                 .withSelfRel()
                 .withTitle("Get refereeing details"),
 

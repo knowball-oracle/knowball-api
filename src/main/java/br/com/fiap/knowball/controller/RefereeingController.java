@@ -21,6 +21,7 @@ import br.com.fiap.knowball.model.Refereeing;
 import br.com.fiap.knowball.service.RefereeingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class RefereeingController {
-    
+
     private final RefereeingService refereeingService;
     private final RefereeingModelAssembler assembler;
 
@@ -42,12 +43,11 @@ public class RefereeingController {
     public CollectionModel<EntityModel<Refereeing>> getAll() {
         log.info("buscando todos os papéis de arbitragem");
         List<EntityModel<Refereeing>> refereeing = refereeingService.findAll().stream()
-            .map(assembler::toModel)
-            .collect(Collectors.toList());
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
 
         return CollectionModel.of(refereeing,
-            linkTo(methodOn(RefereeingController.class).getAll()).withSelfRel()
-        );
+                linkTo(methodOn(RefereeingController.class).getAll()).withSelfRel());
     }
 
     @Operation(summary = "Listar papéis de arbitragem por partida", description = "Retorna todos os papéis de arbitragem para uma partida específica.")
@@ -72,17 +72,30 @@ public class RefereeingController {
         );
     }
 
+    @Operation(summary = "Buscar arbitragem por IDs", description = "Retorna uma arbitragem específica pela chave composta.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Arbitragem encontrada"),
+        @ApiResponse(responseCode = "404", description = "Arbitragem não encontrada")
+    })
+    @GetMapping("/game/{gameId}/referee/{refereeId}")
+    public EntityModel<Refereeing> getById(@PathVariable Long gameId, @PathVariable Long refereeId) {
+        log.info("buscando arbitragem por gameId: {} e refereeId: {}", gameId, refereeId);
+        Refereeing refereeing = refereeingService.findById(gameId, refereeId); // Você precisará criar este método
+        return assembler.toModel(refereeing);
+    }
+
     @Operation(summary = "Criar papel de arbitragem", description = "Cria um novo papel de arbitragem para uma partida e árbitro.")
     @ApiResponse(responseCode = "201", description = "Papel de arbitragem criado com sucesso")
     @PostMapping
     public ResponseEntity<EntityModel<Refereeing>> create(@Valid @RequestBody Refereeing refereeing) {
-        log.info("criando novo papel de arbitragem para partida id {} e árbitro id {}", refereeing.getGame().getId(), refereeing.getReferee().getId());
+        log.info("criando novo papel de arbitragem para partida id {} e árbitro id {}", refereeing.getGame().getId(),
+                refereeing.getReferee().getId());
         Refereeing created = refereeingService.save(refereeing);
         EntityModel<Refereeing> entityModel = assembler.toModel(created);
 
         return ResponseEntity
-            .created(linkTo(methodOn(RefereeingController.class)
-                .getByGameId(created.getGame().getId())).toUri())
-            .body(entityModel);
+                .created(linkTo(methodOn(RefereeingController.class)
+                        .getById(created.getGame().getId(), created.getReferee().getId())).toUri())
+                .body(entityModel);
     }
 }
