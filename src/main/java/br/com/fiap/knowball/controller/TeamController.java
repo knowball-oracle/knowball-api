@@ -4,12 +4,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -99,65 +97,5 @@ public class TeamController {
         log.info("deletando time com id: {}", id);
         teamService.destroy(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @Operation(summary = "Inserir time via Procedure", 
-               description = "Insere um time usando a stored procedure pcd_insert_team")
-    @ApiResponse(responseCode = "201", description = "Time inserido via procedure")
-    @PostMapping("/procedure")
-    public ResponseEntity<Map<String, String>> createWithProcedure(@RequestBody Team team) {
-        log.info("Inserindo time via procedure: {}", team.getName());
-        try {
-            teamService.insertWithProcedure(
-                team.getName(), 
-                team.getCity(), 
-                team.getState()
-            );
-            return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "Time inserido com sucesso via procedure"));
-        } catch (Exception e) {
-            log.error("Erro ao inserir via procedure: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("error", e.getMessage()));
-        }
-    }
-    
-    @Operation(summary = "Atualizar time via Procedure", 
-               description = "Atualiza um time usando a stored procedure prc_update_team")
-    @ApiResponse(responseCode = "200", description = "Time atualizado via procedure")
-    @PutMapping("/procedure/{id}")
-    public ResponseEntity<Map<String, String>> updateWithProcedure(
-            @PathVariable Long id, 
-            @RequestBody Team team) {
-        log.info("Atualizando time {} via procedure", id);
-        try {
-            teamService.updateWithProcedure(
-                id,
-                team.getName(), 
-                team.getCity(), 
-                team.getState()
-            );
-            return ResponseEntity.ok(Map.of("message", "Time atualizado com sucesso via procedure"));
-        } catch (Exception e) {
-            log.error("Erro ao atualizar via procedure: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("error", e.getMessage()));
-        }
-    }
-    
-    @Operation(summary = "Deletar time via Procedure", 
-               description = "Remove um time usando a stored procedure prc_delete_team")
-    @ApiResponse(responseCode = "200", description = "Time deletado via procedure")
-    @DeleteMapping("/procedure/{id}")
-    public ResponseEntity<Map<String, String>> deleteWithProcedure(@PathVariable Long id) {
-        log.info("Deletando time {} via procedure", id);
-        try {
-            teamService.deleteWithProcedure(id);
-            return ResponseEntity.ok(Map.of("message", "Time deletado com sucesso via procedure"));
-        } catch (Exception e) {
-            log.error("Erro ao deletar via procedure: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("error", e.getMessage()));
-        }
     }
 }

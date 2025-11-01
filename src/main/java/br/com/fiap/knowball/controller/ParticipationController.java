@@ -23,6 +23,7 @@ import br.com.fiap.knowball.model.Participation;
 import br.com.fiap.knowball.service.ParticipationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,18 @@ public class ParticipationController {
         );
     }
 
+    @Operation(summary = "Buscar participação por IDs", description = "Retorna uma participação específica pela chave composta (partida e time).")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Participação encontrada"),
+        @ApiResponse(responseCode = "404", description = "Participação não encontrada")
+    })
+    @GetMapping("/game/{gameId}/team/{teamId}")
+    public EntityModel<Participation> getById(@PathVariable Long gameId, @PathVariable Long teamId) {
+        log.info("buscando participação por gameId: {} e teamId: {}", gameId, teamId);
+        Participation participation = participationService.findById(gameId, teamId);
+        return assembler.toModel(participation);
+    }
+
     @Operation(summary = "Criar participação", description = "Cria uma nova participação para uma partida e time.")
     @ApiResponse(responseCode = "201", description = "Participação criada com sucesso")
     @PostMapping
@@ -99,7 +112,7 @@ public class ParticipationController {
 
     @Operation(summary = "Deletar participação", description = "Remove uma participação de uma partida e time específicos.")
     @ApiResponse(responseCode = "204", description = "Participação deletada com sucesso")
-    @DeleteMapping("/game/{gameId}/team/{gameId}")
+    @DeleteMapping("/game/{gameId}/team/{teamId}")
     public ResponseEntity<Void> destroy(@PathVariable Long gameId, @PathVariable Long teamId) {
         log.info("deletando participação para partida id {} e time id {}", gameId, teamId);
         participationService.deleteById(gameId, teamId);

@@ -4,12 +4,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -102,67 +100,5 @@ public class ChampionshipController {
         log.info("deletando campeonato com id: {}", id);
         championshipService.destroy(id);
         return ResponseEntity.noContent().build();
-    }
-
-    // Endpoints para testar STORES PROCEDURES para o entregável da matéria de Banco de Dados
-
-    @Operation(summary = "Inserir campeonato via Procedure",
-                description = "Insere um campeonato usando a stored procedure pcd_insert_campeonato")
-    @ApiResponse(responseCode = "201", description = "Campeonato inserido via procedure")
-    @PostMapping("/procedure")
-    public ResponseEntity<Map<String, String>> createWithProcedure(@RequestBody Championship championship) {
-        log.info("Inserindo campeonato via procedure: {}", championship.getName());
-        try {
-            championshipService.insertWithProcedure(
-                championship.getName(), 
-                championship.getCategory(), 
-                championship.getYear()
-            );
-            return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "Campeonato inserido com sucesso via procedure"));
-        } catch (Exception e) {
-            log.error("Erro ao inserir via procedure: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    @Operation(summary = "Atualizar campeonato via Procedure", 
-               description = "Atualiza um campeonato usando a stored procedure prc_update_campeonato")
-    @ApiResponse(responseCode = "200", description = "Campeonato atualizado via procedure")
-    @PutMapping("/procedure/{id}")
-    public ResponseEntity<Map<String, String>> updateWithProcedure(
-            @PathVariable Long id, 
-            @RequestBody Championship championship) {
-        log.info("Atualizando campeonato {} via procedure", id);
-        try {
-            championshipService.updateWithProcedure (
-                id,
-                championship.getName(), 
-                championship.getCategory(), 
-                championship.getYear()
-            );
-            return ResponseEntity.ok(Map.of("message", "Campeonato atualizado com sucesso via procedure"));
-        } catch (Exception e) {
-            log.error("Erro ao atualizar via procedure: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    @Operation(summary = "Deletar campeonato via Procedure", 
-               description = "Remove um campeonato usando a stored procedure prc_delete_campeonato")
-    @ApiResponse(responseCode = "200", description = "Campeonato deletado via procedure")
-    @DeleteMapping("/procedure/{id}")
-    public ResponseEntity<Map<String, String>> deleteWithProcedure(@PathVariable Long id) {
-        log.info("Deletando campeonato {} via procedure", id);
-        try {
-            championshipService.deleteWithProcedure(id);
-            return ResponseEntity.ok(Map.of("message", "Campeonato deletado com sucesso via procedure"));
-        } catch (Exception e) {
-            log.error("Erro ao deletar via procedure: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("error", e.getMessage()));
-        }
     }
 }
