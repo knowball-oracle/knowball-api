@@ -7,12 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Championship;
-import br.com.fiap.knowball.model.ChampionshipCategoryType;
 import br.com.fiap.knowball.model.Game;
 import br.com.fiap.knowball.repository.ChampionshipRepository;
 import br.com.fiap.knowball.repository.GameRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 
 @Service
 public class ChampionshipService {
@@ -50,20 +48,5 @@ public class ChampionshipService {
         List<Game> games = gameRepository.findByChampionshipId(id);
         gameRepository.deleteAll(games);
         championshipRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void insertWithProcedure(String name, ChampionshipCategoryType category, Integer year) {
-        championshipRepository.insertChampionshipProcedure(name, category.name(), year);
-    }
-
-    @Transactional
-    public void updateWithProcedure(Long id, String name, ChampionshipCategoryType category, Integer year) {
-        championshipRepository.updateChampionshipProcedure(id, name, category.name(), year);
-    }
-
-    @Transactional
-    public void deleteWithProcedure(Long id) {
-        championshipRepository.deleteChampionshipProcedure(id);
     }
 }
