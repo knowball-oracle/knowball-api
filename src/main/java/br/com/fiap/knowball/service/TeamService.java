@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import br.com.fiap.knowball.model.Team;
 import br.com.fiap.knowball.repository.TeamRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 
 @Service
 public class TeamService {
@@ -43,20 +42,5 @@ public class TeamService {
 
     public void destroy(Long id) {
         teamRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void insertWithProcedure(String name, String city, String state) {
-        teamRepository.insertTeamProcedure(name, city, state);
-    }
-
-    @Transactional
-    public void updateWithProcedure(Long id, String name, String city, String state) {
-        teamRepository.updateTeamProcedure(id, name, city, state);
-    }
-
-    @Transactional
-    public void deleteWithProcedure(Long id) {
-        teamRepository.deleteTeamProcedure(id);
     }
 }
