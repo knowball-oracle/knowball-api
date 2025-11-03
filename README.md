@@ -124,6 +124,8 @@ O Knowball é voltado principalmente para:
 
 Elevar o nível de maturidade da API REST através da implementação de **HATEOAS (Hypermedia as the Engine of Application State)**, alcançando o nível 3 do [*Richardson Maturiy Model.*](https://martinfowler.com/articles/richardsonMaturityModel.html)
 
+![Imagem](https://drive.google.com/uc?export=view&id=1o0nE6SiImMPiHIDpz-kCpVIT4CGJNWFm)
+
 ## Comparativo Sprint 1 vs Sprint 2
 
 | Aspecto                          | Sprint 1                                                      | Sprint 2                      |
@@ -256,7 +258,7 @@ mvn spring-boot:run
 
 ## Importar collection no Insomnia
 
-1. **Baixe a collection:**
+1. **Baixe a collection com os novos testes dos endpoints:**
 
 [📥 Baixar knowball-api-tests.json](https://drive.google.com/uc?export=download&id=1x1jmJmGsbHSktv2ufjS996ZYl59iDCq1)
   
