@@ -51,7 +51,7 @@ O Knowball é voltado principalmente para:
 
 ## Diagrama da arquitetura
 
-![Imagem](https://drive.google.com/uc?export=view&id=17Re8NdRuNXts7V7-fM9g2NiruMe6pk6m)
+![Imagem](https://drive.google.com/uc?export=view&id=191OoHkuIFto5qYaMFdx1bX75US4EimOK)
 
 ---
 
