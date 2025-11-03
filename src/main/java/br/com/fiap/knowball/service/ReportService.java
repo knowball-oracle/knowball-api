@@ -18,7 +18,6 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class ReportService {
 
-    @Autowired
     private final ReportRepository reportRepository;
     private final GameRepository matchRepository;
     private final RefereeRepository refereeRepository;
