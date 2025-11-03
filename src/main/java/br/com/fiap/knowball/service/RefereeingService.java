@@ -2,7 +2,6 @@ package br.com.fiap.knowball.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Refereeing;
@@ -15,7 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class RefereeingService {
 
-    @Autowired
     private final RefereeingRepository refereeingRepository;
     private final GameRepository matchRepository;
     private final RefereeRepository refereeRepository;
