@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,9 +74,7 @@ public class ChampionshipController {
         Championship created = championshipService.save(championship);
         EntityModel<Championship> entityModel = assembler.toModel(created);
 
-        return ResponseEntity
-            .created(linkTo(methodOn(ChampionshipController.class).getById(created.getId())).toUri())
-            .body(entityModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
     @Operation(summary = "Atualizar campeonato", description = "Atualiza os dados de um campeonato existente.")
