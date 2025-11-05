@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignorar o arquivo de propriedades com segredos locais
+application-local.properties
