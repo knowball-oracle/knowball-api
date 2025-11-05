@@ -23,22 +23,26 @@ public class RefereeService {
         return refereeRepository.findAll();
     }
 
+    @SuppressWarnings("null")
     public Referee findById(Long id) {
         return refereeRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Arbitro não encontrado com id " + id));
     }
 
+    @SuppressWarnings("null")
     public Referee save(Referee referee) {
         return refereeRepository.save(referee);
     }
 
+    @SuppressWarnings("null")
     public Referee update(Long id, Referee updatedReferee) {
         Referee referee = findById(id);
         BeanUtils.copyProperties(updatedReferee, referee, "id");
         return refereeRepository.save(referee);
     }
 
+    @SuppressWarnings("null")
     public void destroy(Long id) {
         refereeRepository.deleteById(id);
     }

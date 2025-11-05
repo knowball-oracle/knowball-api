@@ -39,6 +39,7 @@ public class RefereeController {
     private final RefereeService refereeService;
     private final RefereeModelAssembler assembler;
 
+    @SuppressWarnings("null")
     @Operation(summary = "Listar todos os árbitros", description = "Retorna a lista de todos os árbitros cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de árbitros retornada com sucesso")
     @GetMapping
@@ -53,6 +54,7 @@ public class RefereeController {
         );
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Buscar árbitro por ID", description = "Retorna um árbitro pelo seu identificador único.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Árbitro encontrado"),
@@ -65,6 +67,7 @@ public class RefereeController {
         return assembler.toModel(referee);
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Criar novo árbitro", description = "Cria um novo árbitro com os dados informados.")
     @ApiResponse(responseCode = "201", description = "Árbitro criado com sucesso")
     @PostMapping
@@ -78,6 +81,7 @@ public class RefereeController {
             .body(entityModel);
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Atualizar árbitro", description = "Atualiza os dados de um árbitro existente.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Árbitro atualizado com sucesso"),

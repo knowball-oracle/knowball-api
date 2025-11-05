@@ -43,6 +43,7 @@ public class ReportService {
         return reportRepository.findAll();
     }
 
+    @SuppressWarnings("null")
     public Report findById(Long id) {
         return reportRepository
                 .findById(id)
@@ -53,6 +54,7 @@ public class ReportService {
         return reportRepository.findByStatus(status);
     }
 
+    @SuppressWarnings("null")
     public Report save(Report report) {
         Long matchId = report.getGame().getId();
         Long refereeId = report.getReferee().getId();
@@ -78,12 +80,14 @@ public class ReportService {
         return saved;
     }
 
+    @SuppressWarnings("null")
     public Report update(Long id, Report report) {
         Report existing = findById(id);
         BeanUtils.copyProperties(report, existing, "id");
         return save(existing);
     }
 
+    @SuppressWarnings("null")
     public void destroy(Long id) {
         reportRepository.deleteById(id);
     }

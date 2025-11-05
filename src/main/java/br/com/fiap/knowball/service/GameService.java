@@ -25,12 +25,14 @@ public class GameService {
         return gameRepository.findAll();
     }
 
+    @SuppressWarnings("null")
     public Game findById(Long id) {
         return gameRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Partida não encontrada com id " + id));
     }
 
+    @SuppressWarnings("null")
     public List<Game> findByChampionshipId(Long championshipId) {
         if(!championshipRepository.existsById(championshipId)) {
             throw new EntityNotFoundException("Campeonato não encontrado");
@@ -39,6 +41,7 @@ public class GameService {
         return gameRepository.findByChampionshipId(championshipId);
     }
 
+    @SuppressWarnings("null")
     public Game save(Game game) {
         championshipRepository.findById(game.getChampionship().getId())
             .orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado"));
@@ -46,12 +49,14 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    @SuppressWarnings("null")
     public Game update(Long id, Game updatedMatch) {
         Game game = findById(id);
         BeanUtils.copyProperties(updatedMatch, game, "id");
         return gameRepository.save(game);
     }
 
+    @SuppressWarnings("null")
     public void destroy(Long id) {
         gameRepository.deleteById(id);
     }

@@ -14,8 +14,8 @@ import br.com.fiap.knowball.model.Referee;
 @Component
 public class RefereeModelAssembler implements RepresentationModelAssembler<Referee, EntityModel<Referee>>{
     
+    @SuppressWarnings("null")
     @Override
-    @NonNull
     public EntityModel<Referee> toModel(@NonNull Referee referee) {
         return EntityModel.of(referee,
             linkTo(methodOn(RefereeController.class).getById(referee.getId()))
