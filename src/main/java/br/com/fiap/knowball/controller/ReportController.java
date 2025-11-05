@@ -38,6 +38,7 @@ public class ReportController {
     private final ReportService reportService;
     private final ReportModelAssembler assembler;
 
+    @SuppressWarnings("null")
     @Operation(summary = "Listar todas as denúncias", description = "Retorna a lista de todas as denúncias cadastradas.")
     @ApiResponse(responseCode = "200", description = "Lista de denúncias retornada com sucesso")
     @GetMapping
@@ -52,6 +53,7 @@ public class ReportController {
         );
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Buscar denúncia por ID", description = "Retorna uma denúncia pelo seu identificador único.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Denúncia encontrada"),
@@ -64,6 +66,7 @@ public class ReportController {
         return assembler.toModel(report);
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Buscar denúncias por status", description = "Retorna todas as denúncias com o status informado.")
     @ApiResponse(responseCode = "200", description = "Lista de denúncias filtrada por status retornada com sucesso")
     @GetMapping("/status/{status}")
@@ -83,6 +86,7 @@ public class ReportController {
         );
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Criar nova denúncia", description = "Cria uma nova denúncia com os dados fornecidos.")
     @ApiResponse(responseCode = "201", description = "Denúncia criada com sucesso")
     @PostMapping

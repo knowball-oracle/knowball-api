@@ -40,6 +40,7 @@ public class ChampionshipController {
     private final ChampionshipService championshipService;
     private final ChampionshipModelAssembler assembler;
 
+    @SuppressWarnings("null")
     @Operation(summary = "Listar todos os campeonatos", description = "Retorna todos os campeonatos cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de campeonatos retornada com sucesso")
     @GetMapping
@@ -54,6 +55,7 @@ public class ChampionshipController {
         );
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Buscar campeonato por ID", description = "Retorna um campeonato pelo seu identificador único.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Campeonato encontrado"),
@@ -66,6 +68,7 @@ public class ChampionshipController {
         return assembler.toModel(championship);
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Criar novo campeonato", description = "Cria um novo campeonato com os dados enviados.")
     @ApiResponse(responseCode = "201", description = "Campeonato criado com sucesso")
     @PostMapping
@@ -77,6 +80,7 @@ public class ChampionshipController {
         return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Atualizar campeonato", description = "Atualiza os dados de um campeonato existente.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Campeonato atualizado com sucesso"),

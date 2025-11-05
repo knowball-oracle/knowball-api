@@ -15,8 +15,8 @@ import br.com.fiap.knowball.model.Report;
 @Component
 public class ReportModelAssembler implements RepresentationModelAssembler<Report, EntityModel<Report>>{
     
+    @SuppressWarnings("null")
     @Override
-    @NonNull
     public EntityModel<Report> toModel(@NonNull Report report) {
         return EntityModel.of(report,
             linkTo(methodOn(ReportController.class).getById(report.getId()))

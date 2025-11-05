@@ -39,6 +39,7 @@ public class GameController {
     private final GameService gameService;
     private final GameModelAssembler assembler;
 
+    @SuppressWarnings("null")
     @Operation(summary = "Buscar todas as partidas", description = "Retorna uma lista de todas as partidas cadastradas.")
     @ApiResponse(responseCode = "200", description = "Lista de partidas retornada com sucesso")
     @GetMapping
@@ -53,6 +54,7 @@ public class GameController {
         );
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Buscar partida por ID", description = "Busca uma partida específica pelo seu identificador único.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Partida encontrada"),
@@ -65,6 +67,7 @@ public class GameController {
         return assembler.toModel(game);
     }
 
+    @SuppressWarnings("null")
     @GetMapping("/championship/{championshipId}")
     public CollectionModel<EntityModel<Game>> getByChampionship(@PathVariable Long championshipId) {
         log.info("buscando partidas pelo campeonato id: {}", championshipId);
@@ -85,6 +88,7 @@ public class GameController {
         );
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Criar nova partida", description = "Cria uma nova partida com os dados informados.")
     @ApiResponse(responseCode = "201", description = "Partida criada com sucesso")
     @PostMapping
@@ -98,6 +102,7 @@ public class GameController {
             .body(entityModel);
     }
 
+    @SuppressWarnings("null")
     @Operation(summary = "Atualizar partida por ID", description = "Atualiza os dados de uma partida existente.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Partida atualizada com sucesso"),

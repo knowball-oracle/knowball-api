@@ -15,8 +15,8 @@ import br.com.fiap.knowball.model.Game;
 @Component
 public class GameModelAssembler implements RepresentationModelAssembler<Game, EntityModel<Game>>{
     
+    @SuppressWarnings("null")
     @Override
-    @NonNull
     public EntityModel<Game> toModel(@NonNull Game game) {
         return EntityModel.of(game,
             linkTo(methodOn(GameController.class).getById(game.getId()))

@@ -32,6 +32,7 @@ public class ParticipationService {
         return participationRepository.findAll();
     }
 
+    @SuppressWarnings("null")
     public List<Participation> findByGameId(Long gameId) {
         if (!gameRepository.existsById(gameId)) {
             throw new EntityNotFoundException("Partida não encontrada com id " + gameId);
@@ -39,6 +40,7 @@ public class ParticipationService {
         return participationRepository.findByGameId(gameId);
     }
 
+    @SuppressWarnings("null")
     public Participation save(Participation participation) {
         Long matchId = participation.getGame().getId();
         Long teamId = participation.getTeam().getId();

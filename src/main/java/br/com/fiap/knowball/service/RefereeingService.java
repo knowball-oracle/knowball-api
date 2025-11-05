@@ -29,11 +29,12 @@ public class RefereeingService {
     public List<Refereeing> findAll() {
         return refereeingRepository.findAll();
     }
-
+    
     public List<Refereeing> findByGameId(Long gameId) {
         return refereeingRepository.findByGameId(gameId);
     }
 
+    @SuppressWarnings("null")
     public Refereeing save(Refereeing refereeing) {
 
         matchRepository.findById(refereeing.getGame().getId())
