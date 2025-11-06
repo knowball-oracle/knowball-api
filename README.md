@@ -260,13 +260,13 @@ mvn spring-boot:run
 
 1. **Baixe a collection com os novos testes dos endpoints:**
 
-[📥 Baixar knowball-api-tests.json](https://drive.google.com/uc?export=download&id=1x1jmJmGsbHSktv2ufjS996ZYl59iDCq1)
+[📥 Baixar knowball-api-tests.yaml](https://drive.google.com/uc?export=download&id=1QnKx2EiVrbU8E_103jgeHLaMK4PrrKCj)
   
 2. Abra o Insomnia
   
 3. Clique em **Create** > **Import**
   
-4. Selecione o arquivo JSON que você baixou
+4. Selecione o arquivo que você baixou
   
 5. Pronto! Todas as requisições serão importadas automaticamente
 
