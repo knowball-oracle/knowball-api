@@ -158,17 +158,19 @@ git clone https://github.com/knowball-oracle/knowball-api.git
 cd knowball
 ```
 
-3. Compile o projeto com Maven:
+3. Configure as credenciais do banco de dados no arquivo `application.properties` ou utilize variáveis de ambiente.
+
+4. Compile o projeto com Maven:
 ```bash
 mvn clean install
 ```
 
-4. Execute a aplicação:
+5. Execute a aplicação:
 ```bash
 mvn spring-boot:run
 ```
 
-5. A aplicação estará disponível em: `https://localhost:8080`
+6. A aplicação estará disponível em: `https://localhost:8080`
 
 ## Listagem de todos os endpoints
 
