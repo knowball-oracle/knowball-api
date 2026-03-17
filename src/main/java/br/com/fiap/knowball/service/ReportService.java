@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Report;
@@ -23,7 +22,6 @@ public class ReportService {
     private final RefereeRepository refereeRepository;
     private final RefereeingRepository refereeingRepository;
 
-    @Autowired
     @Lazy
     private final RefereeService refereeService;
 
