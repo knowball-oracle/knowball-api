@@ -30,9 +30,9 @@ import com.nimbusds.jose.proc.SecurityContext;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final RsaKeysProperties rsaKeys;
+    private final RsaKeyProperties rsaKeys;
 
-    public SecurityConfig(RsaKeysProperties rsaKeys) {
+    public SecurityConfig(RsaKeyProperties rsaKeys) {
         this.rsaKeys = rsaKeys;
     }
 
@@ -84,7 +84,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtDecoder jwtDecoder(RsaKeysProperties rsaKeysProperties) {
+    JwtDecoder jwtDecoder(RsaKeyProperties rsaKeyProperties) {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
     }
 
