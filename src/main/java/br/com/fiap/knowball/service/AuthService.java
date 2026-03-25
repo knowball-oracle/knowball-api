@@ -13,16 +13,9 @@ import br.com.fiap.knowball.repository.UserRepository;
 public class AuthService implements UserDetailsService{
 
     private final UserRepository userRepository;
-    private final AuthenticationManager authenticationManager;
 
-    public AuthService(UserRepository userRepository, AuthenticationManager authenticationManager) {
+    public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.authenticationManager = authenticationManager;
-    }
-
-    public void authenticate(String email, String password) {
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(email, password));
     }
     
     @Override
