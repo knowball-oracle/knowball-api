@@ -104,7 +104,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtDecoder jwtDecoder(RsaKeyProperties rsaKeyProperties) {
+    JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
     }
 

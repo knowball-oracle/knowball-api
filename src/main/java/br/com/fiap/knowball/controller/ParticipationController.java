@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "Participation", description = "Endpoints de gerenciamento de participações nas partidas")
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/participations")
 @RequiredArgsConstructor
@@ -39,7 +41,6 @@ public class ParticipationController {
     private final ParticipationService participationService;
     private final ParticipationModelAssembler assembler;
 
-    @SuppressWarnings("null")
     @Operation(summary = "Listar todas as participações", description = "Retorna todas as participações cadastradas.")
     @ApiResponse(responseCode = "200", description = "Lista de participações retornada com sucesso")
     @GetMapping
@@ -54,7 +55,6 @@ public class ParticipationController {
         );
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Listar participações por partida", description = "Retorna todas as participações de uma partida específica.")
     @ApiResponse(responseCode = "200", description = "Lista de participações da partida retornada com sucesso")
     @GetMapping("/game/{gameId}")
@@ -77,7 +77,6 @@ public class ParticipationController {
         );
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Buscar participação por IDs", description = "Retorna uma participação específica pela chave composta (partida e time).")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Participação encontrada"),
@@ -90,7 +89,6 @@ public class ParticipationController {
         return assembler.toModel(participation);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Criar participação", description = "Cria uma nova participação para uma partida e time.")
     @ApiResponse(responseCode = "201", description = "Participação criada com sucesso")
     @PostMapping
@@ -105,7 +103,6 @@ public class ParticipationController {
             .body(entityModel);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Atualizar participação", description = "Atualiza os dados de uma participação existente.")
     @ApiResponse(responseCode = "200", description = "Participação atualizada com sucesso")
     @PutMapping

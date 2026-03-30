@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -37,5 +39,11 @@ public class ValidationHandler {
     public ResponseEntity<String> handleException(Exception ex) {
         String errorMessage = "Erro inesperado: " + ex.getMessage();
         return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ProblemDetail handleEmailExists(EmailAlreadyExistsException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 }

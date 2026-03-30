@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "Team", description = "Endpoints de gerenciamento de times")
+@SecurityRequirement(name = "bearerAuth")
 @RestController
-@RequestMapping("teams")
+@RequestMapping("/teams")
 @RequiredArgsConstructor
 @Slf4j
 public class TeamController {
@@ -39,7 +41,6 @@ public class TeamController {
     private final TeamService teamService;
     private final TeamModelAssembler assembler;
 
-    @SuppressWarnings("null")
     @Operation(summary = "Listar todos os times", description = "Retorna a lista de todos os times cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de times retornada com sucesso")
     @GetMapping
@@ -54,7 +55,6 @@ public class TeamController {
         );
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Buscar time por ID", description = "Retorna um time pelo seu identificador único.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Time encontrado"),
@@ -67,7 +67,6 @@ public class TeamController {
         return assembler.toModel(team);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Criar novo time", description = "Cria um novo time com os dados fornecidos.")
     @ApiResponse(responseCode = "201", description = "Time criado com sucesso")
     @PostMapping
@@ -81,7 +80,6 @@ public class TeamController {
             .body(entityModel);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Atualizar time", description = "Atualiza os dados de um time existente.")
     @ApiResponse(responseCode = "200", description = "Time atualizado com sucesso")
     @PutMapping("{id}")
@@ -91,7 +89,6 @@ public class TeamController {
         return assembler.toModel(updated);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Deletar time", description = "Remove um time pelo seu ID.")
     @ApiResponses({
         @ApiResponse(responseCode = "204", description = "Time deletado com sucesso"),

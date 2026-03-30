@@ -2,6 +2,7 @@ package br.com.fiap.knowball.service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class TokenService {
                 .subject(user.getEmail())
                 .claim("email", user.getEmail())
                 .claim("name", user.getName())
-                .claim("role", user.getRole().name())
+                .claim("role", List.of(user.getRole().name()))
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

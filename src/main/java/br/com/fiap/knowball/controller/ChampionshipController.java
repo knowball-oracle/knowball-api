@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -31,8 +32,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "Championship", description = "Endpoints de gerenciamento de campeonatos de futebol")
+@SecurityRequirement(name = "bearerAuth")
 @RestController
-@RequestMapping("championships")
+@RequestMapping("/championships")
 @RequiredArgsConstructor
 @Slf4j
 public class ChampionshipController {
@@ -40,7 +42,6 @@ public class ChampionshipController {
     private final ChampionshipService championshipService;
     private final ChampionshipModelAssembler assembler;
 
-    @SuppressWarnings("null")
     @Operation(summary = "Listar todos os campeonatos", description = "Retorna todos os campeonatos cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de campeonatos retornada com sucesso")
     @GetMapping
@@ -55,7 +56,6 @@ public class ChampionshipController {
         );
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Buscar campeonato por ID", description = "Retorna um campeonato pelo seu identificador único.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Campeonato encontrado"),
@@ -68,7 +68,6 @@ public class ChampionshipController {
         return assembler.toModel(championship);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Criar novo campeonato", description = "Cria um novo campeonato com os dados enviados.")
     @ApiResponse(responseCode = "201", description = "Campeonato criado com sucesso")
     @PostMapping
@@ -80,7 +79,6 @@ public class ChampionshipController {
         return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Atualizar campeonato", description = "Atualiza os dados de um campeonato existente.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Campeonato atualizado com sucesso"),
