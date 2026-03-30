@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "Referee", description = "Endpoints de gerenciamento de árbitros")
+@SecurityRequirement(name = "bearerAuth")
 @RestController
-@RequestMapping("referees")
+@RequestMapping("/referees")
 @RequiredArgsConstructor
 @Slf4j
 public class RefereeController {
@@ -39,7 +41,6 @@ public class RefereeController {
     private final RefereeService refereeService;
     private final RefereeModelAssembler assembler;
 
-    @SuppressWarnings("null")
     @Operation(summary = "Listar todos os árbitros", description = "Retorna a lista de todos os árbitros cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de árbitros retornada com sucesso")
     @GetMapping
@@ -54,7 +55,6 @@ public class RefereeController {
         );
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Buscar árbitro por ID", description = "Retorna um árbitro pelo seu identificador único.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Árbitro encontrado"),
@@ -67,7 +67,6 @@ public class RefereeController {
         return assembler.toModel(referee);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Criar novo árbitro", description = "Cria um novo árbitro com os dados informados.")
     @ApiResponse(responseCode = "201", description = "Árbitro criado com sucesso")
     @PostMapping
@@ -81,7 +80,6 @@ public class RefereeController {
             .body(entityModel);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Atualizar árbitro", description = "Atualiza os dados de um árbitro existente.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Árbitro atualizado com sucesso"),

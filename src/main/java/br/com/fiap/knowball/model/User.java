@@ -43,7 +43,7 @@ public class User implements UserDetails{
     private String email;
 
     @NotBlank
-    @Column(nullable = false, unique = true, length = 200)
+    @Column(nullable = false, length = 200)
     private String password;
 
     @Enumerated(EnumType.STRING)

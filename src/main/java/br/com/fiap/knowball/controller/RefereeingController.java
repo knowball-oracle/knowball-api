@@ -6,6 +6,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "Refereeing", description = "Endpoints de gerenciamento de papéis de arbitragem")
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("/refereeing")
 @RequiredArgsConstructor
@@ -37,7 +39,6 @@ public class RefereeingController {
     private final RefereeingService refereeingService;
     private final RefereeingModelAssembler assembler;
 
-    @SuppressWarnings("null")
     @Operation(summary = "Listar todos os papéis de arbitragem", description = "Retorna todos os papéis de arbitragem cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de papéis de arbitragem retornada com sucesso")
     @GetMapping
@@ -51,7 +52,6 @@ public class RefereeingController {
                 linkTo(methodOn(RefereeingController.class).getAll()).withSelfRel());
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Listar papéis de arbitragem por partida", description = "Retorna todos os papéis de arbitragem para uma partida específica.")
     @ApiResponse(responseCode = "200", description = "Lista de papéis de arbitragem da partida retornada com sucesso")
     @GetMapping("/game/{gameId}")
@@ -74,7 +74,6 @@ public class RefereeingController {
         );
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Buscar arbitragem por IDs", description = "Retorna uma arbitragem específica pela chave composta.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Arbitragem encontrada"),
@@ -87,7 +86,6 @@ public class RefereeingController {
         return assembler.toModel(refereeing);
     }
 
-    @SuppressWarnings("null")
     @Operation(summary = "Criar papel de arbitragem", description = "Cria um novo papel de arbitragem para uma partida e árbitro.")
     @ApiResponse(responseCode = "201", description = "Papel de arbitragem criado com sucesso")
     @PostMapping

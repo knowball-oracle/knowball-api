@@ -1,5 +1,6 @@
 package br.com.fiap.knowball.controller;
 
+import br.com.fiap.knowball.dto.UserResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,10 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 @Tag(name = "Users", description = "Gestão de usuários - requer ROLE_ADMIN")
 @SecurityRequirement(name = "bearerAuth")
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 @Slf4j
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
 
     private final UserService userService;
@@ -32,7 +33,7 @@ public class UserController {
     @Operation(summary = "Listar usuários", description = "Lista paginada com filtros opcionais por nome e email.")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
     @GetMapping
-    public ResponseEntity<Page<User>> getAll(
+    public ResponseEntity<Page<UserResponse>> getAll(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email,
             @PageableDefault(size = 20, sort = "name") Pageable pageable) {
@@ -45,7 +46,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Usuário encontrado")
     @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     @GetMapping("{id}")
-    public ResponseEntity<User> getById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
         log.info("GET /users/{}", id);
         return userService.getUserById(id)
             .map(ResponseEntity::ok)
@@ -54,19 +55,20 @@ public class UserController {
 
     @Operation(summary = "Criar usuário", description = "ADMIN cria usuário com qualquer role.")
     @ApiResponse(responseCode = "201", description = "Usuário criado")
-    @ApiResponse(responseCode = "400", description = "Email já cadastrado")
+    @ApiResponse(responseCode = "409", description = "Email já cadastrado")
     @PostMapping
-    public ResponseEntity<User> create(@Valid @RequestBody User user) {
+    public ResponseEntity<UserResponse> create(@Valid @RequestBody User user) {
         log.info("POST /users : {} ({})", user.getEmail(), user.getRole());
-        User saved = userService.createUser(user);
+        UserResponse saved = userService.createUser(user);
         return ResponseEntity.status(201).body(saved);
     }
 
     @Operation(summary = "Atualizar usuário")
     @ApiResponse(responseCode = "200", description = "Usuário atualizado")
     @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    @ApiResponse(responseCode = "409", description = "Email já cadastrado")
     @PutMapping("{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @Valid @RequestBody User userDetails) {
+    public ResponseEntity<UserResponse> update(@PathVariable Long id, @Valid @RequestBody User userDetails) {
         log.info("PUT /users/{}", id);
         return userService.updateUser(id, userDetails)
             .map(ResponseEntity::ok)
