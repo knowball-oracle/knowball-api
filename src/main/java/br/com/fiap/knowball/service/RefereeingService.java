@@ -34,7 +34,6 @@ public class RefereeingService {
         return refereeingRepository.findByGameId(gameId);
     }
 
-    @SuppressWarnings("null")
     public Refereeing save(Refereeing refereeing) {
 
         matchRepository.findById(refereeing.getGame().getId())

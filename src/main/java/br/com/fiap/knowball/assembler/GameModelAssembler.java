@@ -14,8 +14,7 @@ import br.com.fiap.knowball.model.Game;
 
 @Component
 public class GameModelAssembler implements RepresentationModelAssembler<Game, EntityModel<Game>>{
-    
-    @SuppressWarnings("null")
+
     @Override
     public EntityModel<Game> toModel(@NonNull Game game) {
         return EntityModel.of(game,

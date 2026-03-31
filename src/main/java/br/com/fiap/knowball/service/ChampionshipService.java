@@ -37,19 +37,16 @@ public class ChampionshipService {
                 .orElseThrow(() -> new EntityNotFoundException("Campeonato não encontrado com id " + id));
     }
 
-    @SuppressWarnings("null")
     public Championship save(Championship championship) {
         return championshipRepository.save(championship);
     }
 
-    @SuppressWarnings("null")
     public Championship update(@NonNull Long id, Championship updatedChampionship) {
         Championship championship = findById(id);
         BeanUtils.copyProperties(updatedChampionship, championship, "id");
         return championshipRepository.save(championship);
     }
 
-    @SuppressWarnings("null")
     public void destroy(Long id) {
         Championship championship = findById(id);
         List<Game> games = gameRepository.findByChampionshipId(id);

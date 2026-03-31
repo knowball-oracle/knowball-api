@@ -13,8 +13,7 @@ import br.com.fiap.knowball.model.Referee;
 
 @Component
 public class RefereeModelAssembler implements RepresentationModelAssembler<Referee, EntityModel<Referee>>{
-    
-    @SuppressWarnings("null")
+
     @Override
     public EntityModel<Referee> toModel(@NonNull Referee referee) {
         return EntityModel.of(referee,

@@ -16,7 +16,6 @@ import br.com.fiap.knowball.model.Participation;
 @Component
 public class ParticipationModelAssembler implements RepresentationModelAssembler<Participation, EntityModel<Participation>>{
 
-    @SuppressWarnings("null")
     @Override
     public EntityModel<Participation> toModel(@NonNull Participation participation) {
         Long gameId = participation.getGame().getId();

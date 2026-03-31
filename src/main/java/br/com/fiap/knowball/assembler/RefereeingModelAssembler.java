@@ -16,8 +16,7 @@ import br.com.fiap.knowball.model.Refereeing;
 
 @Component
 public class RefereeingModelAssembler implements RepresentationModelAssembler<Refereeing, EntityModel<Refereeing>>{
-    
-    @SuppressWarnings("null")
+
     @Override
     public EntityModel<Refereeing> toModel(@NonNull Refereeing refereeing) {
         Long gameId = refereeing.getGame().getId();

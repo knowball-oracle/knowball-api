@@ -31,19 +31,16 @@ public class TeamService {
             .orElseThrow(() -> new EntityNotFoundException("Time não encontrado com id " + id));
     }
 
-    @SuppressWarnings("null")
     public Team save(Team team) {
         return teamRepository.save(team);
     }
 
-    @SuppressWarnings("null")
     public Team update(@NonNull Long id, Team updatedTeam) {
         Team team = findById(id);
         BeanUtils.copyProperties(updatedTeam, team, "id");
         return teamRepository.save(team);
     }
 
-    @SuppressWarnings("null")
     public void destroy(@NonNull Long id) {
         Team team = findById(id);
         teamRepository.delete(team);

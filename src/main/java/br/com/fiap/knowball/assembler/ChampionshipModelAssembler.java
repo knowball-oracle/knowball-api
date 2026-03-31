@@ -14,7 +14,6 @@ import br.com.fiap.knowball.model.Championship;
 @Component
 public class ChampionshipModelAssembler implements RepresentationModelAssembler<Championship, EntityModel<Championship>> {
 
-    @SuppressWarnings("null")
     @Override
     public EntityModel<Championship> toModel(@NonNull Championship championship) {
         return EntityModel.of(championship,
