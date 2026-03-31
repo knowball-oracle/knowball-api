@@ -13,8 +13,7 @@ import br.com.fiap.knowball.model.Team;
 
 @Component
 public class TeamModelAssembler implements RepresentationModelAssembler<Team, EntityModel<Team>>{
-    
-    @SuppressWarnings("null")
+
     @Override
     public EntityModel<Team> toModel(@NonNull Team team) {
         return EntityModel.of(team,
