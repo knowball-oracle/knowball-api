@@ -8,3 +8,4 @@ public record UserResponse(
    String email,
    UserRole role
 ) {}
+    
