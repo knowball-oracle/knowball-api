@@ -11,6 +11,9 @@
 [![API REST](https://img.shields.io/badge/API_REST-000?style=for-the-badge&logo=api&logoColor=white)](https://www.redhat.com/pt-br/topics/api/what-is-a-rest-api)
 [![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://swagger.io/)
 [![Insomnia](https://img.shields.io/badge/Insomnia-4000BF?style=for-the-badge&logo=insomnia&logoColor=white)](https://insomnia.rest/)
+[![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
+[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![Flyway](https://img.shields.io/badge/Flyway-CC0200?style=for-the-badge&logo=flyway&logoColor=white)](https://flywaydb.org/)
 
 ## Problemas que a aplicação se propõe a solucionar
 
@@ -21,6 +24,7 @@ Entre os principais problemas estão:
 - Falta de uma plataforma unificada para controle de campeonatos, equipes, jogos e participações, que atualmente são gerenciados por sistemas fragmentados.
 - Dificuldade de acompanhar e registrar a atuação dos árbitros e suas respectivas atribuições em cada partida.
 - Falta de **APIs RESTful** flexíveis para integração com outras ferramentas e sistemas de gestão esportiva.
+- Ausência de **controle de acesso** diferenciado, permitindo que apenas administradores realizem operações de escrita.
 
 ## Público-alvo da aplicação
 
@@ -51,7 +55,7 @@ O Knowball é voltado principalmente para:
 
 ## Diagrama da arquitetura
 
-![Imagem](https://drive.google.com/uc?export=view&id=191OoHkuIFto5qYaMFdx1bX75US4EimOK)
+![Imagem](https://drive.google.com/uc?export=view&id=12vT7y5XvQu60_gSqBE_s_Rr0VmlnEZsR)
 
 ---
 
@@ -59,66 +63,59 @@ O Knowball é voltado principalmente para:
 
 ### Atividades concluídas
 
-| Etapa                                        | Descrição das atividades                                    | Data prevista/concluída      |
-|----------------------------------------------|-------------------------------------------------------------|------------------------------|
-| Levantamento de requisitos e modelagem       | Definição das entidades do domínio, regras, relacionamento  | 02 de outubro de 2025        |
-| Modelagem UML inicial                        | Elaboração do diagrama de classes no Draw.io                | 03-05 de outubro de 2025     |
-| Criação do projeto Spring Boot               | Geração do esqueleto e configuração inicial                 | 05 de outubro de 2025        |
-| Implementação das entidades (models)         | Criar classes Championship, Game, Team, Referee, Report, etc| 06-07 de outubro de 2025     |
-| Implementação dos repositórios               | JPARepository para cada entidade                            | 07-08 de outubro de 2025     |
-| Criação dos services                         | Lógica de negócio e validações                              | 08-09 de outubro de 2025     |
-| Implementação dos controllers (API REST)     | Endpoints REST de cada recurso                              | 10 de outubro de 2025        |
-| Ajustes de nomenclatura (Match -> Game)      | Correção devido a palavras reservadas Oracle                | 10 de outubro de 2025        |
-| Solução de erros de mapping/compostos        | Ajuste de participações, IDs compostos e anotações          | 10 de outubro de 2025        |
-| Testes de endpoint no Insomnia               | Criação e validação de requisições GET/POST/PUT/DELETE      | 10 de outubro de 2025        |
-| Refinamento do diagrama de classes           | Adiciona cardinalidades e enums, revisando clareza          | 10 de outubro de 2025        |
-| Documentação da API com Swagger/OpenAPI      | Documentação automática e exemplos de uso                   | 11 de outubro de 2025        |
-| Documentação final                           | Consolidação do cronograma, guias de teste e material de apoio | 11 de outubro de 2025     |
+| Etapa | Descrição das atividades | Data prevista/concluída |
+|-------|--------------------------|------------------------|
+| Levantamento de requisitos e modelagem | Definição das entidades do domínio, regras, relacionamento | 02 de outubro de 2025 |
+| Modelagem UML inicial | Elaboração do diagrama de classes no Draw.io | 03-05 de outubro de 2025 |
+| Criação do projeto Spring Boot | Geração do esqueleto e configuração inicial | 05 de outubro de 2025 |
+| Implementação das entidades (models) | Criar classes Championship, Game, Team, Referee, Report, etc | 06-07 de outubro de 2025 |
+| Implementação dos repositórios | JPARepository para cada entidade | 07-08 de outubro de 2025 |
+| Criação dos services | Lógica de negócio e validações | 08-09 de outubro de 2025 |
+| Implementação dos controllers (API REST) | Endpoints REST de cada recurso | 10 de outubro de 2025 |
+| Ajustes de nomenclatura (Match -> Game) | Correção devido a palavras reservadas Oracle | 10 de outubro de 2025 |
+| Solução de erros de mapping/compostos | Ajuste de participações, IDs compostos e anotações | 10 de outubro de 2025 |
+| Testes de endpoint no Insomnia | Criação e validação de requisições GET/POST/PUT/DELETE | 10 de outubro de 2025 |
+| Refinamento do diagrama de classes | Adiciona cardinalidades e enums, revisando clareza | 10 de outubro de 2025 |
+| Documentação da API com Swagger/OpenAPI | Documentação automática e exemplos de uso | 11 de outubro de 2025 |
+| Documentação final (Sprint 1) | Consolidação do cronograma, guias de teste e material de apoio | 11 de outubro de 2025 |
+| Implementação HATEOAS | Links hipermídia nos recursos REST, nível 3 do Richardson Maturity Model | 30-31 de outubro de 2025 |
+| Paginação e filtros | Pageable em endpoints de usuários, filtros por nome e e-mail | 24-25 de fevereiro de 2026 |
+| Configuração do Spring Security | Setup de segurança com JWT assimétrico (RSA) e autenticação stateless | 10-20 de março de 2026 |
+| Sistema de roles e permissões | Controle de acesso baseado em perfis: `ROLE_ADMIN` e `ROLE_USER` | 21-30 de março de 2026|
+| Controle de versão do banco com Flyway | Migrations versionadas para criação de tabelas e dados iniciais | 01 de abril de 2026 |
+| Camada de visualização — Frontend | Projeto Angular com Tailwind CSS, guards, interceptors, formulários reativos | 01-08 de abril de 2026 |
 
-### Próximas Atividades
- 
-| Etapa                            | Descrição das atividades                                      | Data prevista              |
-|----------------------------------|---------------------------------------------------------------|----------------------------|
-| **Implementação HATEOAS**        | Adicionar links hipermídia nos recursos REST (Spring HATEOAS) | 30-31 de outubro de 2025   |
-| Configuração de Spring Security  | Setup inicial de segurança, autenticação básica               | 20 de fevereiro de 2026    |
-| Sistema de roles e permissões    | Controle de acesso baseado em perfis (admin, user, etc)       | 21-22 de fevereiro de 2026 |
-| Paginação e ordenação            | Implementar Pageable em endpoints de listagem                 | 23-24 de fevereiro de 2026 |
-| Filtros e busca avançada         | Query methods e specifications para buscas complexas          | 25 de fevereiro de 2026    |
-| Configuração de profiles         | Ambientes dev, test, prod com diferentes configs              | 27 de março de 2026        |
-| Preparação para deploy           | Dockerização da aplicação                                     | 27-28 de março de 2026     |
-| Deploy em ambiente de produção   | Configuração CI/CD e deploy inicial                           | 29-30 de março de 2026     |
+## Evolução do projeto — Sprint 1 → Sprint 2 → Sprint 3
 
+### Sprint 1 — Base da API REST
 
-## Evolução do projeto - Sprint 1 -> Sprint 2
+1. **Estrutura base do projeto**
+   - Configuração do projeto Spring Boot com Java
+   - Integração com Oracle Database
 
-### Todos os tópicos já abordados na Sprint 1
+2. **Modelagem de dados**
+   - Criação do modelo relacional completo
+   - Implementação de 7 entidades principais: `Championship`, `Game`, `Team`, `Participation`, `Referee`, `Refereeing`, `Report`
+   - Relacionamentos ManyToOne e chaves compostas com `@EmbeddedId`
 
-1. Estrutura base do projeto
-    - Configuração do projeto Spring Boot com Java
-    - Integração com Oracle Database
+3. **Implementação CRUD completa**
+   - 31 endpoints REST funcionais
+   - Services com lógica de negócio
+   - Repositories com JPA
+   - Validações com Bean Validation
+   - Tratamento de exceções customizado
 
-2. Modelagem de dados
-    - Criação do modelo relacional completo
-    - Implementação de 7 entidades principais: `Championship`, `Game`, `Team`, `Participation`, `Referee`, `Refereeing`, `Report`
-    - Relacionamentos ManyToOne e chaves compostas com `@EmbeddedId`
+4. **Documentação**
+   - Swagger/OpenAPI integrado
+   - Collection do Insomnia exportada
+   - README com instruções de uso
+   - Diagramas do banco de dados/classes das entidades
 
-3. Implementação CRUD completa
-    - 31 endpoints REST funcionais
-    - Services com lógica de negócio
-    - Repositories com JPA
-    - Validações com Bean Validation
-    - Tratamento de exceções customizado
-
-4. Documentação
-    - Swagger/OpenAPI integrado
-    - Collection do Insomnia exportada
-    - README com instruções de uso
-    - Diagramas do banco de dados/classes das entidades
-
-5. Testes
-   - Testes manuais via **Insomnia**
+5. **Testes**
+   - Testes manuais via Insomnia
    - Validação de todos os endpoints
-   - Documentação de casos de teste
+
+---
   
 ### Sprint 2 - HATEOAS
 
@@ -126,17 +123,140 @@ Elevar o nível de maturidade da API REST através da implementação de **HATEO
 
 ![Imagem](https://drive.google.com/uc?export=view&id=1o0nE6SiImMPiHIDpz-kCpVIT4CGJNWFm)
 
-## Comparativo Sprint 1 vs Sprint 2
+### Sprint 3 — Segurança, Migrations e Frontend
 
-| Aspecto                          | Sprint 1                                                      | Sprint 2                      |
-|----------------------------------|---------------------------------------------------------------|-------------------------------|
-| Nível de maturidade              | Nível 2                                                       | Nível 3                       |
-| Retorno dos controllers          | Entity                                                        | EntityModel/CollectionModel   |
-| Hipermídia                       | ❌ Não                                                        | ✅ Sim                       |
-| Assemblers                       | ❌ Não                                                        | ✅ 7 Assemblers              |
-| Links nas respostas              | ❌ Não                                                        | ✅ Self, Collection, Related |
-| Navegabilidade da API            | Manual                                                        | Autodescritiva                |
-| Diagrama de arquitetura          | ❌ Não                                                        | ✅ Sim                       |
+#### 🔐 Spring Security + JWT (RSA)
+
+Implementação de autenticação **stateless** com tokens JWT assinados com chaves **RSA assimétricas**, garantindo que o backend nunca armazene estado de sessão.
+
+**Fluxo de autenticação:**
+
+```
+Cliente → POST /auth/login → AuthController
+                           → AuthenticationManager (BCrypt)
+                           → TokenService → JWT assinado com chave privada RSA
+                           → Resposta com token
+
+Cliente → GET /championships (Authorization: Bearer <token>)
+        → JwtDecoder (chave pública RSA)
+        → JwtAuthenticationConverter → authorities
+        → SecurityFilterChain → acesso concedido/negado
+```
+
+**Configuração de permissões por endpoint:**
+
+| Método | Endpoint | `ROLE_USER` | `ROLE_ADMIN` |
+|--------|----------|:-----------:|:------------:|
+| GET | `/championships/**`, `/games/**`, `/referees/**`, `/teams/**`, `/reports/**` | ✅ | ✅ |
+| POST | `/reports` | ✅ | ✅ |
+| POST | `/championships`, `/games`, `/referees`, `/teams`, `/participations`, `/refereeing` | ❌ | ✅ |
+| PUT | `/**` | ❌ | ✅ |
+| DELETE | `/**` | ❌ | ✅ |
+| GET/POST/PUT/DELETE | `/users/**` | ❌ | ✅ |
+| POST | `/auth/login`, `/auth/register` | ✅ (público) | ✅ (público) |
+
+> **Chaves RSA:** geradas localmente e armazenadas em `src/main/resources/certs/` como `private_key.pem` e `public_key.pem`. Configuradas via `RsaKeyProperties` com `@ConfigurationProperties`.
+
+---
+
+#### 🗄️ Flyway — Controle de versão do banco de dados
+
+O Flyway gerencia todas as alterações no schema do banco de forma versionada e rastreável. As migrations são aplicadas automaticamente no startup da aplicação.
+
+## Listagem de todos os endpoints
+
+> Endpoints marcados com 🔒 exigem autenticação. Endpoints marcados com 👑 exigem `ROLE_ADMIN`.
+
+### Auth (Autenticação)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| POST | `/auth/login` | Autenticar e obter token JWT | Público |
+| POST | `/auth/register` | Registrar novo usuário (`ROLE_USER`) | Público |
+
+### Championship (Campeonatos)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/championships` | Listar todos os campeonatos | 🔒 |
+| GET | `/championships/{id}` | Buscar campeonato por ID | 🔒 |
+| POST | `/championships` | Criar novo campeonato | 👑 |
+| PUT | `/championships/{id}` | Atualizar campeonato | 👑 |
+| DELETE | `/championships/{id}` | Deletar campeonato | 👑 |
+
+### Game (Partidas)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/games` | Buscar todas as partidas | 🔒 |
+| GET | `/games/{id}` | Buscar partida por ID | 🔒 |
+| GET | `/games/championship/{championshipId}` | Buscar partidas por campeonato | 🔒 |
+| POST | `/games` | Criar nova partida | 👑 |
+| PUT | `/games/{id}` | Atualizar partida | 👑 |
+| DELETE | `/games/{id}` | Deletar partida | 👑 |
+
+### Participation (Participações)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/participations` | Listar todas as participações | 🔒 |
+| GET | `/participations/game/{gameId}` | Listar por partida | 🔒 |
+| GET | `/participations/game/{gameId}/team/{teamId}` | Buscar por partida e time | 🔒 |
+| POST | `/participations` | Criar participação | 👑 |
+| PUT | `/participations` | Atualizar participação | 👑 |
+| DELETE | `/participations/game/{gameId}/team/{teamId}` | Deletar participação | 👑 |
+
+### Referee (Árbitros)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/referees` | Listar todos os árbitros | 🔒 |
+| GET | `/referees/{id}` | Buscar árbitro por ID | 🔒 |
+| POST | `/referees` | Criar novo árbitro | 👑 |
+| PUT | `/referees/{id}` | Atualizar árbitro | 👑 |
+| DELETE | `/referees/{id}` | Deletar árbitro | 👑 |
+
+### Refereeing (Arbitragem)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/refereeing` | Listar todas as arbitragens | 🔒 |
+| GET | `/refereeing/game/{gameId}` | Listar por partida | 🔒 |
+| GET | `/refereeing/game/{gameId}/referee/{refereeId}` | Buscar por partida e árbitro | 🔒 |
+| POST | `/refereeing` | Criar arbitragem | 👑 |
+
+### Report (Denúncias)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/reports` | Listar todas as denúncias | 🔒 |
+| GET | `/reports/{id}` | Buscar denúncia por ID | 🔒 |
+| GET | `/reports/status/{status}` | Buscar por status | 🔒 |
+| POST | `/reports` | Criar nova denúncia | 🔒 |
+
+### Team (Times)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/teams` | Listar todos os times | 🔒 |
+| GET | `/teams/{id}` | Buscar time por ID | 🔒 |
+| POST | `/teams` | Criar novo time | 👑 |
+| PUT | `/teams/{id}` | Atualizar time | 👑 |
+| DELETE | `/teams/{id}` | Deletar time | 👑 |
+
+### Users (Usuários)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/users` | Listar usuários (paginado, com filtros) | 👑 |
+| GET | `/users/{id}` | Buscar usuário por ID | 👑 |
+| POST | `/users` | Criar usuário | 👑 |
+| PUT | `/users/{id}` | Atualizar usuário | 👑 |
+| DELETE | `/users/{id}` | Deletar usuário | 👑 |
+
+**Total de endpoints:** 40
+
+---
 
 ## Instruções de como rodar a aplicação
 
@@ -145,6 +265,7 @@ Elevar o nível de maturidade da API REST através da implementação de **HATEO
 - Java 17 ou superior instalado
 - Maven instalado
 - Banco de dados Oracle (configurado conforme o projeto)
+- Node.js 18+ e Angular CLI (para o frontend)
 
 ### Passo a passo
 
@@ -172,82 +293,7 @@ mvn spring-boot:run
 
 6. A aplicação estará disponível em: `https://localhost:8080`
 
-## Listagem de todos os endpoints
-
-### Championship (Campeonatos)
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/championships`        | Listar todos os campeonatos |
-| GET | `/championships/{id}` | Criar novo campeonato |
-| POST| `/championships`                    | Buscar campeonato por ID |
-| PUT | `/championships/{id}` | Atualizar campeonato |
-| DELETE | `/championships/{id}` | Deletar campeonato |
-
-### Game (Partidas)
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/games` | Buscar todas as partidas |
-| GET | `/games/{id}` | Buscar partida por ID |
-| GET | `/games/championship/{championshipId}` | Buscar partidas por campeonato |
-| POST | `/games` | Criar nova partida |
-| PUT | `/games/{id}` | Atualizar partida por ID |
-| DELETE | `/games/{id}` | Deletar partida por ID |
-
-### Participation (Participações)
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/participations` | Listar todas as participações |
-| GET | `/participations/game/{gameId}` | Listar participações por partida |
-| GET | `/participations/game/{gameId}/team/{teamId}` | Listar participações por partida e por time |
-| POST | `/participations` | Criar participação |
-| PUT | `/participations` | Atualizar participação |
-| DELETE | `/participations/game/{gameId}/team/{teamId}` | Deletar participação |
-
-### Referee (Árbitros)
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/referees` | Listar todos os árbitros |
-| GET | `/referees/{id}` | Buscar árbitro por ID |
-| POST | `/referees` | Criar novo árbitro |
-| PUT | `/referees/{id}` | Atualizar árbitro |
-| DELETE | `/referees/{id}` | Deletar árbitro |
-
-### Refereeing (Arbitragem)
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/refereeing` | Listar todos os papéis de arbitragem |
-| GET | `/refereeing/game/{gameId}` | Listar papéis de arbitragem por partida |
-| GET | `/refereeing/game/{gameId}/referee/{refereeId}` | Listar papéis de arbitragem por partida e por árbitro|
-| POST | `/refereeing` | Criar papel de arbitragem |
-
-### Report (Denúncias)
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/reports` | Listar todas as denúncias |
-| GET | `/reports/{id}` | Buscar denúncia por ID |
-| GET | `/reports/status/{status}` | Buscar denúncias por status |
-| POST | `/reports` | Criar nova denúncia |
-
-### Team (Times)
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/teams` | Listar todos os times |
-| GET | `/teams/{id}` | Buscar time por ID |
-| POST | `/teams` | Criar novo time |
-| PUT | `/teams/{id}` | Atualizar time |
-| DELETE | `/teams/{id}` | Deletar time |
-
-
-**Total de endpoints:** 35
-
----
+> O Flyway aplicará as migrations automaticamente no startup — as tabelas e os usuários iniciais serão criados sem nenhuma ação manual.
 
 ## Testando API
 
@@ -257,21 +303,10 @@ mvn spring-boot:run
 
 - Use ferramentas como **Insomnia ou Postman** para testar os endpoints REST da API.
 
-
-## Importar collection no Insomnia
-
-1. **Baixe a collection com os novos testes dos endpoints:**
-
-[📥 Baixar knowball-api-tests.yaml](https://drive.google.com/uc?export=download&id=1QnKx2EiVrbU8E_103jgeHLaMK4PrrKCj)
-  
-2. Abra o Insomnia
-  
-3. Clique em **Create** > **Import**
-  
-4. Selecione o arquivo que você baixou
-  
-5. Pronto! Todas as requisições serão importadas automaticamente
-
+Para testar endpoints protegidos no Swagger:
+1. Faça login via `POST /auth/login` e copie o token retornado
+2. Clique em **Authorize** (cadeado) no topo da página
+3. Digite `Bearer <seu_token>` e confirme
 
 ## Link do vídeo apresentando a proposta
 
