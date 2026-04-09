@@ -233,6 +233,7 @@ O Flyway gerencia todas as alterações no schema do banco de forma versionada e
 | GET | `/reports/{id}` | Buscar denúncia por ID | 🔒 |
 | GET | `/reports/status/{status}` | Buscar por status | 🔒 |
 | POST | `/reports` | Criar nova denúncia | 🔒 |
+| PUT | `/reports/{id}/status`| Atualiza status da denúncia
 
 ### Team (Times)
 
@@ -254,7 +255,7 @@ O Flyway gerencia todas as alterações no schema do banco de forma versionada e
 | PUT | `/users/{id}` | Atualizar usuário | 👑 |
 | DELETE | `/users/{id}` | Deletar usuário | 👑 |
 
-**Total de endpoints:** 40
+**Total de endpoints:** 43
 
 ---
 
