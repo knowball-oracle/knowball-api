@@ -6,16 +6,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.fiap.knowball.model.AnalysisResultType;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.fiap.knowball.assembler.ReportModelAssembler;
 import br.com.fiap.knowball.model.Report;
@@ -39,6 +35,11 @@ public class ReportController {
     
     private final ReportService reportService;
     private final ReportModelAssembler assembler;
+
+    public record UpdateStatusRequest(
+            ReportStatusType status,
+            AnalysisResultType analysisResultType
+    ) {}
 
     @Operation(summary = "Listar todas as denúncias", description = "Retorna a lista de todas as denúncias cadastradas.")
     @ApiResponse(responseCode = "200", description = "Lista de denúncias retornada com sucesso")
@@ -96,5 +97,19 @@ public class ReportController {
         return ResponseEntity
             .created(linkTo(methodOn(ReportController.class).getById(created.getId())).toUri())
             .body(entityModel);
+    }
+
+    @Operation(summary = "Atualizar status da denúncia", description = "Atualiza o status e o resultado da análise de uma denúncia.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Status atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Denúncia não encontrada")
+    })
+    @PutMapping("/{id}/status")
+    public EntityModel<Report> updateStatus(
+            @PathVariable Long id,
+            @RequestBody UpdateStatusRequest request) {
+        log.info("atualizando status da denúncia {}: {} / {}", id, request.status(), request.analysisResultType());
+        Report updated = reportService.updateStatus(id, request.status(), request.analysisResultType());
+        return assembler.toModel(updated);
     }
 }

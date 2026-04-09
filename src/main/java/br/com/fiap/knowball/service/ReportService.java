@@ -2,6 +2,7 @@ package br.com.fiap.knowball.service;
 
 import java.util.List;
 
+import br.com.fiap.knowball.model.AnalysisResultType;
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,13 @@ public class ReportService {
         Report existing = findById(id);
         BeanUtils.copyProperties(report, existing, "id");
         return save(existing);
+    }
+
+    public Report updateStatus(Long id, ReportStatusType status, AnalysisResultType analysisResult) {
+        Report report = findById(id);
+        report.setStatus(status);
+        report.setAnalysisResult(analysisResult);
+        return reportRepository.save(report);
     }
 
     public void destroy(Long id) {
