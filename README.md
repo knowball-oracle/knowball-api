@@ -35,12 +35,12 @@ O Knowball é voltado principalmente para:
 
 ## Diagrama de Classe das Entidades
 
-![Imagem](https://drive.google.com/uc?export=view&id=1-gX6otPR6oUZ41xjQl5smzxORJ4Eh2P7)
+![Imagem](https://drive.google.com/uc?export=view&id=11HwrNN-SC59HeAK3lF1Ax_RHMsIZQyvY)
 
 
 ## Diagrama de Entidade e Relacionamento (DER) 
 
-![Imagem](https://drive.google.com/uc?export=view&id=1SwRdekFADcd0YNgE0b47ojdpJCvtygpQ)
+![Imagem](https://drive.google.com/uc?export=view&id=1KzUn9k_QbjVizTI6ui4CZs3pfGP9PC7O)
 
 ## Relacionamentos e constraints do banco de dados
 
