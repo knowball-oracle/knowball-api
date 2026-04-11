@@ -309,12 +309,11 @@ Para testar endpoints protegidos no Swagger:
 2. Clique em **Authorize** (cadeado) no topo da página
 3. Digite `Bearer <seu_token>` e confirme
 
-## Link do vídeo apresentando a proposta
+## Vídeo demonstração da aplicação funcionando
 
-> 🎬 Clique na imagem abaixo para assistir no YouTube
+> 🎬 Clique no link abaixo para assistir no YouTube
 
-[![Assista ao vídeo](https://img.youtube.com/vi/UewdXhF_TZ8/maxresdefault.jpg)](https://www.youtube.com/watch?v=UewdXhF_TZ8)
-
+[Assista ao vídeo](https://youtu.be/NW1oRrdz700?si=WxiPAh2nUEeeYe0e)
 
 ## Integrantes
 
