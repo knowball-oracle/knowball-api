@@ -34,3 +34,6 @@ build/
 
 # Ignorar o arquivo de propriedades com segredos locais
 application-local.properties
+
+# RSA Keys
+src/main/resources/certs/private_key.pem

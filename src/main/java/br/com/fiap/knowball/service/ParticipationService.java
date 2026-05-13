@@ -41,7 +41,7 @@ public class ParticipationService {
 
     public Participation save(Participation participation) {
         Long matchId = participation.getGame().getId();
-        Long teamId = participation.getTeam().getId();
+        Long teamId  = participation.getTeam().getId();
         ParticipationType type = participation.getType();
 
         gameRepository.findById(matchId)
@@ -57,6 +57,7 @@ public class ParticipationService {
             throw new IllegalArgumentException("Já existe uma equipe " + type + " cadastrada para esta partida");
         }
 
+        participation.setId(new ParticipationId(matchId, teamId));
         return participationRepository.save(participation);
     }
 

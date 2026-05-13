@@ -35,13 +35,16 @@ public class RefereeingService {
     }
 
     public Refereeing save(Refereeing refereeing) {
+        Long gameId     = refereeing.getGame().getId();
+        Long refereeId  = refereeing.getReferee().getId();
 
-        matchRepository.findById(refereeing.getGame().getId())
+        matchRepository.findById(gameId)
                 .orElseThrow(() -> new EntityNotFoundException("Partida não encontrada"));
 
-        // Valida se árbitro existe
-        refereeRepository.findById(refereeing.getReferee().getId())
+        refereeRepository.findById(refereeId)
                 .orElseThrow(() -> new EntityNotFoundException("Árbitro não encontrado"));
+
+        refereeing.setId(new RefereeingId(gameId, refereeId));
 
         return refereeingRepository.save(refereeing);
     }
