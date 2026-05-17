@@ -14,6 +14,8 @@
 [![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
 [![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 [![Flyway](https://img.shields.io/badge/Flyway-CC0200?style=for-the-badge&logo=flyway&logoColor=white)](https://flywaydb.org/)
+[![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://knowball-api.onrender.com)
+[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://knowball-web-henna.vercel.app)
 
 ## Problemas que a aplicação se propõe a solucionar
 
@@ -84,8 +86,12 @@ O Knowball é voltado principalmente para:
 | Sistema de roles e permissões | Controle de acesso baseado em perfis: `ROLE_ADMIN` e `ROLE_USER` | 21-30 de março de 2026|
 | Controle de versão do banco com Flyway | Migrations versionadas para criação de tabelas e dados iniciais | 01 de abril de 2026 |
 | Camada de visualização — Frontend | Projeto Angular com Tailwind CSS, guards, interceptors, formulários reativos | 01-08 de abril de 2026 |
+| Preparação para produção | Criação do `application-prod.properties` com variáveis de ambiente | 12-13 de maio de 2026 |
+| Preparação para produção | Criação do `Dockerfile` multi-stage para build e execução da aplicação | 13-14 de maio de 2026 |
+| Deploy do Backend | Criação do Web Service no Render e configuração das variáveis de ambiente | 14 de maio de 2026 |
+| Deploy do Frontend | Frontend disponível em https://knowball-web-henna.vercel.app | 14 de maio de 2026 |
 
-## Evolução do projeto — Sprint 1 → Sprint 2 → Sprint 3
+## Evolução do projeto — Sprint 1 → Sprint 2 → Sprint 3 -> Sprint 4
 
 ### Sprint 1 — Base da API REST
 
@@ -163,6 +169,76 @@ Cliente → GET /championships (Authorization: Bearer <token>)
 
 O Flyway gerencia todas as alterações no schema do banco de forma versionada e rastreável. As migrations são aplicadas automaticamente no startup da aplicação.
 
+### Sprint 4 - Deploy, Produção e Segurança de credenciais
+
+#### 🚀 Deploy da aplicação em produção
+
+Nesta sprint, a aplicação foi publicada online com frontend e backend acessíveis publicamente, tornando a solução funcional de ponta a ponta em ambiente de produção.
+
+### Arquitetura de deploy
+
+A aplicação foi separada nas seguintes camadas de deploy:
+
+- **Frontend:** Angular hospedado na **Vercel**
+- **Backend:** API Java com Spring Boot hospedada no **Render**
+- **Banco de dados:** Oracle, acessado pela API por meio de variáveis de ambiente seguras
+
+---
+
+| Camada | Plataforma | URL |
+|--------|------------|-----|
+| Frontend (Angular) | Vercel | https://knowball-web-henna.vercel.app |
+| Backend (Spring Boot) | Render | https://knowball-api.onrender.com |
+| Banco de dados | Oracle | oracle.fiap.com.br |
+
+> 💤 **Cold Start:** O backend no Render Free Plan pode levar até 60 segundos para responder após períodos de inatividade. Acesse [`/actuator/health`](https://knowball-api.onrender.com/actuator/health) antes de demonstrações para garantir que o serviço está ativo.
+
+---
+
+#### ⚙️ Configuração de ambiente de produção
+
+Criação de perfil `prod` separado do ambiente de desenvolvimento, garantindo que configurações sensíveis nunca sejam expostas no repositório.
+
+- `application-prod.properties` com todas as variáveis sensíveis lidas via variáveis de ambiente
+- `RsaKeyProdConfig` — leitura das chaves RSA via variáveis de ambiente no perfil `prod`
+- `RsaKeyDevConfig` — ativação do `RsaKeyProperties` exclusivamente no perfil de desenvolvimento
+- `SecurityProdConfig` — configuração de CORS apontando para o domínio da Vercel no perfil `prod`
+- `@Profile("!prod")` adicionado na `SecurityConfig` original para evitar conflito de beans
+
+**Variáveis de ambiente configuradas no Render:**
+
+| Variável | Descrição |
+|----------|-----------|
+| `SPRING_PROFILES_ACTIVE` | Ativa o perfil `prod` |
+| `DB_URL` | Connection string do Oracle |
+| `DB_USERNAME` / `DB_PASSWORD` | Credenciais do banco |
+| `RSA_PRIVATE_KEY` | Chave privada RSA para assinatura JWT |
+| `RSA_PUBLIC_KEY` | Chave pública RSA para validação JWT |
+| `CORS_ALLOWED_ORIGINS` | URL do frontend na Vercel |
+| `PORT` | Porta de execução da aplicação |
+
+---
+
+#### 🐳 Dockerfile
+
+Criação do `Dockerfile` multi-stage para build e execução da aplicação no Render:
+
+```dockerfile
+FROM eclipse-temurin:21-jdk-alpine AS build
+WORKDIR /app
+COPY . .
+RUN chmod +x mvnw
+RUN ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+---
+
 ## Listagem de todos os endpoints
 
 > Endpoints marcados com 🔒 exigem autenticação. Endpoints marcados com 👑 exigem `ROLE_ADMIN`.
@@ -233,7 +309,7 @@ O Flyway gerencia todas as alterações no schema do banco de forma versionada e
 | GET | `/reports/{id}` | Buscar denúncia por ID | 🔒 |
 | GET | `/reports/status/{status}` | Buscar por status | 🔒 |
 | POST | `/reports` | Criar nova denúncia | 🔒 |
-| PUT | `/reports/{id}/status`| Atualiza status da denúncia
+| PUT | `/reports/{id}/status`| Atualiza status da denúncia | 👑 |
 
 ### Team (Times)
 
@@ -259,55 +335,85 @@ O Flyway gerencia todas as alterações no schema do banco de forma versionada e
 
 ---
 
-## Instruções de como rodar a aplicação
+## Instruções de uso
 
-### Pré-requisitos
+### 🌐 Acesso online (deploy)
 
-- Java 17 ou superior instalado
+A aplicação está publicada e disponível sem necessidade de instalação local:
+
+| Camada | URL |
+|--------|-----|
+| **Frontend** | [https://knowball-web-henna.vercel.app](https://knowball-web-henna.vercel.app) |
+| **Backend** | [https://knowball-api.onrender.com](https://knowball-api.onrender.com) |
+| **Swagger (API docs)** | [https://knowball-api.onrender.com/swagger-ui.html](https://knowball-api.onrender.com/swagger-ui.html) |
+
+---
+
+### 🖥️ Execução local
+
+#### Pré-requisitos
+
+- Java 17 ou superior
 - Maven instalado
-- Banco de dados Oracle (configurado conforme o projeto)
+- Banco de dados Oracle acessível
 - Node.js 18+ e Angular CLI (para o frontend)
 
-### Passo a passo
+#### Passo a passo
 
 1. Clone o repositório:
 ```bash
 git clone https://github.com/knowball-oracle/knowball-api.git
 ```
 
-2. Entre na pasta do projeto
+2. Entre na pasta do projeto:
 ```bash
-cd knowball
+cd knowball-api
 ```
 
-3. Configure as credenciais do banco de dados no arquivo `application.properties` ou utilize variáveis de ambiente.
-
-4. Compile o projeto com Maven:
-```bash
-mvn clean install
+3. Configure as credenciais do banco no `application.properties`:
+```properties
+spring.datasource.url=jdbc:oracle:thin:@<host>:<porta>:<sid>
+spring.datasource.username=<seu_usuario>
+spring.datasource.password=<sua_senha>
 ```
 
-5. Execute a aplicação:
+4. Compile e execute:
 ```bash
 mvn spring-boot:run
 ```
 
-6. A aplicação estará disponível em: `https://localhost:8080`
+5. A aplicação estará disponível em: `http://localhost:8080`
 
-> O Flyway aplicará as migrations automaticamente no startup — as tabelas e os usuários iniciais serão criados sem nenhuma ação manual.
+> O Flyway aplicará as migrations automaticamente no startup — as tabelas e os dados iniciais serão criados sem nenhuma ação manual.
 
-## Testando API
+---
 
-- Para acessar a documentação **Swagger (UI e OpenAPI)**:
+### 🧪 Testando a API
 
-`https://localhost:8080/swagger-ui.html`
+**Via Swagger (recomendado):**
 
-- Use ferramentas como **Insomnia ou Postman** para testar os endpoints REST da API.
+- Online: [https://knowball-api.onrender.com/swagger-ui.html](https://knowball-api.onrender.com/swagger-ui.html)
+- Local: `http://localhost:8080/swagger-ui.html`
 
 Para testar endpoints protegidos no Swagger:
 1. Faça login via `POST /auth/login` e copie o token retornado
 2. Clique em **Authorize** (cadeado) no topo da página
 3. Digite `Bearer <seu_token>` e confirme
+
+**Via Insomnia ou Postman:**
+
+Importe a collection disponível no repositório e aponte a variável de ambiente `baseUrl` para:
+- **Online:** `https://knowball-api.onrender.com`
+- **Local:** `http://localhost:8080`
+
+## Integração multidisciplinar
+
+Este projeto também se conecta com a disciplina de **Mastering Relational and Non Relational Database**, especialmente nos pontos abaixo:
+
+- Modelagem e estruturação do banco de dados
+- Scripts SQL e versionamento de schema
+- Integração da aplicação com banco Oracle
+- Validação das regras de persistência e consistência dos dados
 
 ## Vídeo demonstração da aplicação funcionando
 
