@@ -3,16 +3,16 @@ package br.com.fiap.knowball.service;
 import java.util.List;
 
 import br.com.fiap.knowball.model.AnalysisResultType;
+import br.com.fiap.knowball.model.User;
+import br.com.fiap.knowball.repository.*;
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Report;
 import br.com.fiap.knowball.model.ReportStatusType;
-import br.com.fiap.knowball.repository.GameRepository;
-import br.com.fiap.knowball.repository.RefereeRepository;
-import br.com.fiap.knowball.repository.RefereeingRepository;
-import br.com.fiap.knowball.repository.ReportRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -22,19 +22,21 @@ public class ReportService {
     private final GameRepository matchRepository;
     private final RefereeRepository refereeRepository;
     private final RefereeingRepository refereeingRepository;
+    private final UserRepository userRepository;
 
     @Lazy
     private final RefereeService refereeService;
 
     public ReportService(ReportRepository reportRepository,
-            GameRepository matchRepository,
-            RefereeRepository refereeRepository,
-            RefereeingRepository refereeingRepository,
-            RefereeService refereeService) {
+                         GameRepository matchRepository,
+                         RefereeRepository refereeRepository,
+                         RefereeingRepository refereeingRepository, UserRepository userRepository,
+                         RefereeService refereeService) {
         this.reportRepository = reportRepository;
         this.matchRepository = matchRepository;
         this.refereeRepository = refereeRepository;
         this.refereeingRepository = refereeingRepository;
+        this.userRepository = userRepository;
         this.refereeService = refereeService;
     }
 
@@ -70,6 +72,13 @@ public class ReportService {
                     "Não é possível denúnciar um árbitro que não estava apitando esta partida");
         }
 
+        String authenticatedUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User authenticatedUser = userRepository.findByEmail(authenticatedUserEmail)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário autenticado não encontrado"));
+
+        report.setUser(authenticatedUser);
+
         Report saved = reportRepository.save(report);
 
         refereeService.suspendReferee(refereeId);
@@ -79,7 +88,7 @@ public class ReportService {
 
     public Report update(Long id, Report report) {
         Report existing = findById(id);
-        BeanUtils.copyProperties(report, existing, "id");
+        BeanUtils.copyProperties(report, existing, "id", "user");
         return save(existing);
     }
 
@@ -90,7 +99,19 @@ public class ReportService {
         return reportRepository.save(report);
     }
 
-    public void destroy(Long id) {
-        reportRepository.deleteById(id);
+    public void deleteReport(Long id, String authenticatedUserEmail) {
+        Report report = findById(id);
+
+        User authenticatedUser = userRepository.findByEmail(authenticatedUserEmail)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário autenticado não encontrado"));
+
+        boolean isAdmin = authenticatedUser.getRole().name().equals("ROLE_ADMIN");
+        boolean isOwner = report.getUser() != null && report.getUser().getId().equals(authenticatedUser.getId());
+
+        if (!isAdmin && !isOwner) {
+            throw new AccessDeniedException("Você não tem permissão para excluir esta denúncia");
+        }
+
+        reportRepository.delete(report);
     }
 }

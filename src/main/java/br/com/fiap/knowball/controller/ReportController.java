@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.fiap.knowball.assembler.ReportModelAssembler;
@@ -111,5 +113,18 @@ public class ReportController {
         log.info("atualizando status da denúncia {}: {} / {}", id, request.status(), request.analysisResultType());
         Report updated = reportService.updateStatus(id, request.status(), request.analysisResultType());
         return assembler.toModel(updated);
+    }
+
+    @Operation(summary = "Excluir denúncia", description = "Permite excluir uma denúncia. O usuário comum só pode excluir a própria denúncia; o administrador pode excluir qualquer uma.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Denúncia excluída com sucesso"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
+            @ApiResponse(responseCode = "404", description = "Denúncia não encontrada")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id, Authentication authentication) {
+        log.info("excluindo denúncia {}", id);
+        reportService.deleteReport(id, authentication.getName());
+        return ResponseEntity.noContent().build();
     }
 }

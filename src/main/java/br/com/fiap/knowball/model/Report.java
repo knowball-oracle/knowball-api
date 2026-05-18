@@ -2,6 +2,7 @@ package br.com.fiap.knowball.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -64,4 +65,9 @@ public class Report {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private AnalysisResultType analysisResult;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private User user;
 }
