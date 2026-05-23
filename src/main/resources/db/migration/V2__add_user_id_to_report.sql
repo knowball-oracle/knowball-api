@@ -1,0 +1,8 @@
+ALTER TABLE REPORT ADD (user_id NUMBER(19));
+
+UPDATE REPORT SET user_id = 1 WHERE user_id IS NULL;
+
+ALTER TABLE REPORT MODIFY (user_id NUMBER(19) NOT NULL);
+
+ALTER TABLE REPORT ADD CONSTRAINT fk_report_user
+    FOREIGN KEY (user_id) REFERENCES knowball_users(id);
