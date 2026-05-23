@@ -65,7 +65,6 @@ public class Report {
     @Column(length = 20)
     private AnalysisResultType analysisResult;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
