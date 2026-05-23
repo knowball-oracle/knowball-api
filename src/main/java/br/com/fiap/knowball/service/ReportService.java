@@ -4,16 +4,15 @@ import java.util.List;
 
 import br.com.fiap.knowball.model.AnalysisResultType;
 
+import br.com.fiap.knowball.model.User;
+import br.com.fiap.knowball.repository.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Report;
 import br.com.fiap.knowball.model.ReportStatusType;
-import br.com.fiap.knowball.repository.GameRepository;
-import br.com.fiap.knowball.repository.RefereeRepository;
-import br.com.fiap.knowball.repository.RefereeingRepository;
-import br.com.fiap.knowball.repository.ReportRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -23,19 +22,19 @@ public class ReportService {
     private final GameRepository matchRepository;
     private final RefereeRepository refereeRepository;
     private final RefereeingRepository refereeingRepository;
-
-    @Lazy
+    private final UserRepository userRepository;
     private final RefereeService refereeService;
 
-    public ReportService(ReportRepository reportRepository,
-            GameRepository matchRepository,
-            RefereeRepository refereeRepository,
-            RefereeingRepository refereeingRepository,
-            RefereeService refereeService) {
+    public ReportService(@Lazy ReportRepository reportRepository,
+                         GameRepository matchRepository,
+                         RefereeRepository refereeRepository,
+                         RefereeingRepository refereeingRepository, UserRepository userRepository,
+                         RefereeService refereeService) {
         this.reportRepository = reportRepository;
         this.matchRepository = matchRepository;
         this.refereeRepository = refereeRepository;
         this.refereeingRepository = refereeingRepository;
+        this.userRepository = userRepository;
         this.refereeService = refereeService;
     }
 
@@ -56,6 +55,11 @@ public class ReportService {
     public Report save(Report report) {
         Long matchId = report.getGame().getId();
         Long refereeId = report.getReferee().getId();
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        report.setUser(user);
 
         matchRepository.findById(matchId)
                 .orElseThrow(() -> new EntityNotFoundException("Partida não encontrada"));
