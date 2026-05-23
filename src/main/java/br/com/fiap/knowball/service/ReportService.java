@@ -3,8 +3,9 @@ package br.com.fiap.knowball.service;
 import java.util.List;
 
 import br.com.fiap.knowball.model.AnalysisResultType;
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
+
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.knowball.model.Report;
@@ -70,10 +71,12 @@ public class ReportService {
                     "Não é possível denúnciar um árbitro que não estava apitando esta partida");
         }
 
+        if (report.getStatus() == null) {
+            report.setStatus(ReportStatusType.UNDER_REVIEW);
+        }
+
         Report saved = reportRepository.save(report);
-
         refereeService.suspendReferee(refereeId);
-
         return saved;
     }
 

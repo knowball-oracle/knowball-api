@@ -17,4 +17,6 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
     List<Report> findByStatus(@Param("status") ReportStatusType status);
 
     Optional<Report> findByProtocol(String protocol);
+
+    void deleteByGameId(Long gameId);
 }

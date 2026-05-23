@@ -2,6 +2,8 @@ package br.com.fiap.knowball.service;
 
 import java.util.List;
 
+import br.com.fiap.knowball.repository.RefereeingRepository;
+import br.com.fiap.knowball.repository.ReportRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -9,16 +11,21 @@ import br.com.fiap.knowball.model.Game;
 import br.com.fiap.knowball.repository.ChampionshipRepository;
 import br.com.fiap.knowball.repository.GameRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GameService {
     
     private final GameRepository gameRepository;
     private final ChampionshipRepository championshipRepository;
+    private final ReportRepository reportRepository;
+    private final RefereeingRepository refereeingRepository;
 
-    public GameService(GameRepository gameRepository, ChampionshipRepository championshipRepository) {
+    public GameService(GameRepository gameRepository, ChampionshipRepository championshipRepository, ReportRepository reportRepository, RefereeingRepository refereeingRepository) {
         this.gameRepository = gameRepository;
         this.championshipRepository = championshipRepository;
+        this.reportRepository = reportRepository;
+        this.refereeingRepository = refereeingRepository;
     }
 
     public List<Game> findAll() {
@@ -52,7 +59,11 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    @Transactional
     public void destroy(Long id) {
+        findById(id);
+        reportRepository.deleteByGameId(id);
+        refereeingRepository.deleteByGameId(id);
         gameRepository.deleteById(id);
     }
 }
