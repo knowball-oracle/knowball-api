@@ -25,11 +25,11 @@ public class ReportService {
     private final UserRepository userRepository;
     private final RefereeService refereeService;
 
-    public ReportService(@Lazy ReportRepository reportRepository,
+    public ReportService(ReportRepository reportRepository,
                          GameRepository matchRepository,
                          RefereeRepository refereeRepository,
                          RefereeingRepository refereeingRepository, UserRepository userRepository,
-                         RefereeService refereeService) {
+                         @Lazy RefereeService refereeService) {
         this.reportRepository = reportRepository;
         this.matchRepository = matchRepository;
         this.refereeRepository = refereeRepository;
