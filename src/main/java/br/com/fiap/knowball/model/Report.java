@@ -44,7 +44,6 @@ public class Report {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Referee referee;
 
-    @NotBlank(message = "{report.protocol.notblank}")
     @Column(nullable = false, unique = true, length = 50)
     private String protocol;
 

@@ -1,11 +1,10 @@
 package br.com.fiap.knowball.repository;
 
+import br.com.fiap.knowball.model.Report;
+import br.com.fiap.knowball.model.ReportStatusType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import br.com.fiap.knowball.model.Report;
-import br.com.fiap.knowball.model.ReportStatusType;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +17,9 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
     Optional<Report> findByProtocol(String protocol);
 
     void deleteByGameId(Long gameId);
+
+    List<Report> findByUserId(Long userId);
+
+    @Query("SELECT r.protocol FROM Report r WHERE r.protocol LIKE :prefix% ORDER BY r.protocol DESC LIMIT 1")
+    Optional<String> findLastProtocolo(@Param("prefix") String prefix);
 }

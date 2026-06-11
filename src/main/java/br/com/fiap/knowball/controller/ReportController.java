@@ -90,8 +90,8 @@ public class ReportController {
     @ApiResponse(responseCode = "201", description = "Denúncia criada com sucesso")
     @PostMapping
     public ResponseEntity<EntityModel<Report>> create(@Valid @RequestBody Report report) {
-        log.info("criando nova denúncia com protocolo {}", report.getProtocol());
         Report created = reportService.save(report);
+        log.info("nova denúncia criada com protocolo gerado: {}", created.getProtocol());
         EntityModel<Report> entityModel = assembler.toModel(created);
 
         return ResponseEntity

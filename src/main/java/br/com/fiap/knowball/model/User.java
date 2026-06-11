@@ -49,6 +49,9 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private UserRole role;
+
+    @Column(name = "profile_picture", columnDefinition = "TEXT")
+    private String profilePicture;
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

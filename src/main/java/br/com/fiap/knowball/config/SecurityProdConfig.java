@@ -66,6 +66,8 @@ public class SecurityProdConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/me").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/users/me").authenticated()
                         .requestMatchers("/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,
                                 "/referees/**", "/reports/**", "/games/**",
@@ -78,6 +80,7 @@ public class SecurityProdConfig {
                                 "/championships/**", "/participations/**",
                                 "/refereeing/**")
                         .hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/chat").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

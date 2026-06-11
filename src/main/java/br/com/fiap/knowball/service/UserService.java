@@ -3,6 +3,8 @@ package br.com.fiap.knowball.service;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.fiap.knowball.dto.UpdateProfileRequest;
+import br.com.fiap.knowball.dto.UserProfileResponse;
 import br.com.fiap.knowball.dto.UserResponse;
 import br.com.fiap.knowball.exception.EmailAlreadyExistsException;
 import org.springframework.data.domain.Page;
@@ -88,5 +90,30 @@ public class UserService {
 
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    private UserProfileResponse toProfileResponse(User user) {
+        return new UserProfileResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole(),
+                user.getProfilePicture()
+        );
+    }
+
+    public Optional<UserProfileResponse> getProfileByEmail(String email) {
+        return userRepository.findByEmail(email).map(this::toProfileResponse);
+    }
+
+    public Optional<UserProfileResponse> updateProfile(String email, UpdateProfileRequest request) {
+        return userRepository.findByEmail(email).map(user -> {
+            user.setName(request.name());
+
+            if (request.profilePicture() != null && !request.profilePicture().isBlank()) {
+                user.setProfilePicture(request.profilePicture());
+            }
+            return toProfileResponse(userRepository.save(user));
+        });
     }
 }

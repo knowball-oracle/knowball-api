@@ -1,18 +1,16 @@
 package br.com.fiap.knowball.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import br.com.fiap.knowball.model.AnalysisResultType;
+import br.com.fiap.knowball.model.*;
 
-import br.com.fiap.knowball.model.User;
 import br.com.fiap.knowball.repository.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import br.com.fiap.knowball.model.Report;
-import br.com.fiap.knowball.model.ReportStatusType;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -39,7 +37,14 @@ public class ReportService {
     }
 
     public List<Report> findAll() {
-        return reportRepository.findAll();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
+        if (user.getRole() == UserRole.ROLE_ADMIN) {
+            return reportRepository.findAll();
+        }
+        return reportRepository.findByUserId(user.getId());
     }
 
     public Report findById(Long id) {
@@ -50,6 +55,21 @@ public class ReportService {
 
     public List<Report> findByStatus(ReportStatusType status) {
         return reportRepository.findByStatus(status);
+    }
+
+    private String generateProtocol() {
+        int year = LocalDate.now().getYear();
+        String prefix = "KB-" + year + "-";
+
+        int nextNumber = reportRepository
+                .findLastProtocolo(prefix)
+                .map(lastProtocol -> {
+                    String[] parts = lastProtocol.split("-");
+                    return Integer.parseInt(parts[2]) + 1;
+                })
+                .orElse(1);
+
+        return String.format("%s%03d", prefix, nextNumber);
     }
 
     public Report save(Report report) {
@@ -78,6 +98,8 @@ public class ReportService {
         if (report.getStatus() == null) {
             report.setStatus(ReportStatusType.UNDER_REVIEW);
         }
+
+        report.setProtocol(generateProtocol());
 
         Report saved = reportRepository.save(report);
         refereeService.suspendReferee(refereeId);
