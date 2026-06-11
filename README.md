@@ -377,12 +377,19 @@ spring.datasource.username=<seu_usuario>
 spring.datasource.password=<sua_senha>
 ```
 
-4. Compile e execute:
+4. Gere a chave privada para assinatura JWT:
+```bash
+openssl genrsa -out src/main/resources/certs/private_key.pem 2048
+```
+
+> ⚠️ **Atenção:** o arquivo `private_key.pem` está no `.gitignore` e **não é versionado** por segurança. É obrigatório gerá-lo localmente antes de executar a aplicação. Sem ele, o Spring Security não conseguirá assinar nem validar os tokens JWT e a aplicação falhará no startup.
+
+5. Compile e execute:
 ```bash
 mvn spring-boot:run
 ```
 
-5. A aplicação estará disponível em: `http://localhost:8080`
+6. A aplicação estará disponível em: `http://localhost:8080`
 
 > O Flyway aplicará as migrations automaticamente no startup — as tabelas e os dados iniciais serão criados sem nenhuma ação manual.
 
