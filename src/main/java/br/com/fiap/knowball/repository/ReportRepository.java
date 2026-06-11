@@ -22,4 +22,6 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
 
     @Query("SELECT r.protocol FROM Report r WHERE r.protocol LIKE :prefix% ORDER BY r.protocol DESC LIMIT 1")
     Optional<String> findLastProtocolo(@Param("prefix") String prefix);
+
+    Optional<Report> findTopByProtocolStartingWithOrderByProtocolDesc(String prefix);
 }
