@@ -51,7 +51,7 @@ public class AuthController {
         User user = (User) authService.loadUserByUsername(request.email());
         String token = tokenService.generateToken(user);
 
-        return ResponseEntity.ok(new LoginResponse(token, user.getEmail(), user.getName(), user.getRole().name()));
+        return ResponseEntity.ok(new LoginResponse(token, user.getEmail(), user.getName(), user.getRole().name(), user.getProfilePicture()));
     }
 
     @Operation(summary = "Registrar", description = "Registra um novo usuário comum")
@@ -65,6 +65,6 @@ public class AuthController {
         String token = tokenService.generateToken(saved);
 
         return ResponseEntity.status(201)
-            .body(new LoginResponse(token, saved.getEmail(), saved.getName(), saved.getRole().name()));
+            .body(new LoginResponse(token, saved.getEmail(), saved.getName(), saved.getRole().name(), saved.getProfilePicture()));
     }
 }
