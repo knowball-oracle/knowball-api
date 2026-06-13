@@ -45,6 +45,9 @@ public class User implements UserDetails{
     @Lob
     @Column(name = "profile_picture", columnDefinition = "CLOB")
     private String profilePicture;
+
+    @Column(nullable = false)
+    private boolean emailVerified = false;
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
