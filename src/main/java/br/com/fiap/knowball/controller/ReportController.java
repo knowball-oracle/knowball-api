@@ -112,4 +112,17 @@ public class ReportController {
         Report updated = reportService.updateStatus(id, request.status(), request.analysisResultType());
         return assembler.toModel(updated);
     }
+
+    @Operation(summary = "Deletar denúncia", description = "Permite ao autor (ou ADMIN) deletar uma denúncia.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Denúncia deletada com sucesso"),
+            @ApiResponse(responseCode = "403", description = "Usuário não tem permissão para deletar esta denúncia"),
+            @ApiResponse(responseCode = "404", description = "Denúncia não encontrada")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        log.info("deletando denúncia {}", id);
+        reportService.deleteByIdWithPermissionCheck(id);
+        return ResponseEntity.noContent().build();
+    }
 }

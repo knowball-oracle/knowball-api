@@ -8,6 +8,8 @@ import br.com.fiap.knowball.model.*;
 import br.com.fiap.knowball.repository.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -119,7 +121,20 @@ public class ReportService {
         return reportRepository.save(report);
     }
 
-    public void destroy(Long id) {
-        reportRepository.deleteById(id);
+    public void deleteByIdWithPermissionCheck(Long id) {
+        Report report = reportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Denúncia não encontrada com id " + id));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        var principal = (User) auth.getPrincipal();
+
+        boolean isAdmin = principal.getRole() == UserRole.ROLE_ADMIN;
+        boolean isOwner = report.getUser().getId().equals(principal.getId());
+
+        if (!isAdmin && !isOwner) {
+            throw new AccessDeniedException("Usuário não pode deletar esta denúncia");
+        }
+
+        reportRepository.delete(report);
     }
 }
