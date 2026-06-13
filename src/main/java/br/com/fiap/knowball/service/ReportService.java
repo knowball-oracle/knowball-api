@@ -125,11 +125,15 @@ public class ReportService {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Denúncia não encontrada com id " + id));
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        var principal = (User) auth.getPrincipal();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User principal = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário autenticado não encontrado"));
 
         boolean isAdmin = principal.getRole() == UserRole.ROLE_ADMIN;
-        boolean isOwner = report.getUser().getId().equals(principal.getId());
+
+        boolean isOwner = report.getUser() != null
+                && report.getUser().getId() != null
+                && report.getUser().getId().equals(principal.getId());
 
         if (!isAdmin && !isOwner) {
             throw new AccessDeniedException("Usuário não pode deletar esta denúncia");
