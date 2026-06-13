@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class EmailVerificationService {
         this.mailSender = mailSender;
     }
 
+    @Async
     @Transactional
     public void sendVerificationCode(String email) {
         tokenRepo.deleteByEmail(email);
@@ -73,7 +75,7 @@ public class EmailVerificationService {
 
             helper.setFrom(fromEmail);
             helper.setTo(to);
-            helper.setSubject("Seu código de verificação - KnowBall");
+            helper.setSubject("Seu código de verificação - KnowBall"    );
             helper.setText(html, true); // HTML
 
             mailSender.send(message);
