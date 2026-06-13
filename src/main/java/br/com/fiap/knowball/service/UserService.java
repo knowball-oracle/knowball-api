@@ -108,8 +108,9 @@ public class UserService {
 
     public Optional<UserProfileResponse> updateProfile(String email, UpdateProfileRequest request) {
         return userRepository.findByEmail(email).map(user -> {
-            user.setName(request.name());
-
+            if (request.name() != null && !request.name().isBlank()) {
+                user.setName(request.name());
+            }
             if (request.profilePicture() != null && !request.profilePicture().isBlank()) {
                 user.setProfilePicture(request.profilePicture());
             }
