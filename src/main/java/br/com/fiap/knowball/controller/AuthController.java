@@ -69,7 +69,12 @@ public class AuthController {
         log.info("POST /auth/register : {}", request.email());
 
         authService.register(request.name(), request.email(), request.password());
-        emailVerificationService.sendVerificationCode(request.email());
+
+        try {
+            emailVerificationService.sendVerificationCode(request.email());
+        } catch (RuntimeException e) {
+            log.error("Falha ao enviar e-mail de verificação para {}: {}", request.email(), e.getMessage());
+        }
 
         return ResponseEntity.status(201)
                 .body(new RegisterPendingResponse("EMAIL_VERIFICATION_PENDING", request.email()));

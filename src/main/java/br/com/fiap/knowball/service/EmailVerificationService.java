@@ -3,12 +3,14 @@ package br.com.fiap.knowball.service;
 import br.com.fiap.knowball.model.EmailVerificationToken;
 import br.com.fiap.knowball.repository.EmailVerificationTokenRepository;
 import br.com.fiap.knowball.repository.UserRepository;
-import com.resend.Resend;
-import com.resend.core.exception.ResendException;
-import com.resend.services.emails.model.CreateEmailOptions;
+
+import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,7 +22,7 @@ public class EmailVerificationService {
 
     private final EmailVerificationTokenRepository tokenRepo;
     private final UserRepository userRepo;
-    private final Resend resend;
+    private final JavaMailSender mailSender;
 
     @Value("${app.email.from}")
     private String fromEmail;
@@ -31,10 +33,11 @@ public class EmailVerificationService {
     public EmailVerificationService(
             EmailVerificationTokenRepository tokenRepo,
             UserRepository userRepo,
-            @Value("${resend.api-key}") String apiKey) {
+            JavaMailSender mailSender
+    ) {
         this.tokenRepo = tokenRepo;
         this.userRepo = userRepo;
-        this.resend = new Resend(apiKey);
+        this.mailSender = mailSender;
     }
 
     @Transactional
@@ -50,19 +53,33 @@ public class EmailVerificationService {
                 .used(false)
                 .build());
 
-        CreateEmailOptions emailReq = CreateEmailOptions.builder()
-                .from(fromEmail)
-                .to(email)
-                .subject("Seu código de verificação - KnowBall")
-                .html(buildEmailHtml(code))
-                .build();
-
         try {
-            resend.emails().send(emailReq);
+            sendEmail(email, code);
             log.info("Código de verificação enviado para: {}", email);
-        } catch (ResendException e) {
+        } catch (Exception e) {
             log.error("Erro ao enviar e-mail de verificação para {}: {}", email, e.getMessage());
             throw new RuntimeException("Falha ao enviar e-mail de verificação.", e);
+        }
+    }
+
+    private void sendEmail(String to, String code) {
+        String html = buildEmailHtml(code);
+
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper =
+                    new MimeMessageHelper(message, false, "UTF-8");
+
+            helper.setFrom(fromEmail);
+            helper.setTo(to);
+            helper.setSubject("Seu código de verificação - KnowBall");
+            helper.setText(html, true); // HTML
+
+            mailSender.send(message);
+        } catch (jakarta.mail.MessagingException e) {
+            log.error("Erro ao montar email para {}: {}", to, e.getMessage());
+            throw new RuntimeException("Falha ao montar e enviar e-mail de verificação.", e);
         }
     }
 
