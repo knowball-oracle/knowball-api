@@ -84,18 +84,98 @@ public class EmailVerificationService {
 
     private String buildEmailHtml(String code) {
         return """
-            <div style="font-family:sans-serif;max-width:480px;margin:auto;padding:32px">
-              <h2 style="color:#01696f">KnowBall — Verificação de e-mail</h2>
-              <p>Use o código abaixo para confirmar seu cadastro:</p>
-              <div style="font-size:36px;font-weight:bold;letter-spacing:12px;
-                          color:#0f3638;background:#cedcd8;padding:16px 24px;
-                          border-radius:8px;text-align:center;margin:24px 0">
-                %s
-              </div>
-              <p style="color:#7a7974">
-                Válido por %d minutos. Ignore este e-mail se não realizou o cadastro.
-              </p>
-            </div>
-            """.formatted(code, expirationMinutes);
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+        <body style="margin:0;padding:0;background-color:#06060f;font-family:'Helvetica Neue',Arial,sans-serif;">
+          <table width="100%%" cellpadding="0" cellspacing="0" style="background-color:#06060f;padding:40px 16px;">
+            <tr>
+              <td align="center">
+                <table width="100%%" cellpadding="0" cellspacing="0"
+                  style="max-width:480px;
+                         background:linear-gradient(135deg,rgba(255,255,255,0.06) 0%%,rgba(255,255,255,0.02) 100%%);
+                         border:1px solid rgba(255,255,255,0.08);
+                         border-radius:24px;
+                         padding:40px 36px;">
+
+                  <!-- Logo / título -->
+                  <tr>
+                    <td align="center" style="padding-bottom:28px;">
+                      <span style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.5px;">
+                        Knowball</span>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Heading -->
+                  <tr>
+                    <td style="padding-bottom:8px;">
+                      <p style="margin:0;font-size:20px;font-weight:600;color:#ffffff;">
+                        Verifique seu e-mail
+                      </p>
+                    </td>
+                  </tr>
+
+                  <!-- Subtítulo -->
+                  <tr>
+                    <td style="padding-bottom:28px;">
+                      <p style="margin:0;font-size:14px;color:rgba(255,255,255,0.4);line-height:1.6;">
+                        Use o código abaixo para confirmar seu cadastro na plataforma.
+                      </p>
+                    </td>
+                  </tr>
+
+                  <!-- Código -->
+                  <tr>
+                    <td align="center" style="padding-bottom:28px;">
+                      <div style="display:inline-block;
+                                  background:rgba(255,255,255,0.05);
+                                  border:1px solid rgba(255,255,255,0.1);
+                                  border-radius:16px;
+                                  padding:20px 36px;">
+                        <span style="font-size:40px;
+                                     font-weight:700;
+                                     letter-spacing:14px;
+                                     color:#ffffff;
+                                     font-variant-numeric:tabular-nums;">
+                          %s
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Validade -->
+                  <tr>
+                    <td align="center" style="padding-bottom:28px;">
+                      <p style="margin:0;font-size:13px;color:rgba(255,255,255,0.3);">
+                        Válido por <strong style="color:rgba(255,255,255,0.5);">%d minutos</strong>.
+                      </p>
+                    </td>
+                  </tr>
+
+                  <!-- Divider -->
+                  <tr>
+                    <td style="padding-bottom:20px;">
+                      <div style="height:1px;background:rgba(255,255,255,0.07);"></div>
+                    </td>
+                  </tr>
+
+                  <!-- Aviso de segurança -->
+                  <tr>
+                    <td>
+                      <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.2);text-align:center;line-height:1.6;">
+                        Se você não realizou este cadastro, ignore este e-mail.<br>
+                        Nenhuma ação é necessária.
+                      </p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+        """.formatted(code, expirationMinutes);
     }
 }
