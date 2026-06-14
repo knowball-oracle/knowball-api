@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +37,12 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
             "FROM Report r GROUP BY r.game.championship.name, r.game.championship.category")
     List<ReportByChampionshipDTO> countByChampionship();
 
-    @Query("SELECT COUNT(r) FROM Report r WHERE YEAR(r.date) = :year AND MONTH(r.date) = :month")
-    long countByYearAndMonth(@Param("year") int year, @Param("month") int month);
+    @Query("""
+       SELECT COUNT(r)
+       FROM Report r
+       WHERE r.date >= :startDate
+         AND r.date < :endDate
+       """)
+    long countByDateRange(@Param("startDate") LocalDate startDate,
+                          @Param("endDate") LocalDate endDate);
 }

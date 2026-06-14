@@ -27,11 +27,13 @@ public class ReportAnalyticsService {
 
     public ReportAnalyticsSummaryDTO getSummary() {
         LocalDate now = LocalDate.now();
+        LocalDate startOfMonth = now.withDayOfMonth(1);
+        LocalDate startOfNextMonth = startOfMonth.plusMonths(1);
 
         long total = reportRepository.count();
         List<ReportStatusCountDTO> byStatus = reportRepository.countByStatus();
         List<ReportByChampionshipDTO> byChampionship = reportRepository.countByChampionship();
-        long thisMonth = reportRepository.countByYearAndMonth(now.getYear(), now.getMonthValue());
+        long thisMonth = reportRepository.countByDateRange(startOfMonth, startOfNextMonth);
 
         long resolved = byStatus.stream()
                 .filter(s -> s.status() == ReportStatusType.RESOLVED)
@@ -39,7 +41,8 @@ public class ReportAnalyticsService {
                 .sum();
 
         long pending = byStatus.stream()
-                .filter(s -> s.status() == ReportStatusType.NEW || s.status() == ReportStatusType.UNDER_REVIEW)
+                .filter(s -> s.status() == ReportStatusType.NEW
+                        || s.status() == ReportStatusType.UNDER_REVIEW)
                 .mapToLong(ReportStatusCountDTO::count)
                 .sum();
 
