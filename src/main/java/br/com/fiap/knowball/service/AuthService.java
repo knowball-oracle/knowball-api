@@ -36,7 +36,6 @@ public class AuthService implements UserDetailsService {
                 .email(email)
                 .password(passwordEncoder.encode(rawPassword))
                 .role(UserRole.ROLE_USER)
-                .emailVerified(false)
                 .build();
         userRepository.save(user);
     }
