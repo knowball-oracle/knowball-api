@@ -1,5 +1,7 @@
 package br.com.fiap.knowball.repository;
 
+import br.com.fiap.knowball.dto.ReportByChampionshipDTO;
+import br.com.fiap.knowball.dto.ReportStatusCountDTO;
 import br.com.fiap.knowball.model.Report;
 import br.com.fiap.knowball.model.ReportStatusType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +26,16 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
     Optional<String> findLastProtocolo(@Param("prefix") String prefix);
 
     Optional<Report> findTopByProtocolStartingWithOrderByProtocolDesc(String prefix);
+
+    @Query("SELECT new br.com.fiap.knowball.dto.ReportStatusCountDTO(r.status, COUNT(r)) " +
+            "FROM Report r GROUP BY r.status")
+    List<ReportStatusCountDTO> countByStatus();
+
+    @Query("SELECT new br.com.fiap.knowball.dto.ReportByChampionshipDTO(" +
+            "r.game.championship.name, CAST(r.game.championship.category AS string), COUNT(r)) " +
+            "FROM Report r GROUP BY r.game.championship.name, r.game.championship.category")
+    List<ReportByChampionshipDTO> countByChampionship();
+
+    @Query("SELECT COUNT(r) FROM Report r WHERE YEAR(r.date) = :year AND MONTH(r.date) = :month")
+    long countByYearAndMonth(@Param("year") int year, @Param("month") int month);
 }
