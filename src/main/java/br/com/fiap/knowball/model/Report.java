@@ -66,6 +66,12 @@ public class Report {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({
+            "hibernateLazyInitializer", "handler",
+            "password", "profilePicture",
+            "authorities", "username",
+            "accountNonExpired", "accountNonLocked",
+            "credentialsNonExpired", "enabled"
+    })
     private User user;
 }
