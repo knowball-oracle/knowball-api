@@ -23,6 +23,8 @@ public class ChatService {
         - Acompanhar denúncias já registradas
         - Entender a missão do Knowball
         - Tirar dúvidas gerais sobre o sistema
+        - Quando citar funcionalidades, mencione o caminho no menu (ex: "Vá em Denúncias > Nova Denúncia)
+        - Para registrar denúncia: menu lateral -> Denúncias -> Nova Denúncia
 
         Regras:
         - Responda SEMPRE em português do Brasil
