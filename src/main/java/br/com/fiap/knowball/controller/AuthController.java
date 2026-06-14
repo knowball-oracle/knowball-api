@@ -52,7 +52,7 @@ public class AuthController {
         String token = tokenService.generateToken(user);
 
         return ResponseEntity.ok(new LoginResponse(
-                token, user.getEmail(), user.getName(),
+                token, user.getId(), user.getEmail(), user.getName(),
                 user.getRole().name(), user.getProfilePicture()));
     }
 
@@ -69,7 +69,7 @@ public class AuthController {
         String token = tokenService.generateToken(user);
 
         return ResponseEntity.status(201).body(new LoginResponse(
-                token, user.getEmail(), user.getName(),
+                token, user.getId(), user.getEmail(), user.getName(),
                 user.getRole().name(), user.getProfilePicture()));
     }
 }
