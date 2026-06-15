@@ -1,9 +1,6 @@
 package br.com.fiap.knowball.service;
 
-import br.com.fiap.knowball.dto.ReportAnalyticsSummaryDTO;
-import br.com.fiap.knowball.dto.ReportByChampionshipDTO;
-import br.com.fiap.knowball.dto.ReportKpiDTO;
-import br.com.fiap.knowball.dto.ReportStatusCountDTO;
+import br.com.fiap.knowball.dto.*;
 import br.com.fiap.knowball.model.ReportStatusType;
 import br.com.fiap.knowball.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,5 +55,9 @@ public class ReportAnalyticsService {
                 summary.resolvedCount(),
                 summary.pendingCount()
         );
+    }
+
+    public List<ReportByRefereeDTO> getCountByReferee() {
+        return reportRepository.countByReferee();
     }
 }

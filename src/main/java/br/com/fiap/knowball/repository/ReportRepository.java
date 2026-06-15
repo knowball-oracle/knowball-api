@@ -1,6 +1,7 @@
 package br.com.fiap.knowball.repository;
 
 import br.com.fiap.knowball.dto.ReportByChampionshipDTO;
+import br.com.fiap.knowball.dto.ReportByRefereeDTO;
 import br.com.fiap.knowball.dto.ReportStatusCountDTO;
 import br.com.fiap.knowball.model.Report;
 import br.com.fiap.knowball.model.ReportStatusType;
@@ -45,4 +46,16 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
        """)
     long countByDateRange(@Param("startDate") LocalDate startDate,
                           @Param("endDate") LocalDate endDate);
+
+    @Query("""
+        SELECT new br.com.fiap.knowball.dto.ReportByRefereeDTO(
+            r.referee.id,
+            r.referee.name,
+            COUNT(r)
+        )
+        FROM Report r
+        GROUP BY r.referee.id, r.referee.name
+        ORDER BY COUNT(r) DESC
+        """)
+    List<ReportByRefereeDTO> countByReferee();
 }

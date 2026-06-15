@@ -1,9 +1,6 @@
 package br.com.fiap.knowball.controller;
 
-import br.com.fiap.knowball.dto.ReportAnalyticsSummaryDTO;
-import br.com.fiap.knowball.dto.ReportByChampionshipDTO;
-import br.com.fiap.knowball.dto.ReportKpiDTO;
-import br.com.fiap.knowball.dto.ReportStatusCountDTO;
+import br.com.fiap.knowball.dto.*;
 import br.com.fiap.knowball.service.ReportAnalyticsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,5 +56,16 @@ public class ReportAnalyticsController {
     public ResponseEntity<ReportKpiDTO> getKpis() {
         log.info("analytics: KPIs do dashboard");
         return ResponseEntity.ok(analyticsService.getKpis());
+    }
+
+    @Operation(
+            summary = "Contagem por árbitro",
+            description = "Retorna a quantidade de denúncias agrupada por árbitro."
+    )
+    @ApiResponse(responseCode = "200", description = "Contagem por árbitro retornada com sucesso")
+    @GetMapping("/by-referee")
+    public ResponseEntity<List<ReportByRefereeDTO>> countByReferee() {
+        log.info("analytics: contagem de denúncias por árbitro");
+        return ResponseEntity.ok(analyticsService.getCountByReferee());
     }
 }
