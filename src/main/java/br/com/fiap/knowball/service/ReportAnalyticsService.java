@@ -2,6 +2,7 @@ package br.com.fiap.knowball.service;
 
 import br.com.fiap.knowball.dto.ReportAnalyticsSummaryDTO;
 import br.com.fiap.knowball.dto.ReportByChampionshipDTO;
+import br.com.fiap.knowball.dto.ReportKpiDTO;
 import br.com.fiap.knowball.dto.ReportStatusCountDTO;
 import br.com.fiap.knowball.model.ReportStatusType;
 import br.com.fiap.knowball.repository.ReportRepository;
@@ -47,5 +48,15 @@ public class ReportAnalyticsService {
                 .sum();
 
         return new ReportAnalyticsSummaryDTO(total, byStatus, byChampionship, thisMonth, resolved, pending);
+    }
+
+    public ReportKpiDTO getKpis() {
+        ReportAnalyticsSummaryDTO summary = getSummary();
+        return new ReportKpiDTO(
+                summary.totalReports(),
+                summary.reportsThisMonth(),
+                summary.resolvedCount(),
+                summary.pendingCount()
+        );
     }
 }

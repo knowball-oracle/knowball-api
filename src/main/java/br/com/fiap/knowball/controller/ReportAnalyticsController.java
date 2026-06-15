@@ -2,6 +2,7 @@ package br.com.fiap.knowball.controller;
 
 import br.com.fiap.knowball.dto.ReportAnalyticsSummaryDTO;
 import br.com.fiap.knowball.dto.ReportByChampionshipDTO;
+import br.com.fiap.knowball.dto.ReportKpiDTO;
 import br.com.fiap.knowball.dto.ReportStatusCountDTO;
 import br.com.fiap.knowball.service.ReportAnalyticsService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,5 +50,14 @@ public class ReportAnalyticsController {
     public ResponseEntity<ReportAnalyticsSummaryDTO> getSummary() {
         log.info("analytics: resumo geral das denúncias");
         return ResponseEntity.ok(analyticsService.getSummary());
+    }
+
+    @Operation(summary = "KPIs do dashboard",
+            description = "Retorna apenas os indicadores principais (totais) para o dashboard.")
+    @ApiResponse(responseCode = "200", description = "KPIs retornados com sucesso")
+    @GetMapping("/kpis")
+    public ResponseEntity<ReportKpiDTO> getKpis() {
+        log.info("analytics: KPIs do dashboard");
+        return ResponseEntity.ok(analyticsService.getKpis());
     }
 }
