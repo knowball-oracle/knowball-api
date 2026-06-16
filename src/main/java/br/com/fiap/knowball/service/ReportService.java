@@ -1,6 +1,7 @@
 package br.com.fiap.knowball.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import br.com.fiap.knowball.model.*;
@@ -97,9 +98,9 @@ public class ReportService {
                     "Não é possível denúnciar um árbitro que não estava apitando esta partida");
         }
 
-        if (report.getStatus() == null) {
-            report.setStatus(ReportStatusType.UNDER_REVIEW);
-        }
+        report.setStatus(ReportStatusType.NEW);
+
+        report.setDate(LocalDateTime.now());
 
         report.setProtocol(generateProtocol());
 
