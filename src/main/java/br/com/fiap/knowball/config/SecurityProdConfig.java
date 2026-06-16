@@ -75,6 +75,7 @@ public class SecurityProdConfig {
                                 "/teams/**", "/championships/**",
                                 "/participations/**", "/refereeing/**")
                         .authenticated()
+
                         .requestMatchers(HttpMethod.POST, "/reports").authenticated()
                         .requestMatchers(HttpMethod.POST,
                                 "/referees/**", "/games/**", "/teams/**",
@@ -83,6 +84,7 @@ public class SecurityProdConfig {
                         .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/chat").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/reports/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt ->

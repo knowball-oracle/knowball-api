@@ -145,6 +145,10 @@ public class ReportService {
 
         log.info("Permissões: isAdmin={}, isOwner={}", isAdmin, isOwner);
 
+        if (isOwner && report.getStatus() != ReportStatusType.NEW && !isAdmin) {
+            throw new AccessDeniedException("Somente denúncias novas podem ser excluídas pelo autor.");
+        }
+
         if (!isAdmin && !isOwner) {
             throw new AccessDeniedException("Usuário não pode deletar esta denúncia");
         }
