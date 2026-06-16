@@ -111,9 +111,15 @@ public class UserService {
             if (request.name() != null && !request.name().isBlank()) {
                 user.setName(request.name());
             }
-            if (request.profilePicture() != null && !request.profilePicture().isBlank()) {
-                user.setProfilePicture(request.profilePicture());
+
+            if (request.profilePicture() != null) {
+                if (request.profilePicture().isBlank()) {
+                    user.setProfilePicture(null);
+                } else {
+                    user.setProfilePicture(request.profilePicture());
+                }
             }
+
             return toProfileResponse(userRepository.save(user));
         });
     }
