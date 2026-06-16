@@ -129,11 +129,12 @@ public class ReportService {
         User principal = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário autenticado não encontrado"));
 
-        log.info("Tentando deletar denúncia {}. principal.id={}, principal.email={}, report.user.id={}",
+        log.info("Tentando deletar denúncia {}. principal.id={}, principal.email={}, report.user.id={}, report.status={}",
                 id,
                 principal.getId(),
                 principal.getEmail(),
-                report.getUser() != null ? report.getUser().getId() : null
+                report.getUser() != null ? report.getUser().getId() : null,
+                report.getStatus()
         );
 
         boolean isAdmin = principal.getRole() == UserRole.ROLE_ADMIN;
