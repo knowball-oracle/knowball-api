@@ -1,22 +1,21 @@
 package br.com.fiap.knowball.service;
 
+import br.com.fiap.knowball.model.*;
+import br.com.fiap.knowball.repository.*;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import br.com.fiap.knowball.model.*;
-
-import br.com.fiap.knowball.repository.*;
-import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
-import jakarta.persistence.EntityNotFoundException;
-
 @Service
+@Slf4j
 public class ReportService {
 
     private final ReportRepository reportRepository;
@@ -130,11 +129,20 @@ public class ReportService {
         User principal = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário autenticado não encontrado"));
 
+        log.info("Tentando deletar denúncia {}. principal.id={}, principal.email={}, report.user.id={}",
+                id,
+                principal.getId(),
+                principal.getEmail(),
+                report.getUser() != null ? report.getUser().getId() : null
+        );
+
         boolean isAdmin = principal.getRole() == UserRole.ROLE_ADMIN;
 
         boolean isOwner = report.getUser() != null
                 && report.getUser().getId() != null
                 && report.getUser().getId().equals(principal.getId());
+
+        log.info("Permissões: isAdmin={}, isOwner={}", isAdmin, isOwner);
 
         if (!isAdmin && !isOwner) {
             throw new AccessDeniedException("Usuário não pode deletar esta denúncia");
