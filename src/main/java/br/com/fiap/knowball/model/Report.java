@@ -40,8 +40,7 @@ public class Report {
     @Lob
     @Column(nullable = false)
     private String content;
-    
-    @NotNull(message = "{report.date.notnull}")
+
     @Column(name = "report_date", nullable = false)
     private LocalDateTime date;
 
