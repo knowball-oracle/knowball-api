@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Data
@@ -42,7 +42,7 @@ public class Report {
     private String content;
 
     @Column(name = "report_date", nullable = false)
-    private LocalDateTime date;
+    private Instant date;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
