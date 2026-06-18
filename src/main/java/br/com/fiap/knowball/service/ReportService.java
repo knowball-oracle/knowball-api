@@ -25,18 +25,20 @@ public class ReportService {
     private final RefereeingRepository refereeingRepository;
     private final UserRepository userRepository;
     private final RefereeService refereeService;
+    private final EmailService emailService;
 
     public ReportService(ReportRepository reportRepository,
                          GameRepository matchRepository,
                          RefereeRepository refereeRepository,
                          RefereeingRepository refereeingRepository, UserRepository userRepository,
-                         @Lazy RefereeService refereeService) {
+                         @Lazy RefereeService refereeService, EmailService emailService) {
         this.reportRepository = reportRepository;
         this.matchRepository = matchRepository;
         this.refereeRepository = refereeRepository;
         this.refereeingRepository = refereeingRepository;
         this.userRepository = userRepository;
         this.refereeService = refereeService;
+        this.emailService = emailService;
     }
 
     public List<Report> findAll() {
@@ -106,6 +108,7 @@ public class ReportService {
 
         Report saved = reportRepository.save(report);
         refereeService.suspendReferee(refereeId);
+        emailService.sendReportConfirmation(saved);
         return saved;
     }
 
