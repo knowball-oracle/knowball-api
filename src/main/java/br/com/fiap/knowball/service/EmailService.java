@@ -1,28 +1,35 @@
 package br.com.fiap.knowball.service;
 
 import br.com.fiap.knowball.model.Report;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import sendinblue.ApiClient;
+import sendinblue.Configuration;
+import sendinblue.auth.ApiKeyAuth;
+import sibApi.TransactionalEmailsApi;
+import sibModel.CreateSmtpEmail;
+import sibModel.SendSmtpEmail;
+import sibModel.SendSmtpEmailSender;
+import sibModel.SendSmtpEmailTo;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    @Value("${brevo.api.key}")
+    private String apiKey;
 
-    @Value("${spring.mail.username}")
-    private String from;
+    @Value("${brevo.sender.email}")
+    private String senderEmail;
+
+    @Value("${brevo.sender.name}")
+    private String senderName;
 
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm")
@@ -31,19 +38,32 @@ public class EmailService {
     @Async
     public void sendReportConfirmation(Report report) {
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            ApiClient client = Configuration.getDefaultApiClient();
+            ApiKeyAuth apiKeyAuth = (ApiKeyAuth) client.getAuthentication("api-key");
+            apiKeyAuth.setApiKey(apiKey);
 
-            helper.setFrom(from, "Knowball - Sistema de Denúncias");
-            helper.setTo(report.getUser().getEmail());
-            helper.setSubject("✅ Denúncia recebida – Protocolo " + report.getProtocol());
-            helper.setText(buildHtml(report), true);
+            TransactionalEmailsApi api = new TransactionalEmailsApi(client);
 
-            mailSender.send(message);
-            log.info("E-mail de confirmação enviado para {} – protocolo {}",
-                    report.getUser().getEmail(), report.getProtocol());
+            SendSmtpEmail email = new SendSmtpEmail();
+
+            SendSmtpEmailSender sender = new SendSmtpEmailSender();
+            sender.setEmail(senderEmail);
+            sender.setName(senderName);
+            email.setSender(sender);
+
+            SendSmtpEmailTo recipient = new SendSmtpEmailTo();
+            recipient.setEmail(report.getUser().getEmail());
+            email.setTo(List.of(recipient));
+
+            email.setSubject("✅ Denúncia recebida – Protocolo " + report.getProtocol());
+            email.setHtmlContent(buildHtml(report));
+
+            CreateSmtpEmail result = api.sendTransacEmail(email);
+            log.info("E-mail enviado via Brevo para {} – protocolo {} – messageId: {}",
+                    report.getUser().getEmail(), report.getProtocol(), result.getMessageId());
+
         } catch (Exception e) {
-            log.error("Falha ao enviar e-mail de confirmação para protocolo {}: {}",
+            log.error("Falha ao enviar e-mail via Brevo para protocolo {}: {}",
                     report.getProtocol(), e.getMessage());
         }
     }
@@ -67,8 +87,6 @@ public class EmailService {
                   <td align="center">
                     <table width="600" cellpadding="0" cellspacing="0"
                            style="background:#1c1b19;border-radius:16px;overflow:hidden;border:1px solid #2a2927;">
-
-                      <!-- Header -->
                       <tr>
                         <td style="background:linear-gradient(135deg,#01696f,#0c4e54);padding:32px 40px;text-align:center;">
                           <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:700;letter-spacing:-0.5px;">
@@ -79,8 +97,6 @@ public class EmailService {
                           </p>
                         </td>
                       </tr>
-
-                      <!-- Protocolo badge -->
                       <tr>
                         <td style="padding:32px 40px 0;text-align:center;">
                           <div style="display:inline-block;background:#0f0e0c;border:1px solid #01696f;
@@ -88,14 +104,10 @@ public class EmailService {
                             <p style="margin:0;color:#4f98a3;font-size:11px;text-transform:uppercase;
                                       letter-spacing:2px;font-weight:600;">Protocolo gerado</p>
                             <p style="margin:8px 0 0;color:#ffffff;font-size:28px;font-weight:700;
-                                      letter-spacing:2px;font-family:monospace;">
-                              %s
-                            </p>
+                                      letter-spacing:2px;font-family:monospace;">%s</p>
                           </div>
                         </td>
                       </tr>
-
-                      <!-- Mensagem principal -->
                       <tr>
                         <td style="padding:28px 40px 0;">
                           <p style="margin:0;color:#cdccca;font-size:15px;line-height:1.6;">
@@ -108,42 +120,33 @@ public class EmailService {
                           </p>
                         </td>
                       </tr>
-
-                      <!-- Relato -->
                       <tr>
                         <td style="padding:24px 40px 0;">
                           <p style="margin:0 0 10px;color:#797876;font-size:11px;text-transform:uppercase;
                                     letter-spacing:1.5px;font-weight:600;">Seu relato</p>
-                          <div style="background:#141312;border-left:3px solid #01696f;border-radius:0 8px 8px 0;
-                                      padding:16px 20px;">
+                          <div style="background:#141312;border-left:3px solid #01696f;border-radius:0 8px 8px 0;padding:16px 20px;">
                             <p style="margin:0;color:#cdccca;font-size:14px;line-height:1.7;white-space:pre-wrap;">%s</p>
                           </div>
                         </td>
                       </tr>
-
-                      <!-- Aviso -->
                       <tr>
                         <td style="padding:24px 40px 0;">
                           <div style="background:#1a1918;border:1px solid #2a2927;border-radius:10px;padding:16px 20px;">
                             <p style="margin:0;color:#797876;font-size:13px;line-height:1.6;">
                               🔒 <strong style="color:#cdccca;">Confidencialidade garantida.</strong>
                               Suas informações são protegidas e utilizadas exclusivamente para a análise desta denúncia.
-                              Não responda a este e-mail — para dúvidas, acesse o sistema com seu protocolo.
                             </p>
                           </div>
                         </td>
                       </tr>
-
-                      <!-- Footer -->
                       <tr>
-                        <td style="padding:32px 40px;text-align:center;border-top:1px solid #2a2927;margin-top:32px;">
+                        <td style="padding:32px 40px;text-align:center;border-top:1px solid #2a2927;">
                           <p style="margin:0;color:#5a5957;font-size:12px;line-height:1.6;">
                             Este e-mail foi enviado automaticamente pelo sistema Knowball.<br/>
                             © %d Knowball – Integridade no Futebol de Base
                           </p>
                         </td>
                       </tr>
-
                     </table>
                   </td>
                 </tr>
