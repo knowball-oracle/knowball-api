@@ -63,8 +63,8 @@ public class EmailService {
                     report.getUser().getEmail(), report.getProtocol(), result.getMessageId());
 
         } catch (Exception e) {
-            log.error("Falha ao enviar e-mail via Brevo para protocolo {}: {}",
-                    report.getProtocol(), e.getMessage());
+            log.error("Falha ao enviar e-mail via Brevo para protocolo {}",
+                    report.getProtocol(), e);
         }
     }
 
