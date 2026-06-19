@@ -6,7 +6,9 @@ import br.com.fiap.knowball.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.time.YearMonth;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -24,12 +26,15 @@ public class ReportAnalyticsService {
     }
 
     public ReportAnalyticsSummaryDTO getSummary() {
-        LocalDate now = LocalDate.now();
-        LocalDate startOfMonth = now.withDayOfMonth(1);
-        LocalDate startOfNextMonth = startOfMonth.plusMonths(1);
+        YearMonth currentMonth = YearMonth.now();
+
+        Instant startOfMonth    = currentMonth.atDay(1)
+                .atStartOfDay(ZoneOffset.UTC).toInstant();
+        Instant startOfNextMonth = currentMonth.plusMonths(1).atDay(1)
+                .atStartOfDay(ZoneOffset.UTC).toInstant();
 
         long total = reportRepository.count();
-        List<ReportStatusCountDTO> byStatus = reportRepository.countByStatus();
+        List<ReportStatusCountDTO> byStatus      = reportRepository.countByStatus();
         List<ReportByChampionshipDTO> byChampionship = reportRepository.countByChampionship();
         long thisMonth = reportRepository.countByDateRange(startOfMonth, startOfNextMonth);
 

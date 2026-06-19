@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,8 +44,8 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
        WHERE r.date >= :startDate
          AND r.date < :endDate
        """)
-    long countByDateRange(@Param("startDate") LocalDate startDate,
-                          @Param("endDate") LocalDate endDate);
+    long countByDateRange(@Param("startDate") Instant startDate,
+                          @Param("endDate") Instant endDate);
 
     @Query("""
         SELECT new br.com.fiap.knowball.dto.ReportByRefereeDTO(
