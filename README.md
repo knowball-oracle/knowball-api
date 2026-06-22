@@ -65,31 +65,35 @@ O Knowball é voltado principalmente para:
 
 ### Atividades concluídas
 
-| Etapa | Descrição das atividades | Data prevista/concluída |
-|-------|--------------------------|------------------------|
-| Levantamento de requisitos e modelagem | Definição das entidades do domínio, regras, relacionamento | 02 de outubro de 2025 |
-| Modelagem UML inicial | Elaboração do diagrama de classes no Draw.io | 03-05 de outubro de 2025 |
-| Criação do projeto Spring Boot | Geração do esqueleto e configuração inicial | 05 de outubro de 2025 |
-| Implementação das entidades (models) | Criar classes Championship, Game, Team, Referee, Report, etc | 06-07 de outubro de 2025 |
-| Implementação dos repositórios | JPARepository para cada entidade | 07-08 de outubro de 2025 |
-| Criação dos services | Lógica de negócio e validações | 08-09 de outubro de 2025 |
-| Implementação dos controllers (API REST) | Endpoints REST de cada recurso | 10 de outubro de 2025 |
-| Ajustes de nomenclatura (Match -> Game) | Correção devido a palavras reservadas Oracle | 10 de outubro de 2025 |
-| Solução de erros de mapping/compostos | Ajuste de participações, IDs compostos e anotações | 10 de outubro de 2025 |
-| Testes de endpoint no Insomnia | Criação e validação de requisições GET/POST/PUT/DELETE | 10 de outubro de 2025 |
-| Refinamento do diagrama de classes | Adiciona cardinalidades e enums, revisando clareza | 10 de outubro de 2025 |
-| Documentação da API com Swagger/OpenAPI | Documentação automática e exemplos de uso | 11 de outubro de 2025 |
-| Documentação final (Sprint 1) | Consolidação do cronograma, guias de teste e material de apoio | 11 de outubro de 2025 |
-| Implementação HATEOAS | Links hipermídia nos recursos REST, nível 3 do Richardson Maturity Model | 30-31 de outubro de 2025 |
-| Paginação e filtros | Pageable em endpoints de usuários, filtros por nome e e-mail | 24-25 de fevereiro de 2026 |
-| Configuração do Spring Security | Setup de segurança com JWT assimétrico (RSA) e autenticação stateless | 10-20 de março de 2026 |
-| Sistema de roles e permissões | Controle de acesso baseado em perfis: `ROLE_ADMIN` e `ROLE_USER` | 21-30 de março de 2026|
-| Controle de versão do banco com Flyway | Migrations versionadas para criação de tabelas e dados iniciais | 01 de abril de 2026 |
-| Camada de visualização — Frontend | Projeto Angular com Tailwind CSS, guards, interceptors, formulários reativos | 01-08 de abril de 2026 |
-| Preparação para produção | Criação do `application-prod.properties` com variáveis de ambiente | 12-13 de maio de 2026 |
-| Preparação para produção | Criação do `Dockerfile` multi-stage para build e execução da aplicação | 13-14 de maio de 2026 |
-| Deploy do Backend | Criação do Web Service no Render e configuração das variáveis de ambiente | 14 de maio de 2026 |
-| Deploy do Frontend | Frontend disponível em https://knowball-web-henna.vercel.app | 14 de maio de 2026 |
+| Etapa | Descrição das atividades                                                                      | Data prevista/concluída    |
+|-----|-----------------------------------------------------------------------------------------------|----------------------------|
+| Levantamento de requisitos e modelagem | Definição das entidades do domínio, regras, relacionamento                                    | 02 de outubro de 2025      |
+| Modelagem UML inicial | Elaboração do diagrama de classes no Draw.io                                                  | 03-05 de outubro de 2025   |
+| Criação do projeto Spring Boot | Geração do esqueleto e configuração inicial                                                   | 05 de outubro de 2025      |
+| Implementação das entidades (models) | Criar classes Championship, Game, Team, Referee, Report, etc                                  | 06-07 de outubro de 2025   |
+| Implementação dos repositórios | JPARepository para cada entidade                                                              | 07-08 de outubro de 2025   |
+| Criação dos services | Lógica de negócio e validações                                                                | 08-09 de outubro de 2025   |
+| Implementação dos controllers (API REST) | Endpoints REST de cada recurso                                                                | 10 de outubro de 2025      |
+| Ajustes de nomenclatura (Match -> Game) | Correção devido a palavras reservadas Oracle                                                  | 10 de outubro de 2025      |
+| Solução de erros de mapping/compostos | Ajuste de participações, IDs compostos e anotações                                            | 10 de outubro de 2025      |
+| Testes de endpoint no Insomnia | Criação e validação de requisições GET/POST/PUT/DELETE                                        | 10 de outubro de 2025      |
+| Refinamento do diagrama de classes | Adiciona cardinalidades e enums, revisando clareza                                            | 10 de outubro de 2025      |
+| Documentação da API com Swagger/OpenAPI | Documentação automática e exemplos de uso                                                     | 11 de outubro de 2025      |
+| Documentação final (Sprint 1) | Consolidação do cronograma, guias de teste e material de apoio                                | 11 de outubro de 2025      |
+| Implementação HATEOAS | Links hipermídia nos recursos REST, nível 3 do Richardson Maturity Model                      | 30-31 de outubro de 2025   |
+| Paginação e filtros | Pageable em endpoints de usuários, filtros por nome e e-mail                                  | 24-25 de fevereiro de 2026 |
+| Configuração do Spring Security | Setup de segurança com JWT assimétrico (RSA) e autenticação stateless                         | 10-20 de março de 2026     |
+| Sistema de roles e permissões | Controle de acesso baseado em perfis: `ROLE_ADMIN` e `ROLE_USER`                              | 21-30 de março de 2026     |
+| Controle de versão do banco com Flyway | Migrations versionadas para criação de tabelas e dados iniciais                               | 01 de abril de 2026        |
+| Camada de visualização — Frontend | Projeto Angular com Tailwind CSS, guards, interceptors, formulários reativos                  | 01-08 de abril de 2026     |
+| Preparação para produção | Criação do `application-prod.properties` com variáveis de ambiente                            | 12-13 de maio de 2026      |
+| Preparação para produção | Criação do `Dockerfile` multi-stage para build e execução da aplicação                        | 13-14 de maio de 2026      |
+| Deploy do Backend | Criação do Web Service no Render e configuração das variáveis de ambiente                     | 14 de maio de 2026         |
+| Deploy do Frontend | Frontend disponível em https://knowball-web-henna.vercel.app                                  | 14 de maio de 2026         |
+| Assistente virtual Kiko (Spring AI + Groq) | Integração com modelo llama-3.3-70b-versatile via Spring AI para suporte ao denunciante       | Junho de 2026              |
+| Notificações por e-mail (Brevo)| Envio de código de protocolo e atualizações de status via Brevo SMTP                          |  Junho de 2026             |
+| Dashboard administrativo (Oracle APEX) | Integração da API com Oracle APEX para exibição de KPIs e gráficos analíticos |  Junho de 2026 |
+| Endpoints de Analytics | Novos endpoints REST dedicados à análise de denúncias por status, período e volume |  Junho de 2026 |
 
 ## Evolução do projeto — Sprint 1 → Sprint 2 → Sprint 3 -> Sprint 4
 
@@ -239,6 +243,116 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ---
 
+### IA, Notificações e Dashboard Analítico
+
+#### 🤖 Kiko — Assistente Virtual com Spring AI
+
+O **Kiko** é o assistente virtual do Knowball, integrado diretamente à API usando **Spring AI** com o modelo **`llama-3.3-70b-versatile`** hospedado na plataforma **Groq**.
+
+O Kiko foi projetado para orientar denunciantes durante e após o processo de denúncia, respondendo dúvidas sobre manipulação de partidas, explicando o fluxo de análise e fornecendo suporte contextualizado.
+
+**Fluxo de funcionamento:**
+
+```
+Usuário → POST /ai/chat  { "message": "..." }
+        → KikoController
+        → KikoService
+        → Spring AI ChatClient
+        → Groq API (llama-3.3-70b-versatile)
+        → Resposta gerada pelo modelo
+        → Retorno ao usuário
+```
+
+**System Prompt configurado:** O Kiko possui um prompt de sistema que o contextualiza como especialista no domínio do Knowball — conhece as categorias de base, os tipos de manipulação denunciáveis, o fluxo de análise de denúncias e os status do sistema (`NEW`, `UNDER_REVIEW`, `RESOLVED`).
+
+**Variáveis de ambiente necessárias:**
+
+| Variável | Descrição |
+|----------|-----------|
+| `GROQ_API_KEY` | Chave de autenticação da API Groq |
+
+**Endpoint:**
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| POST | `/ai/chat` | Enviar mensagem para o Kiko | 🔒 |
+
+***
+
+#### 📧 Notificações por E-mail — Brevo (Sendinblue)
+
+Integração com o serviço **Brevo** via **SMTP** para envio de e-mails transacionais, garantindo que o denunciante seja informado em cada etapa da sua denúncia sem precisar acessar a plataforma.
+
+**Dois momentos de disparo:**
+
+1. **Criação da denúncia:** ao registrar uma nova denúncia, o usuário recebe um e-mail com:
+    - Número de protocolo único gerado automaticamente
+    - Detalhes da denúncia (partida, árbitro, categoria)
+    - Instruções de acompanhamento
+
+2. **Atualização de status:** toda vez que o admin altera o status da denúncia, o usuário recebe um e-mail informando a mudança. Para denúncias com status `RESOLVED`, o e-mail inclui também o **parecer da análise**.
+
+**Status contemplados nos e-mails:**
+
+| Status | Label no e-mail | Cor |
+|--------|----------------|-----|
+| `NEW` | Nova | 🔵 Azul |
+| `UNDER_REVIEW` | Em Análise | 🟡 Amarelo |
+| `RESOLVED` | Resolvida + Parecer | 🟢 Verde |
+
+**Variáveis de ambiente necessárias:**
+
+| Variável | Descrição |
+|----------|-----------|
+| `BREVO_SMTP_HOST` | Host SMTP do Brevo (`smtp-relay.brevo.com`) |
+| `BREVO_SMTP_PORT` | Porta SMTP (587) |
+| `BREVO_SMTP_USER` | Usuário SMTP (e-mail de conta Brevo) |
+| `BREVO_SMTP_PASSWORD` | Senha/chave SMTP do Brevo |
+| `MAIL_FROM` | Endereço remetente configurado no Brevo |
+
+***
+
+#### 📊 Dashboard Administrativo — Oracle APEX
+
+Integração da API Knowball com **Oracle APEX** para disponibilizar um painel administrativo com visualização analítica completa dos dados de denúncias. O dashboard é consumido exclusivamente por usuários com perfil `ROLE_ADMIN` e exibe dados em tempo real diretamente da API.
+
+**KPIs exibidos:**
+
+| Indicador | Descrição |
+|-----------|-----------|
+| Total de Denúncias | Volume geral de denúncias registradas no sistema |
+| Denúncias este Mês | Total de denúncias criadas no mês corrente |
+| Resolvidas | Quantidade de denúncias com status `RESOLVED` |
+| Pendentes | Denúncias com status `NEW` ou `UNDER_REVIEW` |
+
+**Gráficos e visualizações disponíveis:**
+
+- **Denúncias por Status** — distribuição percentual entre `NEW`, `UNDER_REVIEW` e `RESOLVED`
+- **Evolução mensal** — volume de denúncias ao longo dos meses
+- **Denúncias por Categoria** — distribuição entre sub-13, sub-15, sub-17 e sub-20
+- **Árbitros mais denunciados** — ranking dos árbitros com maior volume de denúncias
+
+**Endpoints de analytics expostos pela API:**
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/analytics/reports/kpis` | KPIs gerais (total, mês atual, resolvidas, pendentes) | 👑 |
+| GET | `/analytics/reports/by-status` | Contagem agrupada por status | 👑 |
+| GET | `/analytics/reports/by-month` | Volume de denúncias agrupado por mês | 👑 |
+| GET | `/analytics/reports/by-category` | Denúncias agrupadas por categoria etária | 👑 |
+| GET | `/analytics/referees/most-reported` | Ranking dos árbitros mais denunciados | 👑 |
+
+**Arquitetura de integração APEX ↔ API:**
+
+```
+Oracle APEX (REST Data Source)
+    → GET /analytics/... (Bearer Token via Web Credential)
+    → Classic Report / Chart Region
+    → Dashboard renderizado para ADMIN
+```
+
+***
+
 ## Listagem de todos os endpoints
 
 > Endpoints marcados com 🔒 exigem autenticação. Endpoints marcados com 👑 exigem `ROLE_ADMIN`.
@@ -331,7 +445,23 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 | PUT | `/users/{id}` | Atualizar usuário | 👑 |
 | DELETE | `/users/{id}` | Deletar usuário | 👑 |
 
-**Total de endpoints:** 43
+### AI — Kiko (Assistente Virtual)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| POST | `/ai/chat` | Enviar mensagem para o assistente Kiko | 🔒 |
+
+### Analytics (Dashboard)
+
+| Método | Endpoint | Descrição | Acesso |
+|--------|----------|-----------|--------|
+| GET | `/analytics/reports/kpis` | KPIs gerais de denúncias | 👑 |
+| GET | `/analytics/reports/by-status` | Denúncias agrupadas por status | 👑 |
+| GET | `/analytics/reports/by-month` | Volume de denúncias por mês | 👑 |
+| GET | `/analytics/reports/by-category` | Denúncias por categoria etária | 👑 |
+| GET | `/analytics/referees/most-reported` | Árbitros mais denunciados | 👑 |
+
+**Total de endpoints:** 52
 
 ---
 
@@ -377,22 +507,33 @@ spring.datasource.username=<seu_usuario>
 spring.datasource.password=<sua_senha>
 ```
 
-4. Gere a chave privada para assinatura JWT:
+4. Configure as variáveis de e-mail e IA:
+```properties
+spring.mail.host=smtp-relay.brevo.com
+spring.mail.port=587
+spring.mail.username=<seu_usuario_brevo>
+spring.mail.password=<sua_senha_brevo>
+mail.from=<remetente_configurado_no_brevo>
+
+groq.api.key=<sua_chave_groq>
+```
+
+5. Gere a chave privada para assinatura JWT:
 ```bash
 openssl genrsa -out src/main/resources/certs/private_key.pem 2048
 ```
 
 > ⚠️ **Atenção:** o arquivo `private_key.pem` está no `.gitignore` e **não é versionado** por segurança. É obrigatório gerá-lo localmente antes de executar a aplicação. Sem ele, o Spring Security não conseguirá assinar nem validar os tokens JWT e a aplicação falhará no startup.
 
-5. Compile e execute:
+6. Compile e execute:
 ```bash
 mvn spring-boot:run
 ```
 
-6. A aplicação estará disponível em: `http://localhost:8080`
+7. A aplicação estará disponível em: `http://localhost:8080`
 
 > O Flyway aplicará as migrations automaticamente no startup — as tabelas e os dados iniciais serão criados sem nenhuma ação manual.
-
+> 
 ---
 
 ### 🧪 Testando a API
