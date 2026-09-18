@@ -35,7 +35,7 @@ public class User implements UserDetails{
     private String email;
 
     @NotBlank
-    @Column(nullable = false, length = 200)
+    @Column(length = 200)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -46,6 +46,14 @@ public class User implements UserDetails{
     @Column(name = "profile_picture", columnDefinition = "CLOB")
     private String profilePicture;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider", nullable = false, length = 20)
+    @Builder.Default
+    private AuthProvider authProvider = AuthProvider.LOCAL;
+
+    @Column(name = "google_id", unique = true, length = 255)
+    private String googleId;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -54,6 +62,11 @@ public class User implements UserDetails{
     @Override
     public String getUsername() {
         return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password != null ? password : "";
     }
 
     @Override
