@@ -38,27 +38,12 @@ public class EmailService {
     @Async
     public void sendReportConfirmation(Report report) {
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("api-key", apiKey);
+            sendViaBrevo(report.getUser().getEmail(),
+                    "Denuncia recebida - Protocolo " + report.getProtocol(),
+                    buildHtml(report));
 
-            Map<String, Object> body = Map.of(
-                    "sender", Map.of(
-                            "name", senderName,
-                            "email", senderEmail
-                    ),
-                    "to", List.of(
-                            Map.of("email", report.getUser().getEmail())
-                    ),
-                    "subject", "Denuncia recebida - Protocolo " + report.getProtocol(),
-                    "htmlContent", buildHtml(report)
-            );
-
-            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity(BREVO_URL, request, String.class);
-
-            log.info("E-mail enviado via Brevo para {} - protocolo {} - status: {}",
-                    report.getUser().getEmail(), report.getProtocol(), response.getStatusCode());
+            log.info("E-mail enviado via Brevo para {} - protocolo {}",
+                    report.getUser().getEmail(), report.getProtocol());
 
         } catch (HttpClientErrorException e) {
             log.error("Erro Brevo [{}] para protocolo {}: {}",
@@ -67,6 +52,41 @@ public class EmailService {
             log.error("Falha ao enviar e-mail para protocolo {}: {}",
                     report.getProtocol(), e.getMessage(), e);
         }
+    }
+
+    public void sendVerificationCode(String toEmail, String subject, String htmlContent) {
+        try {
+            sendViaBrevo(toEmail, subject, htmlContent);
+            log.info("Código de verificação enviado via Brevo para {}", toEmail);
+        } catch (HttpClientErrorException e) {
+            log.error("Erro Brevo [{}] ao enviar código para {}: {}",
+                    e.getStatusCode(), toEmail, e.getResponseBodyAsString());
+            throw new IllegalStateException("Não foi possível enviar o código de verificação.", e);
+        } catch (Exception e) {
+            log.error("Falha ao enviar código de verificação para {}: {}", toEmail, e.getMessage(), e);
+            throw new IllegalStateException("Não foi possível enviar o código de verificação.", e);
+        }
+    }
+
+    private void sendViaBrevo(String toEmail, String subject, String htmlContent) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("api-key", apiKey);
+
+        Map<String, Object> body = Map.of(
+                "sender", Map.of(
+                        "name", senderName,
+                        "email", senderEmail
+                ),
+                "to", List.of(
+                        Map.of("email", toEmail)
+                ),
+                "subject", subject,
+                "htmlContent", htmlContent
+        );
+
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+        restTemplate.postForEntity(BREVO_URL, request, String.class);
     }
 
     private String buildHtml(Report report) {
@@ -162,5 +182,4 @@ public class EmailService {
                 report.getContent()
         );
     }
-
 }
