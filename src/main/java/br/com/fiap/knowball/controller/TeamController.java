@@ -6,10 +6,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.fiap.knowball.repository.TeamRepository;
+import br.com.fiap.knowball.service.TeamLogoService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +44,8 @@ public class TeamController {
     
     private final TeamService teamService;
     private final TeamModelAssembler assembler;
+    private final TeamLogoService teamLogoService;
+    private final TeamRepository teamRepository;
 
     @Operation(summary = "Listar todos os times", description = "Retorna a lista de todos os times cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de times retornada com sucesso")
@@ -99,5 +105,28 @@ public class TeamController {
         log.info("deletando time com id: {}", id);
         teamService.destroy(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Sincronizar escudo de um time",
+            description = "Busca o escudo do time na API TheSportsDB e atualiza o registro.")
+    @PostMapping("/{id}/sync-logo")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> syncLogo(@PathVariable Long id) {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Time não encontrado: " + id));
+
+        boolean found = teamLogoService.syncLogo(team);
+
+        return found
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.notFound().build();
+    }
+
+    @Operation(summary = "Sincronizar escudos de todos os times pendentes",
+            description = "Busca o escudo de todos os times sem logo cadastrado. Processa em lote, respeitando o rate limit da API.")
+    @PostMapping("/sync-logos")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<TeamLogoService.TeamLogoSyncResult> syncAllLogos() {
+        return ResponseEntity.ok(teamLogoService.syncAllMissingLogos());
     }
 }

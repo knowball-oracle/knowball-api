@@ -32,4 +32,7 @@ public class Team {
     @NotBlank(message = "{team.state.notblank}")
     @Column(nullable = false, length = 2)
     private String state;
+
+    @Column(name = "logo_url", length = 500)
+    private String logoUrl;
 }
