@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public record TheSportsDbTeamDTO(
         String idTeam,
         String strTeam,
-        String strTeamBadge,
+        String strBadge,
         String strCountry,
         String strLeague
 ) {}

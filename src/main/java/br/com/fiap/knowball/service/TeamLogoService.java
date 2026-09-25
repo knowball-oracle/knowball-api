@@ -78,30 +78,46 @@ public class TeamLogoService {
 
     private Optional<String> fetchBadgeUrl(String teamName) {
         String url = UriComponentsBuilder
-                .fromHttpUrl(baseUrl + "/" + apiKey + "/searchteams.php")
+                .fromHttpUrl(baseUrl)
+                .pathSegment(apiKey, "searchteams.php")
                 .queryParam("t", teamName)
-                .build()
+                .encode()
                 .toUriString();
 
         try {
-            TheSportsDbSearchResponse response = restTemplate.getForObject(url, TheSportsDbSearchResponse.class);
+            TheSportsDbSearchResponse response =
+                    restTemplate.getForObject(url, TheSportsDbSearchResponse.class);
 
             if (response == null || response.teams() == null || response.teams().isEmpty()) {
+                log.warn("TheSportsDB não encontrou resultados para '{}'", teamName);
                 return Optional.empty();
             }
 
             TheSportsDbTeamDTO bestMatch = response.teams().stream()
-                    .filter(t -> "Brazil".equalsIgnoreCase(t.strCountry()))
+                    .filter(team -> "Brazil".equalsIgnoreCase(team.strCountry()))
                     .findFirst()
                     .orElse(response.teams().get(0));
 
-            return Optional.ofNullable(bestMatch.strTeamBadge())
+            log.info(
+                    "TheSportsDB encontrou '{}' para '{}'. País: '{}'. Badge: '{}'",
+                    bestMatch.strTeam(),
+                    teamName,
+                    bestMatch.strCountry(),
+                    bestMatch.strBadge()
+            );
+
+            return Optional.ofNullable(bestMatch.strBadge())
                     .filter(badge -> !badge.isBlank());
 
         } catch (HttpClientErrorException.TooManyRequests e) {
             throw e;
         } catch (Exception e) {
-            log.error("Falha ao consultar TheSportsDB para '{}': {}", teamName, e.getMessage());
+            log.error(
+                    "Falha ao consultar TheSportsDB para '{}': {}",
+                    teamName,
+                    e.getMessage(),
+                    e
+            );
             return Optional.empty();
         }
     }
