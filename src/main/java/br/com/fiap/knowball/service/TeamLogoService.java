@@ -35,13 +35,14 @@ public class TeamLogoService {
         Optional<String> badgeUrl = fetchBadgeUrl(team.getName());
 
         if (badgeUrl.isEmpty()) {
-            log.warn("Nenhum escudo encontrado na TheSportsDB para o time '{}'", team.getName());
+            log.warn("Nenhum escudo encontrado para '{}'", team.getName());
             return false;
         }
 
         team.setLogoUrl(badgeUrl.get());
         teamRepository.save(team);
-        log.info("Escudo sincronizado para '{}': {}", team.getName(), badgeUrl.get());
+
+        log.info("Escudo salvo para '{}': {}", team.getName(), badgeUrl.get());
         return true;
     }
 
@@ -94,32 +95,57 @@ public class TeamLogoService {
             }
 
             TheSportsDbTeamDTO bestMatch = response.teams().stream()
-                    .filter(team -> "Brazil".equalsIgnoreCase(team.strCountry()))
+                    .filter(team -> normalize(team.strTeam()).equals(normalize(teamName)))
                     .findFirst()
-                    .orElse(response.teams().get(0));
+                    .orElseGet(() -> response.teams().stream()
+                            .filter(team -> "Brazil".equalsIgnoreCase(team.strCountry()))
+                            .findFirst()
+                            .orElse(response.teams().get(0)));
+
+            String badgeUrl = bestMatch.strBadge();
+
+            if (badgeUrl == null || badgeUrl.isBlank()) {
+                log.warn(
+                        "TheSportsDB encontrou '{}' para '{}', mas o campo strBadge veio vazio.",
+                        bestMatch.strTeam(),
+                        teamName
+                );
+                return Optional.empty();
+            }
 
             log.info(
-                    "TheSportsDB encontrou '{}' para '{}'. País: '{}'. Badge: '{}'",
-                    bestMatch.strTeam(),
+                    "Escudo encontrado: buscado='{}', encontrado='{}', url='{}'",
                     teamName,
-                    bestMatch.strCountry(),
-                    bestMatch.strBadge()
+                    bestMatch.strTeam(),
+                    badgeUrl
             );
 
-            return Optional.ofNullable(bestMatch.strBadge())
-                    .filter(badge -> !badge.isBlank());
+            return Optional.of(badgeUrl);
 
-        } catch (HttpClientErrorException.TooManyRequests e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (HttpClientErrorException e) {
             log.error(
-                    "Falha ao consultar TheSportsDB para '{}': {}",
+                    "TheSportsDB retornou HTTP {} ao buscar '{}': {}",
+                    e.getStatusCode(),
                     teamName,
-                    e.getMessage(),
-                    e
+                    e.getResponseBodyAsString()
             );
             return Optional.empty();
+
+        } catch (Exception e) {
+            log.error("Erro ao buscar escudo para '{}'", teamName, e);
+            return Optional.empty();
         }
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return "";
+        }
+
+        return java.text.Normalizer.normalize(value, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .trim()
+                .toLowerCase();
     }
 
     public record TeamLogoSyncResult(int total, int updated, int notFound) {}
