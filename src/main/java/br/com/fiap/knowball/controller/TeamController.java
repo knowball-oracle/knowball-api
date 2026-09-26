@@ -129,4 +129,11 @@ public class TeamController {
     public ResponseEntity<TeamLogoService.TeamLogoSyncResult> syncAllLogos() {
         return ResponseEntity.ok(teamLogoService.syncAllMissingLogos());
     }
+
+    @PostMapping("/{id}/test-logo-save")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> testLogoSave(@PathVariable Long id) {
+        teamLogoService.testSaveLogo(id);
+        return ResponseEntity.noContent().build();
+    }
 }

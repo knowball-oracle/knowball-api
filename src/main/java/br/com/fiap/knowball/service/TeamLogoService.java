@@ -4,9 +4,11 @@ import br.com.fiap.knowball.dto.TheSportsDbSearchResponse;
 import br.com.fiap.knowball.dto.TheSportsDbTeamDTO;
 import br.com.fiap.knowball.model.Team;
 import br.com.fiap.knowball.repository.TeamRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -31,6 +33,7 @@ public class TeamLogoService {
         this.teamRepository = teamRepository;
     }
 
+    @Transactional
     public boolean syncLogo(Team team) {
         Optional<String> badgeUrl = fetchBadgeUrl(team.getName());
 
@@ -40,9 +43,16 @@ public class TeamLogoService {
         }
 
         team.setLogoUrl(badgeUrl.get());
-        teamRepository.save(team);
 
-        log.info("Escudo salvo para '{}': {}", team.getName(), badgeUrl.get());
+        Team saved = teamRepository.saveAndFlush(team);
+
+        log.info(
+                "Escudo salvo: id={}, time='{}', logoUrl='{}'",
+                saved.getId(),
+                saved.getName(),
+                saved.getLogoUrl()
+        );
+
         return true;
     }
 
@@ -146,6 +156,28 @@ public class TeamLogoService {
                 .replaceAll("\\p{M}", "")
                 .trim()
                 .toLowerCase();
+    }
+
+    @Transactional
+    public void testSaveLogo(Long teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Time não encontrado: " + teamId
+                ));
+
+        String testUrl =
+                "https://r2.thesportsdb.com/images/media/team/badge/vvuvps1473538042.png";
+
+        team.setLogoUrl(testUrl);
+
+        Team saved = teamRepository.saveAndFlush(team);
+
+        log.info(
+                "TESTE LOGO — id={}, nome={}, logoUrl após save={}",
+                saved.getId(),
+                saved.getName(),
+                saved.getLogoUrl()
+        );
     }
 
     public record TeamLogoSyncResult(int total, int updated, int notFound) {}
