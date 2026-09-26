@@ -33,24 +33,36 @@ public class TeamLogoService {
         this.teamRepository = teamRepository;
     }
 
-    @Transactional
     public boolean syncLogo(Team team) {
-        Optional<String> badgeUrl = fetchBadgeUrl(team.getName());
-
-        if (badgeUrl.isEmpty()) {
-            log.warn("Nenhum escudo encontrado para '{}'", team.getName());
+        if (team.getId() == null) {
+            log.error("Não é possível sincronizar escudo: o time '{}' não possui ID.", team.getName());
             return false;
         }
 
-        team.setLogoUrl(badgeUrl.get());
+        Optional<String> badgeUrl = fetchBadgeUrl(team.getName());
 
-        Team saved = teamRepository.saveAndFlush(team);
+        if (badgeUrl.isEmpty()) {
+            log.warn("Nenhum escudo encontrado para '{}'.", team.getName());
+            return false;
+        }
+
+        int updatedRows = teamRepository.updateLogoUrl(team.getId(), badgeUrl.get());
+
+        if (updatedRows != 1) {
+            log.error(
+                    "Falha ao persistir escudo: time='{}', id={}, linhasAtualizadas={}.",
+                    team.getName(),
+                    team.getId(),
+                    updatedRows
+            );
+            return false;
+        }
 
         log.info(
-                "Escudo salvo: id={}, time='{}', logoUrl='{}'",
-                saved.getId(),
-                saved.getName(),
-                saved.getLogoUrl()
+                "Escudo persistido com sucesso: time='{}', id={}, url='{}'.",
+                team.getName(),
+                team.getId(),
+                badgeUrl.get()
         );
 
         return true;
