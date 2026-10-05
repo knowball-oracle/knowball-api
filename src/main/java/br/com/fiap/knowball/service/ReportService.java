@@ -120,9 +120,29 @@ public class ReportService {
 
     public Report updateStatus(Long id, ReportStatusType status, AnalysisResultType analysisResult) {
         Report report = findById(id);
+        ReportStatusType previous = report.getStatus();
+
         report.setStatus(status);
         report.setAnalysisResult(analysisResult);
-        return reportRepository.save(report);
+        Report saved = reportRepository.save(report);
+
+        if (previous != status) {
+            notifyStatusChange(saved, status);
+        }
+        return saved;
+    }
+
+    private void notifyStatusChange(Report report, ReportStatusType status) {
+        try {
+            switch (status) {
+                case UNDER_REVIEW -> emailService.sendUnderReviewEmail(report);
+                case RESOLVED -> emailService.sendResolvedEmail(report);
+                default -> { }
+            }
+        } catch (Exception e) {
+            log.error("Falha ao notificar mudança de status da denúncia {}: {}",
+                    report.getProtocol(), e.getMessage(), e);
+        }
     }
 
     public void deleteByIdWithPermissionCheck(Long id) {
