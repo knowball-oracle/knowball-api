@@ -120,16 +120,51 @@ public class ReportService {
 
     public Report updateStatus(Long id, ReportStatusType status, AnalysisResultType analysisResult) {
         Report report = findById(id);
-        ReportStatusType previous = report.getStatus();
+
+        ReportStatusType currentStatus = report.getStatus();
+
+        validateStatusTransition(currentStatus, status);
 
         report.setStatus(status);
-        report.setAnalysisResult(analysisResult);
+
+        if (status == ReportStatusType.RESOLVED) {
+            if (analysisResult == null) {
+                throw new IllegalArgumentException(
+                        "É obrigatório informar o resultado da análise ao resolver uma denúncia."
+                );
+            }
+
+            report.setAnalysisResult(analysisResult);
+        } else {
+            report.setAnalysisResult(null);
+        }
+
         Report saved = reportRepository.save(report);
 
-        if (previous != status) {
+        if (currentStatus != status) {
             notifyStatusChange(saved, status);
         }
+
         return saved;
+    }
+
+    private void validateStatusTransition(
+            ReportStatusType currentStatus,
+            ReportStatusType requestedStatus
+    ) {
+        if (currentStatus != ReportStatusType.NEW
+                && requestedStatus == ReportStatusType.NEW) {
+            throw new IllegalStateException(
+                    "Uma denúncia em análise ou resolvida não pode voltar para o status NOVA."
+            );
+        }
+
+        if (currentStatus == ReportStatusType.RESOLVED
+                && requestedStatus != ReportStatusType.RESOLVED) {
+            throw new IllegalStateException(
+                    "Uma denúncia resolvida não pode ter o status alterado."
+            );
+        }
     }
 
     private void notifyStatusChange(Report report, ReportStatusType status) {
