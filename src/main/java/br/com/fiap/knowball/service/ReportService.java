@@ -153,30 +153,43 @@ public class ReportService {
         User principal = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário autenticado não encontrado"));
 
-        log.info("Tentando deletar denúncia {}. principal.id={}, principal.email={}, report.user.id={}, report.status={}",
-                id,
-                principal.getId(),
-                principal.getEmail(),
-                report.getUser() != null ? report.getUser().getId() : null,
-                report.getStatus()
-        );
-
         boolean isAdmin = principal.getRole() == UserRole.ROLE_ADMIN;
 
         boolean isOwner = report.getUser() != null
                 && report.getUser().getId() != null
                 && report.getUser().getId().equals(principal.getId());
 
-        log.info("Permissões: isAdmin={}, isOwner={}", isAdmin, isOwner);
+        log.info(
+                "Tentando deletar denúncia {}. principal.id={}, principal.email={}, report.user.id={}, "
+                        + "report.status={}, isAdmin={}, isOwner={}",
+                id,
+                principal.getId(),
+                principal.getEmail(),
+                report.getUser() != null ? report.getUser().getId() : null,
+                report.getStatus(),
+                isAdmin,
+                isOwner
+        );
 
-        if (isOwner && report.getStatus() != ReportStatusType.NEW && !isAdmin) {
-            throw new AccessDeniedException("Somente denúncias novas podem ser excluídas pelo autor.");
+        if (report.getStatus() != ReportStatusType.RESOLVED) {
+            throw new AccessDeniedException(
+                    "Apenas denúncias resolvidas podem ser excluídas."
+            );
         }
 
         if (!isAdmin && !isOwner) {
-            throw new AccessDeniedException("Usuário não pode deletar esta denúncia");
+            throw new AccessDeniedException(
+                    "Usuário não pode excluir esta denúncia."
+            );
         }
 
         reportRepository.delete(report);
+
+        log.info(
+                "Denúncia {} excluída com sucesso por {}. principal.id={}",
+                report.getProtocol(),
+                principal.getEmail(),
+                principal.getId()
+        );
     }
 }
