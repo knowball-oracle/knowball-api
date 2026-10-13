@@ -8,7 +8,9 @@
 
     import br.com.fiap.knowball.dto.ReportResponseDTO;
     import br.com.fiap.knowball.model.AnalysisResultType;
+    import com.fasterxml.jackson.annotation.JsonAlias;
     import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+    import jakarta.validation.constraints.NotNull;
     import org.springframework.hateoas.CollectionModel;
     import org.springframework.hateoas.EntityModel;
     import org.springframework.http.ResponseEntity;
@@ -38,8 +40,11 @@
         private final ReportModelAssembler assembler;
 
         public record UpdateStatusRequest(
+                @NotNull(message = "O status é obrigatório.")
                 ReportStatusType status,
-                AnalysisResultType analysisResultType
+
+                @JsonAlias("analysisResultType")
+                AnalysisResultType analysisResult
         ) {}
 
         @Operation(summary = "Listar todas as denúncias", description = "Retorna a lista de todas as denúncias cadastradas.")
@@ -114,8 +119,8 @@
         public EntityModel<Report> updateStatus(
                 @PathVariable Long id,
                 @RequestBody UpdateStatusRequest request) {
-            log.info("atualizando status da denúncia {}: {} / {}", id, request.status(), request.analysisResultType());
-            Report updated = reportService.updateStatus(id, request.status(), request.analysisResultType());
+            log.info("atualizando status da denúncia {}: {} / {}", id, request.status(), request.analysisResult());
+            Report updated = reportService.updateStatus(id, request.status(), request.analysisResult());
             return assembler.toModel(updated);
         }
 
