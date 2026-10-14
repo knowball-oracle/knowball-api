@@ -1,10 +1,9 @@
 package br.com.fiap.knowball.repository;
 
-import br.com.fiap.knowball.dto.ReportByChampionshipDTO;
-import br.com.fiap.knowball.dto.ReportByRefereeDTO;
-import br.com.fiap.knowball.dto.ReportStatusCountDTO;
+import br.com.fiap.knowball.dto.*;
 import br.com.fiap.knowball.model.Report;
 import br.com.fiap.knowball.model.ReportStatusType;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -58,4 +57,32 @@ public interface ReportRepository extends JpaRepository<Report, Long>{
         ORDER BY COUNT(r) DESC
         """)
     List<ReportByRefereeDTO> countByReferee();
+
+    @Query("""
+    SELECT new br.com.fiap.knowball.dto.ReportByResultDTO(r.analysisResult, COUNT(r))
+    FROM Report r
+    WHERE r.analysisResult IS NOT NULL
+    GROUP BY r.analysisResult
+    """)
+    List<ReportByResultDTO> countByAnalysisResult();
+
+    @Query("""
+    SELECT new br.com.fiap.knowball.dto.ReportByCategoryDTO(
+        CAST(r.game.championship.category AS string), COUNT(r))
+    FROM Report r
+    GROUP BY r.game.championship.category
+    """)
+    List<ReportByCategoryDTO> countByCategory();
+
+    @Query("SELECT r.date FROM Report r WHERE r.date >= :startDate")
+    List<Instant> findDatesFrom(@Param("startDate") Instant startDate);
+
+    @Query("""
+    SELECT new br.com.fiap.knowball.dto.ReportRecentDTO(
+        r.id, r.protocol, r.status, r.analysisResult, r.date,
+        r.referee.name, r.game.championship.name)
+    FROM Report r
+    ORDER BY r.date DESC
+    """)
+    List<ReportRecentDTO> findRecent(Pageable pageable);
 }

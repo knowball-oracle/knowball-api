@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -67,5 +68,43 @@ public class ReportAnalyticsController {
     public ResponseEntity<List<ReportByRefereeDTO>> countByReferee() {
         log.info("analytics: contagem de denúncias por árbitro");
         return ResponseEntity.ok(analyticsService.getCountByReferee());
+    }
+
+    @Operation(summary = "Contagem por resultado da análise",
+            description = "Retorna a quantidade de denúncias resolvidas agrupada por resultado.")
+    @ApiResponse(responseCode = "200", description = "Contagem retornada com sucesso")
+    @GetMapping("/by-result")
+    public ResponseEntity<List<ReportByResultDTO>> countByResult() {
+        log.info("analytics: contagem de denúncias por resultado");
+        return ResponseEntity.ok(analyticsService.getCountByResult());
+    }
+
+    @Operation(summary = "Contagem por categoria",
+            description = "Retorna a quantidade de denúncias agrupada por categoria de base.")
+    @ApiResponse(responseCode = "200", description = "Contagem retornada com sucesso")
+    @GetMapping("/by-category")
+    public ResponseEntity<List<ReportByCategoryDTO>> countByCategory() {
+        log.info("analytics: contagem de denúncias por categoria");
+        return ResponseEntity.ok(analyticsService.getCountByCategory());
+    }
+
+    @Operation(summary = "Evolução mensal",
+            description = "Retorna a quantidade de denúncias por mês nos últimos N meses (padrão 6, máximo 24).")
+    @ApiResponse(responseCode = "200", description = "Série mensal retornada com sucesso")
+    @GetMapping("/by-month")
+    public ResponseEntity<List<ReportByMonthDTO>> countByMonth(
+            @RequestParam(defaultValue = "6") int months) {
+        log.info("analytics: evolução mensal ({} meses)", months);
+        return ResponseEntity.ok(analyticsService.getCountByMonth(months));
+    }
+
+    @Operation(summary = "Denúncias recentes",
+            description = "Retorna as denúncias mais recentes, sem o texto do relato (padrão 10, máximo 50).")
+    @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
+    @GetMapping("/recent")
+    public ResponseEntity<List<ReportRecentDTO>> getRecent(
+            @RequestParam(defaultValue = "10") int limit) {
+        log.info("analytics: denúncias recentes (limite {})", limit);
+        return ResponseEntity.ok(analyticsService.getRecent(limit));
     }
 }
