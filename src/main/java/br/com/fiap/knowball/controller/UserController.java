@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import br.com.fiap.knowball.dto.UpdateUserRequest;
 
 @Tag(name = "Users", description = "Gestão de usuários - requer ROLE_ADMIN")
 @SecurityRequirement(name = "bearerAuth")
@@ -68,15 +69,20 @@ public class UserController {
 
     @Operation(summary = "Atualizar usuário")
     @ApiResponse(responseCode = "200", description = "Usuário atualizado")
+    @ApiResponse(responseCode = "400", description = "Dados inválidos")
     @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     @ApiResponse(responseCode = "409", description = "Email já cadastrado")
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id, @Valid @RequestBody User userDetails) {
+    public ResponseEntity<UserResponse> update(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateUserRequest request) {
+
         log.info("PUT /users/{}", id);
-        return userService.updateUser(id, userDetails)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+
+        return userService.updateUser(id, request)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Deleter usuário")

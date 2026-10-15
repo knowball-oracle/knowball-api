@@ -1,20 +1,21 @@
 package br.com.fiap.knowball.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import br.com.fiap.knowball.dto.UpdateProfileRequest;
+import br.com.fiap.knowball.dto.UpdateUserRequest;
 import br.com.fiap.knowball.dto.UserProfileResponse;
 import br.com.fiap.knowball.dto.UserResponse;
 import br.com.fiap.knowball.exception.EmailAlreadyExistsException;
+import br.com.fiap.knowball.model.User;
+import br.com.fiap.knowball.repository.UserRepository;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import br.com.fiap.knowball.model.User;
-import br.com.fiap.knowball.repository.UserRepository;
-import lombok.NonNull;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -57,21 +58,33 @@ public class UserService {
         return toResponse(userRepository.save(user));
     }
 
-    public Optional<UserResponse> updateUser(@NonNull Long id, User userDetails) {
+    @Transactional
+    public Optional<UserResponse> updateUser(
+            @NonNull Long id,
+            UpdateUserRequest request) {
+
         return userRepository.findById(id).map(user -> {
-            user.setName(userDetails.getName());
+            String name = request.name().trim();
+            String email = request.email().trim();
 
-            if (!user.getEmail().equals(userDetails.getEmail()) &&
-                    userRepository.existsByEmail(userDetails.getEmail())) {
-                throw new EmailAlreadyExistsException("Email already exists: " + userDetails.getEmail());
+            boolean emailChanged = !user.getEmail().equals(email);
+
+            if (emailChanged && userRepository.existsByEmail(email)) {
+                throw new EmailAlreadyExistsException(
+                        "Email already exists: " + email
+                );
             }
-            user.setEmail(userDetails.getEmail());
 
-            if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-                user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            user.setName(name);
+            user.setEmail(email);
+            user.setRole(request.role());
+
+            String newPassword = request.password();
+
+            if (newPassword != null && !newPassword.isBlank()) {
+                user.setPassword(passwordEncoder.encode(newPassword));
             }
 
-            user.setRole(userDetails.getRole());
             return toResponse(userRepository.save(user));
         });
     }
